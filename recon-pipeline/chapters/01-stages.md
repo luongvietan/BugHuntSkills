@@ -7,6 +7,10 @@ TARGET=example.com                 # scoped root domain
 ORG=example                        # org name for code searches
 DATE=$(date +%Y%m%d)
 OUT="recon/$TARGET/$DATE"          # dated run dir (see 02-outputs.md)
+export ALLOWLIST="hunt/$TARGET/allowlist.txt"     # machine-readable in-scope
+                                                  # list — ONLY source T/I
+                                                  # stages may draw from
+export EXCLUSIONS="hunt/$TARGET/scope-exclusions.txt"
 WL_DNS=/usr/share/seclists/Discovery/DNS/subdomains-top1million-110000.txt
 WL_DIR=/usr/share/seclists/Discovery/Web-Content/raft-medium-directories.txt
 mkdir -p "$OUT"
@@ -16,91 +20,165 @@ Every stage ends with one normalized `NN-name.txt` artifact in `$OUT` (plus
 raw per-tool files for forensics). Wordlists shown are Kali SecLists paths —
 adjust per machine, record the list used in `run.log`.
 
+## Stage classes — three different kinds of traffic
+
+Every stage below carries a class label. Classes, not stage numbers, decide
+what permission you need:
+
+- **P — passive third-party.** All requests go to public/third-party
+  infrastructure (CT logs, search engines, GitHub, archives). The target
+  sees nothing. Default-safe on any program.
+- **T — target traffic.** Packets/requests reach the scoped target or its
+  hosting edge. Requires written authorization AND targets drawn only from
+  `allowlist.txt`. Default to low rate, read-only requests.
+- **I — intrusive / high-volume.** Port scans, DNS brute-force, directory
+  brute-force. Requires *explicit* policy permission (not just a scope list),
+  a strict allowlist-derived target file, conservative rate, and
+  shared-infrastructure exclusion. Never part of a routine run by default.
+
+The deny-by-default rule applies inside every T/I stage: a discovered
+hostname or resolved IP is a **lead** until it is confirmed on the allowlist
+and owned by the program — shared/CDN IPs never inherit authorization from
+a related hostname.
+
 ---
 
-## Stage 1 — subdomain enumeration
+## Stage 1 — subdomain enumeration   [P passive; optional I gated]
 
 **Purpose:** widest possible net for `*.example.com`. Passive sources first
 (cert logs, search-engine indexes, amass passive), then optional brute-force
-permutations. Merge everything into one deduped host list.
+permutations. Merge everything into one deduped host list — then **filter by
+allowlist membership**, not just by exclusions.
 
-**Commands**
+**Commands — passive [P]**
 
 ```bash
-# passive: cert transparency (no packets to target)
+# cert transparency (no packets to target)
 curl -s "https://crt.sh/?q=%25.$TARGET&output=json" \
   | jq -r '.[].name_value' | tr 'A-Z' 'a-z' | sed 's/^\*\.//' \
   | sort -u > "$OUT/raw-crtsh.txt"
 
-# passive: amass passive + sublist3r
+# amass — VERSION MATTERS (v5 rewrote the tool):
+#   v4.x (classic CLI):
 amass enum -passive -d "$TARGET" -o "$OUT/raw-amass-passive.txt"
-sublist3r -d "$TARGET" -o "$OUT/raw-sublist3r.txt"
-
-# active (gated): DNS brute-force + amass active/alts
-gobuster dns -d "$TARGET" -w "$WL_DNS" -t 50 -i -o "$OUT/raw-gobuster-dns.txt"
-amass enum -active -brute -d "$TARGET" -w "$WL_DNS" -o "$OUT/raw-amass-active.txt"
+#   v5.x (engine + Asset Database): `enum` auto-starts the local engine and
+#   results land in the asset DB, not a -o file (a plain `-o` can come out
+#   empty). Populate, then export from the DB:
+amass enum -passive -d "$TARGET"                 # engine auto-starts
+amass subs -d "$TARGET" > "$OUT/raw-amass-passive.txt"   # check `amass subs -h`
+#   `amass -version` tells you which family you're on; many hunters pin
+#   amass v4.2.0 for the simple -o workflow — either is fine, document it.
+sublist3r -d "$TARGET" -o "$OUT/raw-sublist3r.txt"   # optional: unmaintained
 ```
 
-**Normalize + merge**
+**Commands — intrusive [I] (explicit DNS-brute-force permission required)**
+
+```bash
+gobuster dns -d "$TARGET" -w "$WL_DNS" -t 50 -i -o "$OUT/raw-gobuster-dns.txt"
+amass enum -active -brute -d "$TARGET" -w "$WL_DNS" -o "$OUT/raw-amass-active.txt"  # v4 flags
+```
+
+**Normalize + merge, then filter by allowlist**
 
 ```bash
 cat "$OUT"/raw-crtsh.txt "$OUT"/raw-amass-passive.txt "$OUT"/raw-sublist3r.txt \
   | tr 'A-Z' 'a-z' | sed 's/^\*\.//; s/\r$//' | grep -E '\.[a-z]{2,}$' \
   | sort -u > "$OUT/01-subdomains-passive.txt"
-# if active was authorized, add its hosts too:
+# if intrusive stage was authorized, add its hosts too:
 grep -oE '[a-z0-9._-]+\.[a-z0-9.-]+' "$OUT"/raw-gobuster-dns.txt "$OUT"/raw-amass-active.txt 2>/dev/null \
   | cut -d: -f2 | tr 'A-Z' 'a-z' | sort -u > "$OUT/01b-subdomains-active.txt"
 cat "$OUT"/01-subdomains-passive.txt "$OUT"/01b-subdomains-active.txt 2>/dev/null \
-  | sort -u > "$OUT/01-subdomains.txt"
-# drop known out-of-scope exclusions (keep a scoped copy for diffing)
-if [ -s scope-exclusions.txt ]; then
-  grep -vFf scope-exclusions.txt "$OUT/01-subdomains.txt" > "$OUT/01-subdomains-scoped.txt" || true
-else
-  cp "$OUT/01-subdomains.txt" "$OUT/01-subdomains-scoped.txt"   # no exclusions = all in scope
-fi
+  | sort -u > "$OUT/01-subdomains.txt"          # ALL discovered = leads
+
+# ALLOWLIST membership decides what target-traffic stages may touch.
+# Missing/empty allowlist => empty allowlisted list (never "everything is
+# in scope"). Wildcard lines (*.example.com) match via proper wildcard
+# semantics, not grep -F fixed strings:
+python3 - "$OUT/01-subdomains.txt" > "$OUT/01-subdomains-allowlisted.txt" <<'PY'
+import fnmatch, sys, os
+try:
+    pats = [l.strip().lower() for l in open(os.environ["ALLOWLIST"])
+            if l.strip() and not l.startswith("#")]
+except (OSError, KeyError):
+    pats = []                       # no allowlist -> nothing is in scope
+excl = []
+ex_path = os.environ.get("EXCLUSIONS", "")
+if ex_path and os.path.exists(ex_path):
+    excl = [l.strip().lower() for l in open(ex_path)
+            if l.strip() and not l.startswith("#")]
+def hit(host, pats):
+    for p in pats:
+        if p.startswith("*."):
+            base = p[2:]
+            # *.example.com covers subdomains only; the apex needs its own
+            # allowlist line — do not silently widen scope
+            if host.endswith("." + base):
+                return True
+        elif fnmatch.fnmatch(host, p):
+            return True
+    return False
+for line in open(sys.argv[1]):
+    h = line.strip().lower()
+    if h and hit(h, pats) and not hit(h, excl):
+        print(h)
+PY
 ```
 
-**Output files:** `01-subdomains.txt` (all), `01-subdomains-scoped.txt` (in-scope),
-`raw-crtsh.txt`, `raw-amass-passive.txt`, `raw-sublist3r.txt`, `raw-gobuster-dns.txt`,
-`raw-amass-active.txt`.
+Wildcard semantics written down: `*.example.com` matches
+`api.example.com` and `a.b.example.com` — it does **not** cover the apex
+`example.com` (the apex needs its own allowlist line; never silently widen
+scope). An asset that matches no allowlist line stays in `01-subdomains.txt`
+as a lead for phase-2's ownership check — it is not fed to any
+target-traffic stage.
+
+**Output files:** `01-subdomains.txt` (all leads), `01-subdomains-allowlisted.txt`
+(the only list T/I stages may read), `01-subdomains-passive.txt`,
+`01b-subdomains-active.txt`, `raw-*`.
 
 **Failure notes**
 
 - crt.sh returns nothing or times out -> retry, or use Cert Spotter/Censys; SAN
   lists lag weeks behind reality.
-- sublist3r is abandonware-adjacent; if it crashes, its sources overlap amass's —
-  proceed without it.
-- amass v4 renamed flags (`enum` subcommand flags differ); check `amass enum -h`
-  for `-passive`/`-active`/`-brute` on your build.
+- sublist3r is unmaintained (last release ~2019); if it crashes, its sources
+  overlap amass's — proceed without it.
+- amass **v5** (2025+) is a rewrite: subcommands `engine|enum|subs|track|viz`,
+  `enum` drives a local engine and stores results in the Asset Database —
+  the classic `enum -o file.txt` dump does not apply (may produce an empty
+  file). Export with `amass subs`/DB queries, or pin v4.2.0 for the old
+  `-passive -o` flow. Check `amass -version` before assuming flags.
 - `gobuster dns` prints `Found: host [IP]` — hence the `grep -oE` extraction above.
-- `grep -vFf` treats exclusion lines as fixed strings: `api.example.com` also drops
-  `test-api.example.com`, and a wildcard like `*.dev.example.com` matches nothing.
-  Write exclusions as literal names, or switch to regex (`grep -vE 'dev\.example\.com$'`).
+- `scope-exclusions.txt` applies on top of the allowlist through the same
+  matcher — `*.dev.example.com` drops the whole subtree, `api.example.com`
+  drops only that exact host. Exclusions subtract; they never widen scope.
 - Wildcard DNS makes every brute-forced name resolve; spot-check a random name
   (`dig +short A does-not-exist-12345.$TARGET`) and subtract the wildcard answer IPs.
   Plain `dig +short` also prints CNAME targets mid-chain — ask for `A` explicitly
   and filter to `^[0-9.]+$` when you want IPs only.
 
-**Passive/active gating:** crt.sh, amass `-passive`, sublist3r = passive (target
-sees nothing). `gobuster dns` and amass `-active -brute` query resolvers for
-guessed names — low impact but technically active; run only when the policy
-permits DNS brute-force, and keep the scoped/unscoped split above.
+**Gating:** crt.sh, amass passive, sublist3r = class P (target sees nothing).
+`gobuster dns` and amass `-active -brute` = class I — explicit DNS-brute-force
+permission, plus the allowlist filter above governs what any later stage may
+touch regardless of what DNS answered.
 
 ---
 
-## Stage 2 — live probe
+## Stage 2 — live probe   [T target traffic]
 
-**Purpose:** turn the subdomain list into URLs that actually serve HTTP(S),
-with status, title, tech, and IP per host. This is the working list for every
-later stage.
+**Purpose:** turn the **allowlisted** subdomain list into URLs that actually
+serve HTTP(S), with status, title, tech, and IP per host. This is the working
+list for every later stage.
 
 **Commands**
 
 ```bash
-httpx -l "$OUT/01-subdomains-scoped.txt" -o "$OUT/raw-httpx-urls.txt" -silent
-httpx -l "$OUT/01-subdomains-scoped.txt" -sc -cl -title -tech-detect -ip -fr \
-  -o "$OUT/02-live-probe.txt" -silent
+# input is the ALLOWLISTED file — never 01-subdomains.txt (all leads)
+httpx -l "$OUT/01-subdomains-allowlisted.txt" -o "$OUT/raw-httpx-urls.txt" -silent
+httpx -l "$OUT/01-subdomains-allowlisted.txt" -sc -cl -title -tech-detect -ip -fr \
+  -rate-limit 50 -o "$OUT/02-live-probe.txt" -silent
 ```
+
+An empty `01-subdomains-allowlisted.txt` correctly produces an empty probe —
+that is the deny-by-default outcome, not a bug.
 
 `raw-httpx-urls.txt` is the URL list; `02-live-probe.txt` is the annotated list.
 Copy the first to the canonical artifact:
@@ -122,32 +200,75 @@ cp "$OUT/raw-httpx-urls.txt" "$OUT/02-live-hosts.txt"
   keep it, but note the final URL is what lands in the file.
 - Default threads are high; add `-rate-limit 50` on programs with rate rules.
 
-**Passive/active gating:** httpx sends real HTTP requests to the target —
-active. It is the cheapest active step and almost always in-scope, but it is
-where "passive" ends: everything from here down touches the wire.
+**Gating:** httpx sends real HTTP requests to the target — class T. Cheapest
+target-traffic step and almost always in-scope, but it is where "passive"
+ends: input comes only from `01-subdomains-allowlisted.txt`, and `-rate-limit`
+defaults low (50) until the policy says otherwise.
 
 ---
 
-## Stage 3 — port scan
+## Stage 3 — port scan   [I intrusive — separate gate]
 
 **Purpose:** find the non-HTTP surface — forgotten admin panels, dev ports,
-exposed services — on owned netblocks. Two gears: masscan for breadth, nmap
-for depth/service ID.
+exposed services — on **owned** netblocks. This stage is off the default run
+path entirely unless the policy explicitly permits port scanning.
 
-**Commands**
+**Pre-flight (required):**
+
+1. Resolve allowlisted hosts; then **ownership-check every IP** before it
+   enters the scan list — an IP belonging to Cloudflare/Fastly/Akamai/
+   third-party SaaS is excluded even though the hostname is in scope
+   (shared infrastructure does not inherit authorization).
+2. Confirm the policy permits port scanning *at all*; note the permission
+   line in `run.log`.
+
+**Commands — default (nmap, conservative)**
 
 ```bash
-# resolve scoped hosts to IPs first (scans run against IPs, not URLs)
-dnsx -l "$OUT/01-subdomains-scoped.txt" -a -resp-only -o "$OUT/raw-ips.txt"
+dnsx -l "$OUT/01-subdomains-allowlisted.txt" -a -resp-only -o "$OUT/raw-ips.txt"
 # dig fallback per host: dig +short A host | grep -E '^[0-9.]+$'  (+short prints CNAMEs too)
-sort -u "$OUT/raw-ips.txt" > "$OUT/03-ips.txt"
 
-# breadth (needs root, watch the rate)
-sudo masscan -iL "$OUT/03-ips.txt" -p1-65535 --rate=10000 -oL "$OUT/raw-masscan.txt"
+# strip shared/CDN ranges before scanning — maintain scope-ip-exclusions.txt
+# under hunt/$TARGET/ (CIDR or exact IPs of Cloudflare/Fastly/Akamai/
+# managed-SaaS seen this run)
+export IP_EXCLUSIONS="hunt/$TARGET/scope-ip-exclusions.txt"
+python3 - "$OUT/raw-ips.txt" > "$OUT/03-ips.txt" <<'PY'
+import ipaddress, sys, os
+excl = []
+ex_path = os.environ.get("IP_EXCLUSIONS", "")
+if ex_path and os.path.exists(ex_path):
+    excl = [ipaddress.ip_network(l.strip(), strict=False)
+            for l in open(ex_path)
+            if l.strip() and not l.startswith("#")]
+for line in open(sys.argv[1]):
+    ip = line.strip()
+    try:
+        a = ipaddress.ip_address(ip)
+    except ValueError:
+        continue
+    if not any(a in n for n in excl):
+        print(ip)
+PY
 
-# depth (top ports + service detection)
-nmap -iL "$OUT/03-ips.txt" --top-ports 1000 -sV -oA "$OUT/raw-nmap-top1000"
-# parse open ports into the canonical artifact
+nmap -iL "$OUT/03-ips.txt" --top-ports 1000 -sV -T3 --max-rate 300 \
+  -oA "$OUT/raw-nmap-top1000"
+```
+**Commands — exceptional (masscan breadth)** — only when the policy
+*explicitly* permits high-rate scanning AND the target list is owned
+netblocks AND you've recorded justification + chosen rate in `run.log`:
+
+```bash
+sudo masscan -iL "$OUT/03-ips.txt" -p1-65535 --rate=1000 \
+  --excludefile "hunt/$TARGET/scope-ip-exclusions.txt" -oL "$OUT/raw-masscan.txt"
+```
+
+Start at `--rate=1000`, not 10000 — masscan bypasses the OS stack and a
+high rate saturates links and reads as an attack to defenders. This is the
+exceptional path, never the routine one.
+
+**Normalize**
+
+```bash
 # masscan -oL lines: "open tcp 443 1.2.3.4 <ts>" -> ip:port
 grep -h 'open' "$OUT/raw-masscan.txt" 2>/dev/null | awk '{print $4":"$3}' > "$OUT/03-ports.txt"
 # nmap .gnmap lines: "Host: 1.2.3.4 ()\tPorts: 22/open/tcp//ssh///, 80/open/tcp//http///, ..."
@@ -161,41 +282,46 @@ grep -h 'Ports:' "$OUT/raw-nmap-top1000.gnmap" 2>/dev/null | awk '{
     if (f[2] == "open") print ip ":" f[1]
   }
 }' >> "$OUT/03-ports.txt"
+touch "$OUT/03-ports.txt"      # artifact exists even when the stage is skipped
 sort -u "$OUT/03-ports.txt" -o "$OUT/03-ports.txt"
 ```
 
-**Output files:** `03-ips.txt`, `03-ports.txt` (`ip:port` lines), `raw-masscan.txt`,
-`raw-nmap-top1000.{nmap,gnmap,xml}`.
+If the stage is skipped (no port-scan permission — the common case), write a
+one-line `03-ports.txt` placeholder (`# skipped: no port-scan permission`)
+so the artifact contract still holds for the diff stage.
+
+**Output files:** `03-ips.txt` (owned IPs only), `03-ports.txt` (`ip:port`),
+`raw-masscan.txt` (exceptional only), `raw-nmap-top1000.{nmap,gnmap,xml}`.
 
 **Failure notes**
 
-- masscan requires root and bypasses the OS stack — a too-high `--rate` saturates
-  links and looks like an attack to defenders. Start at 1k-10k, keep
-  `--excludefile` for known-sensitive ranges.
+- masscan requires root and bypasses the OS stack — exceptional path only;
+  keep `--excludefile` pointed at `scope-ip-exclusions.txt`.
 - masscan output lines look like `open tcp 443 1.2.3.4 1695555555` — field order
   is `state proto port ip ts`; the awk above prints `ip:port`.
 - nmap `.gnmap` is NOT line-per-port — ports are a comma-separated `port/state/proto`
   list inside the `Ports:` field of the host line. `grep '^[0-9]+/tcp'` matches
   nothing; the awk above splits `Host:`/`Ports:` fields instead.
 - Hosts behind Cloudflare/Fastly/etc. answer every port open-looking or none —
-  CDN ranges are usually out of scope anyway; scan owned space (ASN/netblocks),
-  not CDN edges.
+  the pre-flight IP filter is exactly what keeps CDN edges out of `-iL`.
 - nmap `-sC` (default scripts) is noisy and can trip IDS; use only with
-  justification in `run.log`.
+  justification in `run.log`. `-T3 --max-rate 300` is the conservative default;
+  raise only if the policy tolerates it.
 - Windows: masscan builds exist but nmap+Zenmap is the sane default.
 
-**Passive/active gating:** this is the loudest stage in the runbook — unambiguously
-active. Confirm the policy permits port scanning at all, restrict `-iL` to
-in-scope owned IPs (not every IP a subdomain resolved to through a CDN), record
-the rate used, and skip entirely if the program forbids it.
+**Gating:** loudest stage — class I, off the default path. Requirements stack:
+written authorization + explicit port-scan permission + allowlist-derived
+owned IPs only + recorded rate. Any missing item => write the `skipped`
+placeholder and move on.
 
 ---
 
-## Stage 4 — directory & file enumeration
+## Stage 4 — directory & file enumeration   [I intrusive — gated]
 
 **Purpose:** per live host, brute-force paths for admin panels, config files,
 backups, old endpoints. Expensive — budget it: deep on interesting hosts,
-shallow `common.txt` pass on the rest.
+shallow `common.txt` pass on the rest. Input is `02-live-hosts.txt`, which
+already descends from the allowlist — never re-derive targets here.
 
 **Commands**
 
@@ -236,29 +362,29 @@ grep -hE '^\[?[0-9]{3}' "$OUT"/raw-dirsearch-*.txt 2>/dev/null \
 - `-k` on gobuster ignores TLS errors — needed for dev/staging certs, but note
   that you used it.
 
-**Passive/active gating:** fully active and the most request-dense stage —
-thousands of GETs per host. Requires explicit scope permission (most web-target
-programs allow it; rate-limited programs may not). Never run against hosts that
-failed the scoped check, and throttle on shared-infra programs.
+**Gating:** class I — most request-dense stage, thousands of GETs per host.
+Requires explicit scope permission (most web-target programs allow it;
+rate-limited programs may not). Targets come only from `02-live-hosts.txt`;
+throttle `-t` and add delays on shared-infra or rate-sensitive programs.
 
 ---
 
-## Stage 5 — screenshots
+## Stage 5 — screenshots   [T target traffic — read-only]
 
 **Purpose:** eyeball every live host at once. Login portals, debug pages,
 default installs, and "why does this exist" apps fall out of a 10-minute skim
 that no status-code column reveals.
 
-**Commands**
+**Commands — gowitness v3 (maintained)**
 
 ```bash
-eyewitness --web -f "$OUT/02-live-hosts.txt" -d "$OUT/05-eyewitness" \
-  --no-prompt --threads 8
-# open the triage report
-ls "$OUT/05-eyewitness/report.html"
+gowitness scan file -f "$OUT/02-live-hosts.txt" \
+  --write-db --screenshot-path "$OUT/05-gowitness"
+# triage in the report viewer (gowitness report server), or browse PNGs
+ls "$OUT/05-gowitness"
 ```
 
-Triage the report by hand; write one line per interesting host:
+Triage by hand; write one line per interesting host:
 
 ```bash
 printf '%s\n' "https://dev.$TARGET — default Jenkins login, no auth noted" \
@@ -266,31 +392,47 @@ printf '%s\n' "https://dev.$TARGET — default Jenkins login, no auth noted" \
 ```
 
 **Output files:** `05-screenshots.txt` (manual triage notes — the diffable
-artifact), `05-eyewitness/` (report.html + PNGs — evidence, not diffed).
+artifact), `05-gowitness/` (screenshots + sqlite DB — evidence, not diffed).
 
 **Failure notes**
 
-- Command name varies by distro: `eyewitness`, `EyeWitness`, or
-  `python3 EyeWitness.py`. Needs geckodriver/Firefox; headless errors usually
-  mean a missing driver, not dead hosts.
-- Timeouts pile up on dead-ish hosts; `--timeout` (per-request) and a smaller
-  input file keep runs sane. Screenshot only `02-live-hosts.txt`, not raw subs.
+- gowitness **v3** rewrote the CLI: `scan file -f LIST --write-db
+  --screenshot-path DIR`. The v2 `gowitness file -f` / `single URL` forms are
+  gone — check `gowitness --help` on your build. `report server` serves the
+  DB; without `--write-db` only PNGs land on disk.
+- Needs a Chrome/Chromium it can drive (headless CDP) — missing browser is
+  the usual failure, not dead hosts.
+- Timeouts pile up on dead-ish hosts; a smaller input file keeps runs sane.
+  Screenshot only `02-live-hosts.txt`, not raw subs.
 - Auth-gated apps screenshot as login pages — still note them; the login type
   (SSO vs local vs default-looking) is the signal.
-- Alternatives if eyewitness breaks: gowitness, aquatone — same `-f url-list`
-  workflow.
+- eyewitness/aquatone still work if you have them but are less maintained;
+  the `-f url-list` workflow is equivalent.
 
-**Passive/active gating:** active (one GET + render per host) but read-only and
-low-rate — same exposure class as the stage-2 probe you already gated. The
-triage itself is offline.
+**Gating:** class T (one GET + render per host), read-only, low rate — same
+exposure as the stage-2 probe it reads from. The triage itself is offline.
 
 ---
 
-## Stage 6 — GitHub, pastes & code leaks
+## Stage 6 — GitHub, pastes & code leaks   [P passive — secrets handling]
 
 **Purpose:** the org's own public footprint: hardcoded tokens in repos, internal
 hostnames in gists, config dumps on pastebins. Highest lead-per-minute ratio of
 any stage, and fully passive toward the target.
+
+**Secret-handling rules (non-negotiable):**
+
+- Raw scanner output (`raw-trufflehog.json`, `raw-gitleaks-*.json`, cloned
+  repos) **contains live secrets**. Keep it inside `$OUT` only — never paste
+  into `notes.md`, evidence bundles, or reports. Reports cite
+  file-path + key-type + a masked prefix (`AKIA…AB12` style), never the value.
+- `06-code-leads.txt` carries locations only (repo, file, secret type) — no
+  secret material.
+- A found credential is never validated against target auth without the
+  same explicit authorization as any credential use (see the orchestrator's
+  scope contract). Enumeration ≠ permission to log in.
+- `gh-clones/` is a cache holding leaked secrets in plain text — delete it
+  after extraction (`rm -rf "$OUT/gh-clones"`) once leads are recorded.
 
 **Commands**
 
@@ -344,20 +486,18 @@ matters).
 - GitHub code search needs auth — `gh auth login` or an API token; unauthenticated
   web search misses `filename:`/`extension:` qualifiers.
 - Verified findings from trufflehog are the priority queue; unverified hits are
-  bulk noise — sort, don't drown.
+  bulk noise — sort, don't drown. Verified ≠ permission to use the credential.
 - Adjacent checks worth an hour (note results in the lead file): cloud bucket
   permutations (`$ORG-dev`, `$ORG-backup` on the usual endpoints), Google dorks
   (`site:$TARGET inurl:admin`, `ext:log|sql|conf`), Wayback for dead endpoints.
 
-**Passive/active gating:** passive toward the target — all traffic goes to
-GitHub/paste/search infrastructure. Two cautions: rate limits on the GitHub
-API (use `gh`, back off on 403s), and verifying a found token against target
-auth *is* active — that verification step needs the same scope check as any
-credential use.
+**Gating:** class P toward the target — all traffic goes to GitHub/paste/
+search infrastructure. Two cautions: rate limits on the GitHub API (use `gh`,
+back off on 403s), and the credential-validation rule above.
 
 ---
 
-## Stage 7 — tech fingerprinting
+## Stage 7 — tech fingerprinting   [T target traffic — low rate]
 
 **Purpose:** stack per live host — server, framework, CMS, JS libs. Output feeds
 the vuln-class checklist: WordPress -> wpscan, GraphQL -> introspection,
@@ -403,7 +543,32 @@ plus `raw-tech-tags.txt` are both diffable — copy whichever is cleaner to
 - CDNs front real stacks — `Akamai`/`cloudflare` tags mask origin tech; corroborate
   with error pages, cookie names, and `Server` headers in `02-live-probe.txt`.
 
-**Passive/active gating:** `-tech-detect` rides along on the already-gated stage-2
+**Gating:** class T. `-tech-detect` rides along on the already-gated stage-2
 requests. whatweb `-a 1` ≈ one request per host (same class as probing); `-a 3`
 and wappalyzer's headless render are heavier — apply on the interesting-host
 subset, not the whole list.
+
+---
+
+## Edge scenarios — decide before they happen
+
+- **No allowlist file / empty allowlist** → `01-subdomains-allowlisted.txt`
+  comes out empty; every T/I stage has zero targets and the run is a passive
+  collection only. That is the intended deny-by-default outcome — fix the
+  scope files, never "work around" the empty list.
+- **Apex vs wildcard** → `*.example.com` does not cover `example.com`; both
+  need their own allowlist lines. Check `scope.md`'s written interpretation.
+- **Wildcard DNS** → stage-1 note covers detection; subtract wildcard answer
+  IPs before trusting any resolution.
+- **CDN/shared-IP resolution** → hostname in scope, IP belongs to Cloudflare
+  → IP goes to `scope-ip-exclusions.txt`; stage 3 never touches it. Scan
+  owned space only.
+- **429s / rising latency anywhere** → rate limiting or WAF response: drop
+  threads, add delay, or stop the stage. Pushing through is a program-violation
+  pattern, not persistence.
+- **Secret found in stage 6** → record location + type + masked prefix in
+  leads; do not validate it; purge `gh-clones/`. The credential rule in the
+  orchestrator contract governs what happens next.
+- **Tool version mismatch** → amass v5 vs v4 and gowitness v3 vs v2 syntax
+  both differ per install; `-version`/`--help` first, record the version in
+  `run.log`.
