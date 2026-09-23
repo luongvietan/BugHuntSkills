@@ -12,7 +12,7 @@ Three phases: **cast a wide net → adapt & focus → document the attack surfac
   - `ext:php inurl:"api.php?action="`, `intitle:"index.of" intext:"api.txt"`
 - **API directories** — ProgrammableWeb, RapidAPI, apis.guru: endpoints, versions, auth model, docs links, SDKs (download & review source), changelog (past vulns, old versions).
 - **Shodan** — `hostname:"target.com" "content-type: application/json"`, `"wp-json"`, `"200 OK"`. Finds APIs w/o naming conventions via response fingerprinting.
-- **OWASP Amass** — `amass enum -passive -d target.com | grep api` → subdomains incl. `legacy-api`, `*-backup`, `dev` (improper-asset-management candidates). `amass intel -addr IPs`, `-d domain -whois`, `enum -active -brute -w API_superlist`, `viz` for graphs.
+- **OWASP Amass** — `amass enum -passive -d target.com | grep api` → subdomains incl. `legacy-api`, `*-backup`, `dev` (improper-asset-management candidates). `amass intel -addr IPs`, `-d domain -whois`, `enum -active -brute -w API_superlist`, `viz` for graphs. **(v4 syntax)** — amass **v5** (2025+) is a rewrite: subcommands `engine|enum|subs|track|viz`, results go to the Asset Database rather than stdout/`-o`; `intel` is gone. Check `amass -version`; the recon-pipeline skill covers both flows.
 - **GitHub** — search `org-name` + `api-key`/`password`/`token`. Mine all tabs: Code (search "api","key","secret"; check **History** for removed secrets), Issues (open issue = live bug), Pull requests (unmerged secret removal still shows the key in Files Changed). Even without secrets, harvest languages, endpoints, docs.
 - **Wayback Machine** — retracted API docs, old endpoints, deprecated versions.
 - **Pastehunter** — pastebin-style leaks.

@@ -1,5 +1,9 @@
 # API3:2019 — Excessive Data Exposure
 
+> **2023 status:** merged → **API3:2023 Broken Object Property Level
+> Authorization (BOPLA)** — this chapter is the *read* side; `ch06` (mass
+> assignment) is the *write* side of the same 2023 risk.
+
 ## Core Idea
 APIs return more data than the UI shows, trusting the client to filter. Sniff the raw response — the "extra" fields (PII, tokens, internal props) are the vulnerability. Scanners can't detect this; human judgment about data sensitivity is required.
 

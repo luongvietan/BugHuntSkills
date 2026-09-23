@@ -1,5 +1,9 @@
 # API10:2019 — Insufficient Logging & Monitoring
 
+> **2023 status:** dropped from the 2023 top 10 — keep it as a secondary,
+> defense-in-depth note paired with the exploit it failed to catch.
+> **API10:2023 is Unsafe Consumption of APIs** — see the SKILL.md crosswalk.
+
 ## Core Idea
 Without logs/alerts, attackers operate undetected — median breach detection is 200+ days, usually by outsiders. For bounty hunters: noisy attack traffic often goes unnoticed; the finding is the *absence* of detection for events that should alarm.
 

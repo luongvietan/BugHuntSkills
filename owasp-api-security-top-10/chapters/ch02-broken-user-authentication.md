@@ -1,5 +1,8 @@
 # API2:2019 — Broken User Authentication
 
+> **2023 status:** renamed → **API2:2023 Broken Authentication** (adds 3rd-party
+> auth-provider flaws). Same test surface.
+
 ## Core Idea
 Authentication endpoints are exposed to everyone and often misimplemented: missing anti-brute-force controls, weak token handling, wrong-mechanism-for-use-case. Two sub-issues: **lack of protection** on auth endpoints and **misimplementation** of the mechanism itself.
 

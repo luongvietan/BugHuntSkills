@@ -1,5 +1,8 @@
 # API7:2019 — Security Misconfiguration
 
+> **2023 status:** renumbered → **API8:2023 Security Misconfiguration**.
+> **API7:2023 is SSRF** — a new risk; see the SKILL.md crosswalk for routing.
+
 ## Core Idea
 The broadest surface: unhardened stack, missing patches, extra HTTP verbs, absent TLS/security headers, permissive CORS, verbose errors, open cloud storage. Automated tooling exists, making it the most-detectable risk.
 

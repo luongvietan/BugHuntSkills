@@ -1,5 +1,7 @@
 # API1:2019 — Broken Object Level Authorization (BOLA / IDOR)
 
+> **2023 status:** unchanged → **API1:2023 BOLA**. Quote API1:2023 in reports.
+
 ## Core Idea
 The #1 most common and impactful API flaw: the server trusts client-supplied object IDs instead of verifying the logged-in user may act on that object. Manipulating any object ID in a request = potential unauthorized access.
 

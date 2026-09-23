@@ -11,7 +11,7 @@ Knowledge base distilled from Corey Ball's *Hacking APIs* (Early Access). The bo
 
 Mental model: APIs are self-service machines. Documentation tells you how to use them; your job is to use them *unintended*. Most early wins come not from bypassing firewalls but from simply using an endpoint as designed — with someone else's resource ID, a forged token, or an extra JSON variable.
 
-Companion skill `owasp-api-security-top-10` covers the risk taxonomy; this skill covers *how to test for it* with tools.
+Companion skill `owasp-api-security-top-10` covers the risk taxonomy — including the maintained **2019 → 2023 crosswalk** (this book predates the 2023 edition; use 2023 IDs in reports) — this skill covers *how to test for it* with tools.
 
 ## How to use
 
@@ -42,4 +42,4 @@ Companion skill `owasp-api-security-top-10` covers the risk taxonomy; this skill
 
 ## Scope & ethics
 
-Assume testing is authorized and in scope (bug bounty or pentest engagement). Destructive-capable attacks (DELETE fuzzing, mass resource changes, `--os-shell`, `--dump-all`) belong on test accounts and non-production data — the book is explicit: validate BFLA deletes on your own resources, and prefer demonstrating impact over actually deleting client data.
+Assume testing is authorized and in scope (bug bounty or pentest engagement). Destructive-capable attacks (DELETE fuzzing, mass resource changes, `--os-shell`, `--dump-all`) belong on test accounts and non-production data — the book is explicit: validate BFLA deletes on your own resources, and prefer demonstrating impact over actually deleting client data. Volume-gated chapters (auth brute-force concepts ch05, evasion/rate-limits ch10, GraphQL cost tests ch11) carry per-chapter rules: low-volume proof on your own accounts by default; scale needs explicit policy permission. Edition/tool-currency metadata: `sources.md`.

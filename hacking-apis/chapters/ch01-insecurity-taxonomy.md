@@ -2,6 +2,14 @@
 
 Source: Chapter 3 (API Insecurities). Maps each weakness class to what it *looks like* during testing. See companion skill `owasp-api-security-top-10` for the full risk framework; this chapter is the attacker's field guide.
 
+> **Taxonomy note (2026 refresh):** the book predates the OWASP API Top 10 **2023**
+> edition. When mapping findings to a current framework, use the 2023 names —
+> BOLA (API1), Broken Authentication (API2), **BOPLA** (API3 = excessive data +
+> mass assignment merged), Unrestricted Resource Consumption (API4), BFLA
+> (API5), and the three new ones: Sensitive Business Flows (API6), SSRF (API7),
+> Unsafe API Consumption (API10). The crosswalk lives in
+> `owasp-api-security-top-10/SKILL.md`.
+
 ## Information disclosure (fuel for everything else)
 
 Sources: API responses themselves, public repos (GitHub), search engines, social media, company websites, public API directories (ProgrammableWeb, RapidAPI, apis.guru).

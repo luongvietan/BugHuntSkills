@@ -1,5 +1,8 @@
 # API9:2019 — Improper Assets Management
 
+> **2023 status:** renamed → **API9:2023 Improper Inventory Management** —
+> adds documented-vs-running version drift and data-flow inventory. Same tests.
+
 ## Core Idea
 Old versions, beta/staging hosts, and undocumented endpoints run the same data with weaker defenses. Version-rotate (`v2`→`v1`) and hunt alternate hosts — yesterday's API misses today's fixes (rate limits, authz, WAF rules).
 

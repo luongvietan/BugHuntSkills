@@ -2,6 +2,23 @@
 
 Source: Chapter 7. Turn discovered APIs into a working request collection, use them as intended, and score early wins: info disclosures, misconfigurations, excessive data exposure, business-logic flaws.
 
+## Authorization-boundary matrix (2026 refresh)
+
+When cataloging endpoints, record which *boundaries* each crosses — that is
+what decides the test. Use only researcher-owned accounts and data at every
+boundary:
+
+| Boundary | Question | Test class |
+|---|---|---|
+| **Object** | can account B act on account A's `{id}`? | BOLA (API1:2023) — two owned accounts |
+| **Property** | can the caller read/write fields the UI doesn't show? | BOPLA (API3:2023) — response diff + write-back on own objects |
+| **Function** | can a lower role call higher-role methods/paths? | BFLA (API5:2023) — vertical pair of owned accounts |
+| **Tenant/org** | does `org_id`/workspace context actually partition? | cross-tenant BOLA — needs two orgs you own |
+| **Workflow** | can the business flow be replayed/reordered/abused as designed? | Sensitive Business Flows (API6:2023) — low-volume simulation only |
+
+Every cell is tested with resources you own; "can I touch another user's X"
+is never answered against a real user.
+
 ## Step 1 — Get request information
 
 **Documentation** — try `/docs`, `/api/docs`, `docs.`, `dev.`, `developer.`, `/developers/documentation`. If locked down: register an account and look again, Google-dork it, check Wayback for retracted docs, fuzz doc paths (`subdomains_list`, `dir_list` from the Hacking-APIs repo). Admin docs are often public by self-service design — they're the BFLA target list.

@@ -1,5 +1,9 @@
 # API4:2019 — Lack of Resources & Rate Limiting
 
+> **2023 status:** broadened → **API4:2023 Unrestricted Resource Consumption**
+> (response size, CPU/memory, quotas, per-request cost — not just request rate).
+> All testing stays low-volume: prove the mechanism, never degrade service.
+
 ## Core Idea
 APIs without request/size/record limits can be exhausted by simple repeated calls — no auth needed, single machine or cloud. Enables DoS directly and unlocks brute-force attacks on auth/OTP endpoints.
 

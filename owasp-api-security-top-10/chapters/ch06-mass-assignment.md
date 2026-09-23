@@ -1,5 +1,9 @@
 # API6:2019 — Mass Assignment
 
+> **2023 status:** merged → **API3:2023 BOPLA** (write side; `ch03` is the read
+> side). **API6:2023 is a different risk** — Unrestricted Access to Sensitive
+> Business Flows; see the SKILL.md crosswalk for its routing.
+
 ## Core Idea
 Frameworks auto-bind client JSON to internal object properties. If the endpoint doesn't whitelist fields, attackers set properties they should never touch — privilege flags, balances, internal params. APIs *helpfully* expose property names via their responses.
 

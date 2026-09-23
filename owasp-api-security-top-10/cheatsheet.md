@@ -1,25 +1,33 @@
-# Cheatsheet — OWASP API Security Top 10 (2019): Tester Decision Table
+# Cheatsheet — OWASP API Security Top 10 (2019 → 2023 crosswalk): Tester Decision Table
+
+Risk column shows `2019 → 2023` mapping. Quote 2023 IDs in reports.
 
 ## Where to look → what to try
 
-| Surface | Try first | Risk |
+| Surface | Try first | Risk (19→23) |
 |---|---|---|
-| Any `{id}`/`{guid}`/`{name}` in path, query, body, header | Swap ID for another user's → 200+data = BOLA | API1 |
-| Custom headers (`X-User-Id`, `X-Account`) | Modify value → horizontal access | API1 |
-| Login / register / reset / OTP verify / token refresh | Credential stuffing, brute force, lockout missing, weak password | API2 |
-| JWT | `alg:none`, weak HMAC secret, no `exp` check, signature ignored | API2 |
-| Any JSON response | Diff fields vs UI → tokens/PII/internal props = exposure | API3 |
-| `size`, `limit`, `per_page`, `count`, `page` | Huge values → slowdown/errors/overflow | API4 |
-| Upload + server-side processing (thumbs, convert) | Oversized file → memory/CPU exhaustion | API4 |
-| Every endpoint | GET→PUT/DELETE/PATCH; `users`→`admins`; `/export_all`, `/new`, `/internal` | API5 |
-| Object mutation endpoints | Add `is_admin`, `role`, `balance`, `verified`, internal params | API6 |
-| Endpoints using shell-backed features | `$(cmd)`, `;cmd`, `|cmd`, backticks in params | API8 |
-| JSON/query params (Mongo-ish) | `[$ne]`, `[$gt]`, `[$regex]`, object/array juggling | API8 |
-| Subdomains & paths | `beta/staging/dev/test/mbasic/legacy` hosts, `/v1↔v2↔v3` rotation | API9 |
-| Web root | `.git`, `.env`, `.bash_history`, swagger/openapi files | API7 |
-| CORS | `Origin: evil.com` reflection + `Access-Control-Allow-Credentials` | API7 |
-| Errors | Force 4xx/5xx → stack traces, versions, paths | API7 |
-| Logged fields (UA, names, params) | `%0d%0a`, format strings → log injection | API10 |
+| Any `{id}`/`{guid}`/`{name}` in path, query, body, header | Swap ID for another user's → 200+data = BOLA | API1 → API1 |
+| Custom headers (`X-User-Id`, `X-Account`) | Modify value → horizontal access | API1 → API1 |
+| Login / register / reset / OTP verify / token refresh | Lockout missing, weak password, low-volume spray on own accounts only | API2 → API2 |
+| JWT | `alg:none`, weak HMAC secret, no `exp` check, signature ignored | API2 → API2 |
+| Any JSON response | Diff fields vs UI → tokens/PII/internal props = exposure | API3 → API3 BOPLA (read) |
+| Object mutation endpoints | Add `is_admin`, `role`, `balance`, `verified`, internal params | API6 → API3 BOPLA (write) |
+| `size`, `limit`, `per_page`, `count`, `page` | Large values → slowdown/errors/overflow — few requests, measure, stop | API4 → API4 |
+| Upload + server-side processing (thumbs, convert) | One oversized file → memory/CPU signal; no repeated load | API4 → API4 |
+| Every endpoint | GET→PUT/DELETE/PATCH; `users`→`admins`; `/export_all`, `/new`, `/internal` | API5 → API5 |
+| Purchase/book/vote/coupon flows | Low-volume abuse simulation on own accounts — auto-purchase, re-use coupon, flood-by-design | — → API6 (new) |
+| URL params, webhook/callback registration, file-import-by-URL | `http://127.0.0.1/`, `http://169.254.169.254/`, collaborator URL → SSRF | — → API7 (new) |
+| Endpoints using shell-backed features | `$(cmd)`, `;cmd`, `|cmd`, backticks in params | API8 → dropped 2023* |
+| JSON/query params (Mongo-ish) | `[$ne]`, `[$gt]`, `[$regex]`, object/array juggling | API8 → dropped 2023* |
+| Subdomains & paths | `beta/staging/dev/test/mbasic/legacy` hosts, `/v1↔v2↔v3` rotation; documented-vs-running drift | API9 → API9 |
+| Web root | `.git`, `.env`, `.bash_history`, swagger/openapi files | API7 → API8 |
+| CORS | `Origin: evil.com` reflection + `Access-Control-Allow-Credentials` | API7 → API8 |
+| Errors | Force 4xx/5xx → stack traces, versions, paths | API7 → API8 |
+| Third-party API the target consumes | Trust boundary: unvalidated upstream data stored/reflected, weak TLS to provider, over-scoped provider token | — → API10 (new) |
+| Logged fields (UA, names, params) | `%0d%0a`, format strings → log injection | API10 → dropped 2023* |
+
+\* dropped from the 2023 top 10 ≠ not a bug — still test; report under the
+class name, not a 2023 ID.
 
 ## Severity & report hints
 

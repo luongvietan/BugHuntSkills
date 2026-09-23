@@ -2,6 +2,15 @@
 
 Source: Chapter 13. Controls block based on *attribution* — IP, token, headers, request metadata. Change what they attribute → evade.
 
+> **Gating (2026 refresh):** this chapter is *not* quickstart material. Evasion
+> probes (IP rotation, header spoofing, encoding tricks) and any resource-
+> exhaustion test require **explicit permission in the policy** — many programs
+> ban automated evasion or DoS-class testing outright. Rate-limit *verification*
+> is different from evasion: a small number of extra requests past the limit on
+> your own account demonstrates the mechanism; rotating infrastructure to keep
+> going is an escalation that needs permission. Omit these from quickstarts and
+> first passes.
+
 ## Detecting controls before they detect you
 
 Use the API as intended first; controls hide in responses: `X-CDN: Imperva|Zenedge|fastly|akamai|Incapsula`, `X-Kong-Proxy-Latency`, `Server: Zenedge/Kestrel`, `X-Original-URI`. A 302 to a CDN = traffic proxied through a WAF. Active detection: `nmap --script http-waf-detect`, Wafw00f, W3af, Bypass WAF.

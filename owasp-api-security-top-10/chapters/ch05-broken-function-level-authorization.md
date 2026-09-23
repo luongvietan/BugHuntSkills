@@ -1,5 +1,7 @@
 # API5:2019 — Broken Function Level Authorization (BFLA)
 
+> **2023 status:** unchanged → **API5:2023 BFLA**.
+
 ## Core Idea
 Role/group-scoped *functions* (not objects) exposed to the wrong caller — admin endpoints callable by regular users, or HTTP-method swaps turning a read into a write. APIs are predictable: `GET`→`PUT`, `/users`→`/admins` guessing works.
 

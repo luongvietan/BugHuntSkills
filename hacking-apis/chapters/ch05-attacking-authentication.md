@@ -2,6 +2,13 @@
 
 Source: Chapter 8. Goal: go from no access → unauthorized access → other users' resources → privileged access. Classic flaws (bad passwords, default creds, verbose errors, weak reset flows) plus API-specific ones (no rate limit on auth, one token for everything, low-entropy tokens, JWT misconfig).
 
+> **Volume rules (2026 refresh):** every check below runs **low-volume against
+> your own accounts**. Brute-force, credential-stuffing, and password-spraying
+> wordlists are the *concept* — on a live program you prove the missing control
+> (no lockout after N tries, OTP accepts unlimited attempts, weak password
+> policy) with a handful of attempts, never a real stuffing run. Resource-
+> exhaustion and bypass-at-scale tests need explicit policy permission.
+
 ## Classic attacks
 
 **Brute force** — capture the real auth request, replicate body format in Wfuzz:

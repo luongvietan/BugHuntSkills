@@ -1,5 +1,8 @@
 # API8:2019 — Injection
 
+> **2023 status:** dropped from the 2023 top 10 — still a real test class.
+> Payload depth: `payloads-all-the-things`; mechanism depth: `web-security-academy`.
+
 ## Core Idea
 Untrusted data reaches an interpreter (SQL, NoSQL, LDAP, OS command, XML parser, ORM) as part of a command/query. APIs take injection input anywhere: params, body, headers, integrated upstream services. Scanners and fuzzers find these easily; impact runs to full host takeover.
 

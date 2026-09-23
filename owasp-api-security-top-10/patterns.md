@@ -25,10 +25,25 @@
 **How**: rotate `/v1/↔/v2/↔/v3/`, try unversioned paths; enumerate subdomains `api.`, `beta`, `staging`, `dev`, `test`, `mbasic`, `legacy`; diff behaviors vs production (missing rate limit/authz/WAF)
 **Trade-offs**: shadow hosts sometimes out of scope — check program rules
 
-## Rate-Limit Gap Testing
+## Rate-Limit Gap Testing → API4:2023 Unrestricted Resource Consumption
 **When to use**: auth, OTP, reset, search, export, upload, paging endpoints
-**How**: burst requests; try oversized `size/limit/per_page` values; check per-account vs per-IP keying; verify limit applies on all hosts/versions
+**How**: small bursts only; try oversized `size/limit/per_page` values; check per-account vs per-IP keying; verify limit applies on all hosts/versions. 2023 widened the class: response-size amplification, per-request cost, CPU/memory-heavy ops, quota absence all count — not just request rate.
 **Trade-offs**: demonstrate mechanism with minimal requests — never actually DoS a live target
+
+## Sensitive Business Flow Abuse — API6:2023 (new)
+**When to use**: flows where the *legitimate* function is the weapon — purchase, booking, voting, coupon/invite redemption, comment/review posting, account creation
+**How**: identify the flow's business constraint ("one per user", "first come first served", "rate-limited by design") → simulate the abuse pattern **at low volume on your own accounts**: re-use a coupon across your two test accounts, script a handful of automated buys, double-submit a form. The finding is the *absence of a control*, proven small
+**Trade-offs**: NEVER run at scale — a real scalping/spam run is a program violation; 5-10 requests proves the missing control
+
+## SSRF via API — API7:2023 (new)
+**When to use**: any parameter holding a URL, webhook/callback registration, import-by-URL, PDF/report generators, link-preview unfurlers, file fetchers
+**How**: `http://127.0.0.1`, `http://169.254.169.254` (cloud metadata — check `hacking-the-cloud` for the per-provider paths), your own collaborator URL, redirect chains to bypass naive filters. Payload depth: `payloads-all-the-things` SSRF chapter
+**Trade-offs**: metadata hits are read-only probes only — never mint creds or pivot without explicit authorization
+
+## Unsafe Consumption of APIs — API10:2023 (new)
+**When to use**: features built on third-party APIs the target consumes — payment/status webhooks, partner data feeds, OAuth-provider integrations, "powered by X" widgets
+**How**: ask what the target trusts from its providers: unvalidated upstream data stored then reflected (stored XSS via partner API), missing TLS verification to the provider, provider tokens with wider scope than needed, trusting upstream `Content-Type`. Probe by observing how upstream responses are handled, not by attacking the provider
+**Trade-offs**: the third-party API itself is out of scope — you test the *target's handling* of it
 
 ## NoSQL Operator Injection
 **When to use**: JSON APIs backed by Mongo-like stores

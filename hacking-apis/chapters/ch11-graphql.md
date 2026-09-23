@@ -2,6 +2,15 @@
 
 Source: Chapter 14 (lab: DVGA). GraphQL ≠ REST: **one endpoint, POST only**; body carries `query` (read), `mutation` (write), `subscription` (realtime). Queries declare object type + args + wanted fields — think "SQL with extra steps". Most endpoints return **200 with errors in the body**, so status-code anomaly detection doesn't apply — diff response bodies/lengths instead.
 
+> **Bounded-probing rules (2026 refresh):** introspection queries and
+> nested/circular query tests are *expensive by design* — a deep nesting bomb
+> is a DoS probe. Run the single standard introspection query once; map the
+> schema from that result; don't loop it. Query-cost/depth tests (does the
+> server cap depth or complexity?) are demonstrated with ONE escalating
+> sequence, not a flood. Batching/alias attacks: a small aliased batch proves
+> the missing cost limit — never a 1000-alias packet. Suggestions/error
+> leakage stays the low-noise discovery path.
+
 ## Finding the endpoint & IDE
 
 - Dir-brute with GraphQL wordlists (`kr brute target -w seclists/…/graphql.txt`): `/graphql`, `/v1/graphql`, `/api/graphql`, `/graph`, `/graphiql`, `/console`, `/query`, `/graphql/console`, `/altair`, `/playground` + `/v2 /v3 /test /internal /mobile /legacy` variants.
