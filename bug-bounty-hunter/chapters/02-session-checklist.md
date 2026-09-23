@@ -19,6 +19,44 @@ hunt/<target>/
 recon/<target>/<YYYYMMDD>/   # per-run pipeline output (see recon-pipeline)
 ```
 
+URL-intake sessions keep the same contract files under the engagement
+workspace `engagements/<program-or-alias>/<YYYY-MM-DD>/` instead —
+layout and `engagement.md` fields in `04-engagement-workspace.md`.
+
+## Program-URL intake — when invoked with a Bugcrowd/HackerOne URL
+
+Session start runs through `06-authenticated-program-intake.md` instead of
+manual policy collection. The contract boxes below still apply — intake
+fills them, it does not replace them.
+
+- [ ] **Program URL parsed** — platform + program slug identified; active
+      phase stated; workspace `engagements/<program-or-alias>/<YYYY-MM-DD>/`
+      created under the active project root (root rule:
+      `04-engagement-workspace.md`)
+- [ ] **Browser surface resolved** — connected `mcp__cua_repl.js`
+      preferred, else any connected read-only browser surface; browser
+      access state (`available` | `signed-in` | `blocked`) recorded in
+      `engagement.md`. `blocked` stops only the browser-dependent step —
+      hand the user the smallest action (connect a surface or open the
+      signed-in page); never a credential-bearing HTTP/API fallback
+- [ ] **Authenticated page review complete** — only the program's
+      allowlisted researcher-facing pages (brief, scope/rewards, rules,
+      visible known issues, changelog, report instructions); each material
+      page recorded with source URL, retrieval timestamp (UTC), and the
+      displayed last-updated/revision indicator
+- [ ] **Scope contract filled from the exact page wording** — `scope.md` +
+      `allowlist.txt` written from what the pages show; an unreadable or
+      ambiguous section is a recorded gap with the affected scope field
+      marked `UNKNOWN` (uppercase — the scope-contract gap marker;
+      card-field gaps below stay lowercase `unknown`), never inferred from
+      adjacent wording
+- [ ] **Resume policy freshness** — on resume, re-open the live program
+      pages before any active work and compare the displayed
+      update/revision indicator with the saved snapshot; a material change
+      re-gates the affected asset/technique/method checks
+      (`blocked-by-policy` until re-verified). The ~7-day re-read below
+      applies either way
+
 ## Session init (phase 1 gate) — the scope contract
 
 All boxes required before any target traffic. An unchecked box means the

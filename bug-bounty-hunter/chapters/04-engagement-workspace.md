@@ -9,7 +9,10 @@ session. Concepts adapted from the Claude-BugHunter engagement scaffold
 ```text
 engagements/<program-or-alias>/<YYYY-MM-DD>/
   engagement.md          # program link, scope snapshot date, allowed methods, stop conditions
+                         # + intake/session metadata (fields below)
   scope.md               # the scope contract — see chapters/02-session-checklist.md
+  allowlist.txt          # machine-readable in-scope hosts/patterns — the ONLY
+                         # source active stages may draw targets from
   recon/                 # recon-pipeline dated runs + verified/leads split
     verified-assets.md
     unverified-leads.md  # discovered != authorized
@@ -24,6 +27,35 @@ The layout is a default, not a requirement — `recon-pipeline`'s dated
 `recon/<target>/<YYYYMMDD>/` output can live inside `recon/` as-is. The
 non-negotiable properties are the separations: scope contract, verified
 assets, unverified leads, finding records, evidence, submission state.
+
+Create the workspace under the active user project root — the directory the
+session's work belongs to, not the skills repository. If the current
+directory is the skills repository or is not a clear writable project, use
+the task's active project root instead. If no project root is available,
+STOP before creating any file and ask the user for a destination.
+
+### `engagement.md` — intake and session metadata
+
+The durable record of where the engagement stands; the intake chapter
+(`06-authenticated-program-intake.md`) writes here as it runs, and resume
+reads it first. Fields:
+
+- **Platform URL** and **program URL** — the intake input (e.g. the
+  Bugcrowd/HackerOne program URL from the invocation).
+- **Last read time (UTC)** and the program page's displayed
+  last-updated/revision indicator verbatim — the freshness anchor the
+  resume policy check compares against.
+- **Relevant source links** — brief, scope/rewards, rules, report
+  instructions; every material claim links to its source.
+- **Browser access state** — `available`, `signed-in`, or `blocked`.
+- **Current phase** — the seven-phase position the session is parked at.
+- **Completion summary** — what finished this session.
+- **Blocker list** — per blocker: what is known, what remains unknown, why
+  the workflow stopped, and the smallest user action that unblocks it.
+
+Metadata only — `engagement.md` never stores credentials, cookies, tokens,
+or unrelated account content; the browser access state label is the only
+session fact it records.
 
 ### `scope.md` minimum fields
 

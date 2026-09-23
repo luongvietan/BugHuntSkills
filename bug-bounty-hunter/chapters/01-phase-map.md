@@ -21,6 +21,15 @@ your hours-per-week, prior reports.
 
 **Actions:**
 
+- **Invoked with a Bugcrowd/HackerOne program URL?** Phase 1 runs through
+  `06-authenticated-program-intake.md` instead of manual collection: parse
+  the URL, resolve the connected browser (prefer the already `signed-in`
+  platform tab; states `available` / `signed-in` / `blocked`), read the
+  program's allowlisted researcher-facing pages, and fill the same scope
+  contract from them — unreadable sections recorded as scope gaps marked
+  `UNKNOWN` (the scope-field marker; card-field gaps stay lowercase
+  `unknown`). Phases 2–7 route exactly as below — intake changes how the
+  contract is filled, not where the work goes.
 - Read the full policy end-to-end and pin it: record the policy URL, the
   revision or the date you read it, in-scope asset list, exclusions, banned
   techniques (DoS, social engineering, automated scanning limits, brute
@@ -49,11 +58,22 @@ your hours-per-week, prior reports.
   overview if you want the short version first.
 
 **Exit criteria:** policy read; scope includes/excludes written to
-`hunt/<target>/scope.md`; banned techniques noted; two test accounts planned.
+`hunt/<target>/scope.md` + `allowlist.txt`; banned techniques noted; two
+test accounts planned. URL-intake sessions additionally record browser
+access state, last-read time, and the page's update indicator in
+`engagement.md`.
 
 **Do not skip:** the exclusions list. Hunters lose accounts to technically
 in-scope-looking assets (CDNs, acquired-company domains, third-party SaaS)
 that the policy carves out in one sentence.
+
+**Do not skip — the access boundary:** intake's browser read is passive
+research on the platform's own pages and grants nothing else. Target
+traffic — any request to a program asset — still needs the written policy
+through the normal gates below; escalation — state-changing, material-risk,
+or ambiguous actions — still waits for explicit user direction. Page access
+is not test authorization: browser navigation never silently promotes one
+grant into the next.
 
 ---
 
