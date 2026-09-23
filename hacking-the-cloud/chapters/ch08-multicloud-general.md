@@ -2,6 +2,17 @@
 
 Source: `aws/general-knowledge/` (aws_cli_tips, aws_organizations_defaults, block-expensive-actions-with-scps, why_recreating_an_iam_role, connection-tracking covered in ch06), `gcp/general-knowledge/*`, `gcp/enumeration/enumerate_all_permissions.md`, `gcp/avoid-detection/apps-script-abuse.md`, `azure/*`, `terraform/*`, `*/capture_the_flag/*`. Provider-agnostic model: control-plane identity → resource policies → data-plane access. Details differ; the hunting loop doesn't.
 
+> **Edge scenarios — decided in advance:**
+> - *Account ID belongs to a third party* (vendor/SaaS running on the
+>   target's domain): out of scope — report the dangling-reference bug, not
+>   the third party's cloud.
+> - *Credential of unclear ownership*: never validate "to find out" — decode
+>   the account ID offline (ch01), report as unverified.
+> - *Public bucket listing shows personal data*: stop at listing metadata;
+>   report exposure class, do not sample contents.
+> - *Cognito pool or SSO belongs to the program but its backend is another
+>   tenant's*: treat as shared infrastructure — no calls.
+
 ## AWS general knowledge worth internalizing
 
 - **Organizations model** — management account owns the org; member accounts carry `OrganizationAccountAccessRole` (admin, trusts mgmt) — the built-in lateral path (ch06). Invited accounts may lack it.

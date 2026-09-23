@@ -2,6 +2,14 @@
 
 Source: `aws/exploitation/` (orphaned CloudFront takeover, s3_server_access_logs, s3_streaming_copy, s3-bucket-replication-exfiltration), `aws/enumeration/` (loot_public_ebs_snapshots, discover_secrets_in_public_aims), `aws/post_exploitation/s3_acl_persistence.md`, `gcp/general-knowledge/gcp-buckets.md`, `azure/` (anonymous-blob-access, soft-deleted-blobs). Storage misconfig is the most common cloud bounty class — the tests are cheap, the impact is usually data read or hosted-content control.
 
+> **Evidence without data reads:** prove exposure with *metadata* — a
+> `ListBucket` returning object keys/count (not contents), a snapshot's
+> existence/size/encryption flag, an ACL or policy document — never by
+> downloading objects. A bucket containing personal data = stop at the
+> listing, report, don't sample. Write-access proof = upload a tiny
+> researcher-owned canary file to a path you created, then remove it — never
+> overwrite or delete existing objects.
+
 ## S3 — read, write, take over
 
 - **Probe**: `aws s3 ls s3://<bucket> --no-sign-request` (or just `https://<bucket>.s3.amazonaws.com`). List+read is the classic leak finding.

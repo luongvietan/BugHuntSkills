@@ -2,6 +2,13 @@
 
 Source: `aws/exploitation/` (iam_privilege_escalation, Misconfigured_Resource-Based_Policies/*, route53_modification, local_ec2_priv_esc_through_user_data, obfuscated_admin_policy, cognito_user_self_signup), `gcp/exploitation/*`, `azure/run-command-abuse.md`. Requires an existing foothold (leaked creds, SSRF creds, Cognito pool). For bounty work: prove the *policy condition* exists, don't execute the escalation.
 
+> **Escalation = narrative.** The evidence is the misconfiguration itself:
+> the resource policy granting `*` principal, the `iam:PassRole` +
+> `lambda:CreateFunction` combination, the public Cognito sign-up. Quote the
+> policy document / API response as proof; describe the escalation path it
+> enables — running the actual `PassRole`→invoke chain is post-exploitation,
+> not validation.
+
 ## AWS IAM privesc — the canonical families
 
 **Policy-write self-elevation** (attach or overwrite a better policy on yourself):

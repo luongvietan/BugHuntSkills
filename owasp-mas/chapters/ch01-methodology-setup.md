@@ -2,6 +2,13 @@
 
 Source: MASTG general chapters (app taxonomy, security testing, tampering & RE), Android/iOS platform overviews, and the setup techniques (device shell, app extraction, proxy, pinning bypass).
 
+> **Device rules (2026 refresh):** test devices run *test data only* —
+> emulator or a wiped physical device, dedicated test account, no real user
+> data anywhere on it. A rooted/jailbroken device that also holds real
+> accounts, photos, or messages is not a test device — stop and substitute.
+> Rooted-device findings on the target's *production* app are still in scope
+> only when the program says so (many exclude root-required issues).
+
 ## Testing types
 
 - **Black-box** — no information beyond what's publicly discoverable; simulates an external attacker. Slow, least coverage.

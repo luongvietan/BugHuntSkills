@@ -2,6 +2,12 @@
 
 Source: MASTG tools catalog + techniques pages (device access, analysis, MITM, instrumentation, patching).
 
+> **Tool currency (2026 refresh):** tool names and flags drift — check each
+> tool's current release before scripting (Frida/Objection versions pair
+> with OS versions; MobSF, apktool, jadx, idevicebackup2 flags change).
+> MASTG upstream lists `MASTG-TOOL-*` entries per tool — prefer those over
+> memorized invocations.
+
 ## Core instruments
 
 **Frida** — runtime instrumentation engine. `frida-server` on rooted/jailbroken device; `frida -U -f pkg` spawn + script hooks. Core uses: hook Java/ObjC methods (`Java.use`, `ObjC.classes`), trace crypto/network APIs, dump runtime values, call app functions. **Frida Gadget** (injected lib) enables instrumentation on **non-rooted/non-jailbroken** devices via repackaging. Frida CodeShare = community scripts (universal SSL unpinning, root-detection bypass, crypto monitors). r2frida ties it to radare2; Fridump dumps process memory.

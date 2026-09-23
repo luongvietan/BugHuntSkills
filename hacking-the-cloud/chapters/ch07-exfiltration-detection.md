@@ -2,6 +2,13 @@
 
 Source: `aws/exploitation/` (s3-bucket-replication-exfiltration, s3_server_access_logs, s3_streaming_copy), `aws/post_exploitation/` (iam_persistence*, lambda_persistence, iam_roles_anywhere, iam_rogue_oidc, s3_acl, user_data_script, codebuild runner, survive_access_key_deletion, network-firewall bypass, download_tools), `aws/avoiding-detection/*`, `gcp/avoid-detection/apps-script-abuse.md`. Two uses: (a) describe what an attacker *could* do next for impact narratives; (b) tell the blue team exactly which telemetry your PoC generated.
 
+> **Hard line for bounty work:** this chapter is *report material*, not a
+> runbook — exfiltration and persistence mechanics are never executed on a
+> program (they are also the strongest scope-violation signals). Use it to
+> write credible "what an attacker could do" impact and to name the
+> CloudTrail/GuardDuty events your own test generated so triage can find
+> them.
+
 ## Data-egress channels worth naming
 
 - **S3 replication backdoor** — `PutReplicationConfiguration` + assumable role silently mirrors current and future objects cross-account; Batch Operations sweeps existing objects. Evidence to cite: replication config in `get-bucket-replication`.

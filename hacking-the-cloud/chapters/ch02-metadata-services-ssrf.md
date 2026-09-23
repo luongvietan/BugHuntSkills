@@ -2,6 +2,11 @@
 
 Source: `aws/general-knowledge/intro_metadata_service.md`, `aws/exploitation/ec2-metadata-ssrf.md`, `lambda-steal-iam-credentials.md`, `gcp/…/metadata_in_google_cloud_instances.md`, `azure/abusing-managed-identities.md`, `terraform/terraform_enterprise_metadata_service.md`, `aws/post_exploitation/get_iam_creds_from_console_session.md`. Every major cloud exposes a link-local metadata endpoint that vends temporary credentials — the highest-value SSRF target and the core of the cloud kill chain.
 
+> **Bounty boundary:** reaching the metadata endpoint *at all* is the
+> reportable bug. Read-only proof = fetch a harmless key (`ami-id`,
+> `hostname`, instance-id) or the IAM role *name* — never mint/use the
+> vended credentials, never pivot onward. Credential use = ch03's gate.
+
 ## AWS IMDS — the crown jewel
 
 - **IMDSv1 (GET only, still widespread)**: `http://169.254.169.254/latest/meta-data/`. Also reachable over IPv6 `http://[fd00:ec2::254]/` on Nitro instances — try when v4 is filtered.

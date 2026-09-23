@@ -7,6 +7,13 @@ description: Mobile app security testing distilled from OWASP MASTG v2.0.0 (mas.
 
 Distilled from OWASP MASTG (mas.owasp.org), CC-BY-SA 4.0.
 
+> **Version status (verified 2026-09-23):** distilled from MASTG **v2.0.0**
+> (restructured release — MASWE weakness model). MASTG is a *rolling*
+> document at mas.owasp.org; MASVS now also includes a **MASVS-PRIVACY**
+> category not covered here — check upstream for its tests. Tool names
+> (Frida, Objection, MobSF, apktool, jadx, idevicebackup2) drift with
+> releases — `sources.md` records the review trail.
+
 Knowledge base distilled from the OWASP Mobile Application Security Testing Guide v2.0.0 — the practical companion to the MASVS verification standard. The MASTG's signature is a repeatable test shape:
 
 **MASWE weakness → Overview → Steps (static + dynamic) → Observation → Evaluation (pass/fail).**

@@ -1,6 +1,6 @@
 # Patterns — Reusable Heuristics from OWASP MASTG
 
-Cross-cutting heuristics across the MASVS categories. Per-category detail lives in `chapters/`.
+Cross-cutting heuristics across the MASVS categories. Per-category detail lives in `chapters/`. Version: MASTG v2.0.0 (rolling — see `sources.md`).
 
 ## The master test shape (every MASTG-TEST)
 

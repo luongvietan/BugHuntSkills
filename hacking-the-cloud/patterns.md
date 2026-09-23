@@ -17,7 +17,7 @@ Each hop multiplies severity: blind SSRF alone is medium; SSRF returning ASIA cr
 - **Error messages are an oracle.** AccessDenied leaks caller ARN+account; deny-all session policies classify public-vs-private resource policies; sign-up endpoints leak user existence when login is hardened; `NoSuchBucket` used to leak takeover targets. Whenever AWS/Azure/GCP answers *why* it refused, that's a recon primitive.
 - **Existence checks don't need auth.** Role/user name enum via your own trust policy, root email via console errors, account ID via bucket/key/or error — assemble the target map before touching it.
 - **Defaults are the vuln class.** Cognito self-signup, IMDSv1, unauthenticated identity pools, wildcard principals, missing OIDC `sub` conditions, non-retroactive org policies, soft-delete retention — hunt the knobs nobody turned.
-- **Temp creds have a clock.** ASIA tokens die in 15min–hours: validate once, immediately, and report — re-checking later may show "dead creds" that were live during the PoC window. Say so in the report.
+- **Temp creds have a clock.** ASIA tokens die in 15min–hours: if the policy authorizes validation, one `get-caller-identity` immediately — otherwise report the leak now; re-checking later may show "dead creds" that were live during the PoC window. Say so in the report.
 - **Your account is the clean room.** s3-account-search, quiet-riot, session-policy probes, trust-policy enum all log to *your* CloudTrail. Set up a research account with an SCP blocking expensive/destructive calls before hunting.
 - **Naming is intelligence.** `OrganizationAccountAccessRole`, `AWSServiceRoleFor*`, GCP `…-compute@developer.gserviceaccount.com`, Apps Script `sys-*` projects, bucket naming conventions, backup tags — defaults and conventions turn guessing into enumeration.
 - **Deleted ≠ gone.** Dangling CNAME→bucket takeovers, soft-deleted blobs (7 days), public snapshots/AMIs of retired systems, recreated-role ARN staleness — always check the graveyard.
@@ -29,7 +29,7 @@ Each hop multiplies severity: blind SSRF alone is medium; SSRF returning ASIA cr
 
 ## Workflow patterns
 
-- **Validate up the ladder**: free/anonymous checks → error-oracle probes → one credential validation → read-only list/describe → canary write+delete → stop. Never descend into data to "see how bad it is."
+- **Validate up the ladder**: free/anonymous checks → error-oracle probes → (gated) one credential validation if authorized → read-only list/describe → canary write+delete → stop. Never descend into data to "see how bad it is."
 - **Chain accounting for cloud**: SSRF→metadata→creds→`get-caller-identity`→(role name implies permissions)→storage. Write the whole hypothetical chain; confirm the hops you can.
 - **Lab-first for dangerous steps**: CloudGoat/iam-vulnerable/Stratus reproduce privesc, exfil, and detection-evasion paths in your own account — cite the reproduction in the report instead of running it on the target.
 - **Map every action to its trail**: before each PoC call, know the CloudTrail event it writes; include the list in your report so triage can verify and defenders can alert.

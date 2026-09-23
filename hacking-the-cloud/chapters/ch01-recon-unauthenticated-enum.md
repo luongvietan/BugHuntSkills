@@ -2,6 +2,12 @@
 
 Source: `aws/enumeration/`, `gcp/enumeration/`, `azure/enum_email_addresses.md`. Surprising amount of AWS structure is discoverable with zero or near-zero access — most techniques log to *your* account, not the target's. The goal: turn a company name / domain into account IDs, principal names, and exposed resources.
 
+> **Scope label:** unauthenticated enum hits *public* endpoints (resource
+> policies, public snapshots, email-validity oracles) and is default-safe.
+> Anything run *with* credentials is a different scope class — it requires
+> credentialed cloud scope in the policy (a test account the program gave
+> you), and "the key I found" is never that account (see ch03).
+
 ## Account ID discovery
 
 - **From an access key** — `aws sts get-access-key-info --access-key-id AKIA...` returns the account ID and logs only to *your* account. Offline alternative: the account ID is encoded in the key itself — strip the 4-char prefix, base32-decode, mask `0x7fffffffff80`, shift right 7 bits (Aidan Steele / Tal Be'ery method).

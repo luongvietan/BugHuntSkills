@@ -1,6 +1,6 @@
 # Cheatsheet — OWASP MASTG
 
-Quick-lookup card. Details in `chapters/`; mindset in `SKILL.md`; terms in `glossary.md`.
+Quick-lookup card. Details in `chapters/`; mindset in `SKILL.md`; terms in `glossary.md`. Version: MASTG v2.0.0 (rolling — see `sources.md`).
 
 ## Session kickoff
 
