@@ -1,0 +1,28 @@
+# Glossary — Bug Bounty Playbook V2
+
+- **1-day** — newly released public exploit/CVE; race to hit targets before patching.
+- **ATO** — account takeover.
+- **Cache key** — request fields the cache uses to decide "same request" (usually method+path+host).
+- **Unkeyed input** — input that changes the response but isn't part of the cache key → cache poisoning primitive.
+- **CNAME / dangling DNS** — subdomain alias pointing at a service that no longer exists → subdomain takeover.
+- **CSTI** — client-side template injection (Angular expressions etc.).
+- **DOM source / sink** — user-controllable JS input (location.*, document.cookie…) vs dangerous consumer (eval, innerHTML, document.write).
+- **DTD** — Document Type Definition; XML block defining entities/structure.
+- **External entity** — XML entity resolved from URL/file (`SYSTEM "file:///…"`) → XXE.
+- **extractvalue()** — MySQL XML function abused for error-based SQLi (error echoes data).
+- **GraphQL introspection** — `{__schema{types{name,fields{name}}}}` query dumping the API schema.
+- **IDOR** — insecure direct object reference; fetch/act on objects by user-supplied id without authz.
+- **JSONP** — legacy JSON-with-padding; `callback=` reflects JS → SOP/CSP bypass primitive.
+- **MRO** — Python Method Resolution Order; `__class__.__mro__` → root `object` → `__subclasses__()`.
+- **OSRF** — on-site request forgery; forced request initiated *from the target app itself*.
+- **Param Miner** — Burp extension discovering hidden/unkeyed params+headers.
+- **Path confusion** — server and cache/proxy parse the same URL differently → cache deception/RPO.
+- **PoC** — proof-of-concept exploit code.
+- **Polyglot (XSS)** — single payload surviving multiple injection contexts.
+- **Prototype pollution** — injecting `__proto__` props so every JS object inherits them.
+- **RPO** — relative path overwrite; relative resource URLs resolve to attacker-influenced content.
+- **SAML assertion** — signed XML from IdP→SP carrying identity (`Subject`/`NameID` + `Signature`/`Reference URI`).
+- **SSTI** — server-side template injection; user input concatenated into template code.
+- **Turbo Intruder** — high-performance Burp fuzzing extension.
+- **WADL / WSDL** — XML docs describing REST (WADL) or SOAP (WSDL) services.
+- **XSW** — XML Signature Wrapping; split signature-validation vs assertion-processing (8 variants).

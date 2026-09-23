@@ -1,0 +1,30 @@
+# Glossary — Web Hacking 101
+
+- **Application logic vuln** — abusing what code permits (mass assignment, races, missing checks); no injection payload required.
+- **ATO** — account takeover.
+- **Buffer overflow** — writing past allocated memory → overwrite data/code.
+- **CRLF injection** — injecting `%0d%0a` into header-bound input → response splitting/arbitrary headers.
+- **CSTI** — client-side template injection (Angular `{{ }}`); author's note: don't use the acronym in reports.
+- **enumall** — Jason Haddix's Recon-ng script scraping search engines for subdomains.
+- **EyeWitness** — screenshots web ports across a host list for triage.
+- **Forced Browse** — ZAP's directory/file brute-force (≈ Burp content discovery).
+- **GitRob** — scans org's public GitHub repos + contributors for secrets/configs.
+- **Heartbleed** — OpenSSL read-out-of-bounds via oversized heartbeat length → heap leak.
+- **HPP** — HTTP parameter pollution; duplicate-param tricks where input is forwarded to another request.
+- **Interstitial** — warning page between redirect hops; bypassing it keeps the redirect silent.
+- **KnockPy** — subdomain brute-forcer via wordlists.
+- **Mass assignment** — framework binds all posted params to a model → set fields you shouldn't (Rails `created_at`).
+- **Memcache** — unauthenticated key-value cache service; exposure → data dump/poisoning.
+- **MVG** — Magick Vector Graphics, ImageMagick's scriptable format → ImageTragick RCE.
+- **Null byte** — `%00`/`0x00`, C string terminator → truncation/truncated path checks.
+- **OOB / out-of-band exfil** — data leaves via attacker-controlled channel (DNS/HTTP to your server), used for blind XXE/SSRF.
+- **OAuth** — delegated authz: user → app → provider → code → token; `redirect_uri` is the pivot.
+- **Open redirect** — unvalidated redirect target param → phishing/chains.
+- **Parameter entity** — XML `%name` entity valid inside DTDs — basis of OOB XXE exfil.
+- **Race condition** — two "mutually exclusive" ops completing near-simultaneously (double transfer).
+- **Reflected vs stored vs self XSS** — one-shot / persisted / self-triggered script injection.
+- **SOP** — same-origin policy; browser rule for cross-origin script access.
+- **SSRF** — server makes requests on attacker's behalf (metadata endpoints, internal hosts).
+- **Subdomain takeover** — CNAME → unclaimed third-party resource → claim it, serve as the subdomain.
+- **Wappalyzer** — browser plugin fingerprinting a site's tech stack.
+- **XXE** — XML external entity; `SYSTEM` entities reading files/URLs via the parser.
