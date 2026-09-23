@@ -30,7 +30,7 @@ Apply it to any mobile check: name the weakness, grep the config/code for the me
 - **Snapshot-diff**: baseline the data dirs, run the feature, diff — new files are where storage findings live.
 - **Proxy first, hook second**: get plaintext visibility via proxy+CA; escalate up the MITM ladder (pinning bypass → TLS hooks → repackage) only as far as needed.
 - **MobSF for breadth, hands for depth**: automated scan seeds a checklist; manual confirmation gives each finding exploit context and kills false positives.
-- **Grep vocabulary per category**: storage APIs, crypto `getInstance`/CommonCrypto, `BiometricPrompt`/`LAContext`, `TrustManager`/`URLSessionDelegate`, `addJavascriptInterface`, `getInstance("DexClassLoader")` — build the keyword list once, reuse per app.
+- **Grep vocabulary per category**: storage APIs, crypto `getInstance`/CommonCrypto, `BiometricPrompt`/`LAContext`, `TrustManager`/`URLSessionDelegate`, `addJavascriptInterface`, `DexClassLoader|PathClassLoader|loadDex` — build the keyword list once, reuse per app.
 - **Two accounts still apply**: backend API authZ bugs (IDOR/BOLA) are found exactly as in web — mobile is often the *less* tested client for the same endpoints.
 - **Old versions carry old bugs**: test prior app versions and legacy API paths the app still calls.
 

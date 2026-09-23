@@ -39,7 +39,7 @@ objection → android sslpinning disable / ios sslpinning disable
 objection → ios jailbreak disable / android root disable
 objection → env | memory dump | ios keychain dump | ios nsuserdefaults get
 frida-ios-dump → decrypt IPA ; iproxy 2222 22 → ssh device
-idevicesyslog | idevicebackup2 backup --full ./bak      # iOS logs/backup
+idevicesyslog | idevicebackup2 backup ./bak             # iOS logs/backup
 checksec --file=lib.so ; rabin2 -I binary               # binary protections
 testssl.sh https://api.target ; nscurl --ats-diagnostics https://api.target
 MobSF: upload APK/IPA → static+dynamic report           # baseline scan

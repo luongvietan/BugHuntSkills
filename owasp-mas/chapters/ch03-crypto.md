@@ -45,7 +45,7 @@ Source: MASTG crypto chapter, MASWE-0003/0007..0017, crypto tests, best-practice
 
 ## Interpretation (current guidance)
 
-- Acceptable today: AES-GCM-256 or ChaCha20-Poly1305; SHA-256/384/512, SHA-3, BLAKE3; RSA ≥3072, ECDSA P-384, EdDSA Ed448; RSA/DH ≥3072 or ECDH P-384 for key establishment. PBKDF2 ≥10k iterations (≥10M for critical keys), or PHC algorithms (Argon2).
+- Acceptable today: AES-GCM-256 or ChaCha20-Poly1305; SHA-256/384/512, SHA-3, BLAKE3; RSA ≥3072, ECDSA P-384, EdDSA — Ed25519 is the mobile norm (Ed448 exists but is rare on-device); RSA/DH ≥3072 or ECDH P-384 for key establishment. PBKDF2 at the current OWASP floor — ~210k–600k iterations depending on the hash (e.g., ~600k for HMAC-SHA256, ~210k for HMAC-SHA512; verify the latest OWASP Password Storage Cheat Sheet) — or PHC algorithms such as Argon2id.
 - Verify **purpose-fit**: SHA-256 hashing a screen-resolution analytics value is fine; MD5 for integrity or SHA-256 for passwords is not. Non-security contexts downgrade or void the finding.
 - Padding-oracle surface: CBC without MAC + distinguishable decryption errors — confirm error side channels before claiming.
 - Post-quantum note: NIST FIPS 203/204/205 (ML-KEM/ML-DSA/SLH-DSA) are the forward path; flag "future-proof" claims using unreviewed PQ schemes.
