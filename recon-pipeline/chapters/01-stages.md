@@ -201,9 +201,9 @@ cp "$OUT/raw-httpx-urls.txt" "$OUT/02-live-hosts.txt"
 - Default threads are high; add `-rate-limit 50` on programs with rate rules.
 
 **Gating:** httpx sends real HTTP requests to the target — class T. Cheapest
-target-traffic step and almost always in-scope, but it is where "passive"
-ends: input comes only from `01-subdomains-allowlisted.txt`, and `-rate-limit`
-defaults low (50) until the policy says otherwise.
+target-traffic step — and it is where "passive" ends: input comes only from
+`01-subdomains-allowlisted.txt`, and `-rate-limit` defaults low (50) until the
+policy says otherwise.
 
 ---
 

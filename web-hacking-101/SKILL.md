@@ -11,7 +11,7 @@ description: Case-study knowledge base from "Web Hacking 101" by Peter Yaworski.
 
 - **Vuln class ↔ functionality mapping**: don't spray payloads — map each feature to the classes it can host (`url=` → SSRF/redirect; XML upload → XXE; `id=` → IDOR/HPP; 2FA flow → logic).
 - **Takeaways > payloads**: each case ends with the insight that mattered — persistence after a failed first attempt, services-as-attack-surface, new functionality as fresh meat.
-- **Attack surface ≠ website**: S3 buckets, Zendesk, OAuth apps, staging servers, JS files, mobile APIs, GitHub repos, CIDR ranges — all in scope.
+- **Attack surface ≠ website**: S3 buckets, Zendesk, OAuth apps, staging servers, JS files, mobile APIs, GitHub repos, CIDR ranges — all *potentially* in scope; the policy's asset list decides.
 - **Persistence is the exploit**: many cases succeeded on the 2nd–6th attempt (double `uid`, encoded CRLF, second account, second request).
 - **Confirm before you submit** — "don't shout hello before crossing the pond."
 
