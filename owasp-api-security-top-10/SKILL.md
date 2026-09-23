@@ -1,6 +1,6 @@
 ---
 name: owasp-api-security-top-10
-description: "Knowledge base from the OWASP API Security Top 10 — source book is the 2019 edition, with a maintained crosswalk to the current API1:2023–API10:2023 list. Use when testing APIs for BOLA/IDOR, broken authentication, BOPLA/excessive data exposure & mass assignment, resource-consumption and rate-limit gaps, BFLA, sensitive-business-flow abuse, SSRF, misconfiguration, inventory/shadow-version drift, unsafe third-party API consumption, or writing API-security findings and remediation."
+description: "Knowledge base from the OWASP API Security Top 10 — source book is the 2019 edition, with a maintained crosswalk to the current API1:2023–API10:2023 list. Use when testing APIs for BOLA/IDOR, broken authentication, BOPLA/excessive data exposure & mass assignment, resource-consumption and rate-limit gaps, BFLA, sensitive-business-flow abuse, SSRF, misconfiguration, inventory/shadow-version drift, unsafe third-party API consumption, or writing API-security findings and remediation. Verify asset scope and method permission before live use."
 ---
 
 <!-- argument-hint: [API risk number, vuln class, or endpoint type] -->
@@ -112,6 +112,8 @@ to the methods above. No coverage gaps.
 
 Source = 2019 edition; the crosswalk above maps every chapter to the current
 2023 list — quote 2023 IDs in reports. Offensive techniques are for authorized
-testing only; respect program scope, never degrade production — resource-
+testing only. Before live testing, verify the exact asset and technique against
+current program rules; this skill grants no authorization, and unclear scope or
+permission means stop and re-check. Respect program scope, never degrade production — resource-
 consumption and business-flow tests run low-volume on your own accounts.
 See `sources.md` for edition + review metadata.

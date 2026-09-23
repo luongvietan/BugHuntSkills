@@ -1,6 +1,6 @@
 ---
 name: bug-bounty-hunter
-description: Entry point and router for an authorized bug bounty hunting session. Use when starting or resuming a hunt, deciding which companion skill or chapter applies right now, picking a methodology for a target type (wildcard scope, single web app, API, mobile, cloud), choosing a vuln class to work, or asking "which skill covers X" — it runs the seven-phase loop (program selection, recon, application mapping, vuln hunting, escalation and chaining, reporting, continuous monitoring) and routes each phase to the right one of the 16 companion skills and its chapter files. All testing is assumed authorized and in scope; every active-scanning stage is gated on written authorization plus a fresh scope re-check.
+description: Entry point and router for an authorized bug bounty hunting session. Use when starting or resuming a hunt, deciding which companion skill or chapter applies right now, picking a methodology for a target type (wildcard scope, single web app, API, mobile, cloud), choosing a vuln class to work, or asking "which skill covers X" — it runs the seven-phase loop (program selection, recon, application mapping, vuln hunting, escalation and chaining, reporting, continuous monitoring) and routes each phase to the right one of the 16 companion skills and its chapter files. Do not infer authorization; active stages require written permission for the exact asset and technique plus a fresh scope re-check.
 ---
 
 # bug-bounty-hunter — session router for the 16-skill arsenal
@@ -154,8 +154,8 @@ Nothing below this line happens until the session-init contract in
 
 ## Scope & ethics
 
-Every routed skill assumes authorized testing against in-scope assets under a
-program policy actually read. This router adds nothing to that authority — it
-spends it more carefully. When policy and opportunity conflict (out-of-scope
+Every routed skill may be used for live testing only after the current program
+policy and scope contract verify the exact asset and technique. This router
+adds no authorization. When policy and opportunity conflict (out-of-scope
 asset, banned technique, real user data within reach), policy wins; a great
 out-of-scope bug pays $0 and can cost the account. Source hierarchy + review metadata: `sources.md`.

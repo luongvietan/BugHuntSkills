@@ -7,7 +7,7 @@
 ```
 wappalyzer / builtwith → Google "<tech> <ver> exploits" → NVD → ExploitDB/searchsploit
 → GitHub PoC (beware fakes) → local vuln VM test → target
-1-day feeds → PoC → mass-scan known assets
+1-day feeds → match verified allowlisted assets → active scanning only with explicit policy permission + allowed rate → minimal confirmation
 ```
 
 ## CMS scanners

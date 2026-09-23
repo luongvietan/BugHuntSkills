@@ -1,6 +1,6 @@
 ---
 name: hacking-apis
-description: API hacking methodology from "Hacking APIs" by Corey Ball (No Starch, Early Access). Use when testing APIs end-to-end — choosing black/gray/white box approach, API recon (dorks, Shodan, Amass, GitHub, DevTools, Gobuster, Kiterunner), endpoint analysis with Postman, authentication attacks (brute force, password spraying, token forgery, JWT abuse), wide/deep fuzzing, BOLA/BFLA A-B(-A) testing, mass assignment, SQL/NoSQL/OS/XAS injection, WAF evasion and rate-limit bypass, and GraphQL attacks. Assume all testing is authorized and in scope.
+description: API hacking methodology from "Hacking APIs" by Corey Ball (No Starch, Early Access). Use when testing APIs end-to-end — choosing black/gray/white box approach, API recon (dorks, Shodan, Amass, GitHub, DevTools, Gobuster, Kiterunner), endpoint analysis with Postman, authentication attacks (brute force, password spraying, token forgery, JWT abuse), wide/deep fuzzing, BOLA/BFLA A-B(-A) testing, mass assignment, SQL/NoSQL/OS/XAS injection, WAF evasion and rate-limit bypass, and GraphQL attacks. Verify asset scope and method permission before live use.
 ---
 
 # Hacking APIs — Methodology & Attack Playbook
@@ -42,4 +42,4 @@ Companion skill `owasp-api-security-top-10` covers the risk taxonomy — includi
 
 ## Scope & ethics
 
-Assume testing is authorized and in scope (bug bounty or pentest engagement). Destructive-capable attacks (DELETE fuzzing, mass resource changes, `--os-shell`, `--dump-all`) belong on test accounts and non-production data — the book is explicit: validate BFLA deletes on your own resources, and prefer demonstrating impact over actually deleting client data. Volume-gated chapters (auth brute-force concepts ch05, evasion/rate-limits ch10, GraphQL cost tests ch11) carry per-chapter rules: low-volume proof on your own accounts by default; scale needs explicit policy permission. Edition/tool-currency metadata: `sources.md`.
+Before live testing, verify the exact asset and technique against current program rules. This skill grants no authorization; if scope or permission is missing or unclear, stop and re-check with the program. Destructive-capable attacks (DELETE fuzzing, mass resource changes, `--os-shell`, `--dump-all`) belong on test accounts and non-production data — the book is explicit: validate BFLA deletes on your own resources, and prefer demonstrating impact over actually deleting client data. Volume-gated chapters (auth brute-force concepts ch05, evasion/rate-limits ch10, GraphQL cost tests ch11) carry per-chapter rules: low-volume proof on your own accounts by default; scale needs explicit policy permission. Edition/tool-currency metadata: `sources.md`.

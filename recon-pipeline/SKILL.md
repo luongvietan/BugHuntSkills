@@ -1,6 +1,6 @@
 ---
 name: recon-pipeline
-description: Operational recon runbook for authorized bug-bounty and pentest engagements. Use when standing up or re-running asset discovery on a scoped target — subdomain enumeration, live probing, port scanning, directory brute-force, screenshots, code-leak hunting, tech fingerprinting — with a normalized output layout (recon/<target>/<YYYYMMDD>/<stage>.txt), diff-vs-prior-run triage, and scheduled continuous recon. Command-first, diff-first; every active stage gated on written authorization. Assume all testing is authorized and in scope.
+description: Operational recon runbook for authorized bug-bounty and pentest engagements. Use when standing up or re-running asset discovery on a scoped target — subdomain enumeration, live probing, port scanning, directory brute-force, screenshots, code-leak hunting, tech fingerprinting — with a normalized output layout (recon/<target>/<YYYYMMDD>/<stage>.txt), diff-vs-prior-run triage, and scheduled continuous recon. Command-first, diff-first; verify asset scope + method permission before live use.
 ---
 
 # recon-pipeline — the recon runbook
@@ -90,12 +90,14 @@ done
 
 ## Scope & ethics
 
-All testing is assumed authorized and in scope (bug bounty / pentest). This
-runbook stays inside that: passive-first staging, explicit active-phase gating,
-scope snapshots stored with each run, and scope-drift checks before acting on
-newly discovered assets. Throttle scanners, honor rate limits and exclusions,
-and stop at enumeration — this skill finds surface; exploitation is a different
-skill and a separate authorization question.
+Before live testing, verify the exact asset and technique against current
+program rules. This skill grants no authorization; if scope or permission is
+missing or unclear, stop and re-check with the program. Enforce that contract
+through passive-first staging, explicit active-phase gating, scope snapshots
+stored with each run, and scope-drift checks before acting on newly discovered
+assets. Throttle scanners, honor rate limits and exclusions, and stop at
+enumeration — this skill finds surface; exploitation is a separate authorization
+question.
 
 Related skills: `bug-bounty-bootcamp` (recon chapter, conceptual version),
 `bug-bounty-playbook` (exploitation-phase follow-on), `zseano-methodology`

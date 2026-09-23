@@ -1,6 +1,6 @@
 ---
 name: xss-cheat-sheet
-description: "Knowledge base from \"XSS Cheat Sheet\" by Rodolfo Assis (Brute Logic). Use when crafting XSS payloads for bug bounty/pentest — context-based vectors, filter/WAF/CSP bypasses, blind XSS, exploitation chains, and payload selection by reflection context."
+description: "Knowledge base from \"XSS Cheat Sheet\" by Rodolfo Assis (Brute Logic). Use when crafting XSS payloads for bug bounty/pentest — context-based vectors, filter/WAF/CSP bypasses, blind XSS, exploitation chains, and payload selection by reflection context. Verify asset scope and method permission before live use."
 ---
 
 <!-- argument-hint: [context, blocked char, or section name] -->
@@ -87,4 +87,4 @@ When you ask about a topic not covered below, I read the relevant chapter file b
 
 ## Scope & Limits
 
-2018-era material targeting Firefox 58/Chrome 63 — browser quirks may differ today; methodology and context model remain current. Payloads are PoC-grade (`alert`-family); adapt for your engagement scope and authorization. Not a substitute for testing methodology skills (see `bug-bounty-playbook`, `zseano-methodology` if installed). Source/version/review metadata: `sources.md`.
+2018-era material targeting Firefox 58/Chrome 63 — browser quirks may differ today; methodology and context model remain current. Before using a payload against a live target, verify the exact asset and technique against current program rules; this skill grants no authorization. Payloads are PoC-grade (`alert`-family); use only the minimal proof permitted by scope. Not a substitute for testing methodology skills (see `bug-bounty-playbook`, `zseano-methodology` if installed). Source/version/review metadata: `sources.md`.

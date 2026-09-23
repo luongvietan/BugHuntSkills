@@ -1,6 +1,6 @@
 ---
 name: bug-bounty-playbook
-description: Exploitation-phase playbook from "Bug Bounty Playbook V2" by Alex Thomas (ghostlulz). Use when exploiting a scoped bug-bounty target — known-CVE workflow, CMS scanners, GitHub dorking, subdomain takeover, exposed databases, brute forcing, Burp workflow, SQLi/XSS/upload/IDOR techniques, API testing (REST/SOAP/GraphQL, JWT/SAML attacks), web cache poisoning/deception, SSTI, XXE, CSP bypass, RPO. Assume all testing is authorized and in scope.
+description: Exploitation-phase playbook from "Bug Bounty Playbook V2" by Alex Thomas (ghostlulz). Use when exploiting a scoped bug-bounty target — known-CVE workflow, CMS scanners, GitHub dorking, subdomain takeover, exposed databases, brute forcing, Burp workflow, SQLi/XSS/upload/IDOR techniques, API testing (REST/SOAP/GraphQL, JWT/SAML attacks), web cache poisoning/deception, SSTI, XXE, CSP bypass, RPO. Verify asset scope and method permission before live use.
 ---
 
 # Bug Bounty Playbook V2 — Exploitation Phase
@@ -53,6 +53,6 @@ description: Exploitation-phase playbook from "Bug Bounty Playbook V2" by Alex T
 
 ## Scope & limits
 
-All procedures assume an authorized, in-scope engagement. This playbook is offense-shaped by design — every risky class carries a chapter-level callout (`> **…gate/ceiling/boundary/rule:**`) that is the contract: harmless markers prove the bug (`alert(document.domain)`, `id`, a canary file you own), credential/extraction/victim-facing steps are report narrative or explicitly permission-gated, and volumetric actions (scanners, brute force, fuzzing) follow policy rates. When a chapter's example exceeds its callout, the callout wins.
+Before live testing, verify the exact asset and technique against current program rules. This skill grants no authorization; if scope or permission is missing or unclear, stop and re-check with the program. This playbook is offense-shaped by design — every risky class carries a chapter-level callout (`> **…gate/ceiling/boundary/rule:**`) that is the contract: harmless markers prove the bug (`alert(document.domain)`, `id`, a canary file you own), credential/extraction/victim-facing steps are report narrative or explicitly permission-gated, and volumetric actions (scanners, brute force, fuzzing) follow policy rates. When a chapter's example exceeds its callout, the callout wins.
 
 Source/version/review metadata: `sources.md`.

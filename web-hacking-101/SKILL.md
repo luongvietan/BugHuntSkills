@@ -1,6 +1,6 @@
 ---
 name: web-hacking-101
-description: Case-study knowledge base from "Web Hacking 101" by Peter Yaworski. Use when hunting web vulnerabilities — each chapter pairs a bug class (HTML injection, HPP, CRLF, CSRF, application logic, XSS, SQLi, open redirect, subdomain takeover, XXE, RCE, template injection, SSRF, memory) with real disclosed reports, bounties, and the takeaways that made them work. Also covers target approach, reporting etiquette, and tooling. Assume all testing is authorized.
+description: Case-study knowledge base from "Web Hacking 101" by Peter Yaworski. Use when hunting web vulnerabilities — each chapter pairs a bug class (HTML injection, HPP, CRLF, CSRF, application logic, XSS, SQLi, open redirect, subdomain takeover, XXE, RCE, template injection, SSRF, memory) with real disclosed reports, bounties, and the takeaways that made them work. Also covers target approach, reporting etiquette, and tooling. Verify asset scope and method permission before live use.
 ---
 
 # Web Hacking 101 — Learning from Real Reports
@@ -35,6 +35,13 @@ description: Case-study knowledge base from "Web Hacking 101" by Peter Yaworski.
 - `cheatsheet.md` — per-class probe list (param → payload → expected signal).
 - `patterns.md` — the takeaway patterns distilled ("if X then test Y").
 - `glossary.md` — terms (HPP, CRLF splitting, OOB XXE, CSTI, mass assignment…).
+
+## Scope & ethics
+
+Case studies are historical examples, not authorization. Before live testing,
+verify the exact asset and technique against current program rules. This skill
+grants no authorization; if scope or permission is missing or unclear, stop and
+re-check with the program.
 
 ## Author's calibration (Yaworski)
 

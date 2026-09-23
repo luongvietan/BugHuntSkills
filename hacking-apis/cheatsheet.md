@@ -1,6 +1,6 @@
 # Cheatsheet — Hacking APIs
 
-One-page command & checklist reference. All testing assumed authorized/in-scope.
+One-page command & checklist reference. Live use requires verified exact-asset scope and method permission; chapter-level gates still apply.
 
 ## Recon
 

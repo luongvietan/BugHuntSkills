@@ -1,6 +1,6 @@
 ---
 name: report-writing
-description: Use when drafting, submitting, or disputing bug bounty / vulnerability disclosure reports — turning a confirmed bug into a persuasive report, choosing a defensible severity, writing reproduction steps a triager can replay in under 5 minutes, phrasing impact for each vuln class, and responding to triage verdicts (N/A, informative, duplicate, spam) or escalating to mediation. Authorized, in-scope testing only.
+description: Use when drafting, submitting, or disputing bug bounty / vulnerability disclosure reports — turning a confirmed bug into a persuasive report, choosing a defensible severity, writing reproduction steps a triager can replay in under 5 minutes, phrasing impact for each vuln class, and responding to triage verdicts (N/A, informative, duplicate, spam) or escalating to mediation. Use findings from verified in-scope testing; re-check before follow-up tests.
 ---
 
 # Report Writing — Bug Bounty Reports That Get Paid
@@ -53,4 +53,4 @@ Drafting order that works mid-hunt: pass the pre-draft validation gate (7 questi
 
 ## Scope & ethics
 
-All use of this skill assumes authorized testing against in-scope assets under a program policy you've read. When policy and opportunity conflict (out-of-scope asset, banned technique, real user data within reach), policy wins — a great out-of-scope bug pays $0 and can cost your account. Related skills: `bug-bounty-bootcamp` (per-class hunting methodology), `web-hacking-101` (case studies of real reports), `recon-pipeline` (where to point the hunting), `xss-cheat-sheet` (payloads for the PoC itself). Severity-source + evidence-handling metadata: `sources.md`.
+Use this skill for findings from verified in-scope testing; it grants no authority to perform follow-up tests. Re-check current program rules before gathering additional evidence. When policy and opportunity conflict (out-of-scope asset, banned technique, real user data within reach), policy wins — a great out-of-scope bug pays $0 and can cost your account. Related skills: `bug-bounty-bootcamp` (per-class hunting methodology), `web-hacking-101` (case studies of real reports), `recon-pipeline` (where to point the hunting), `xss-cheat-sheet` (payloads for the PoC itself). Severity-source + evidence-handling metadata: `sources.md`.

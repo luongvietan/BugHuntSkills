@@ -1,6 +1,6 @@
 ---
 name: zseano-methodology
-description: "Knowledge base from \"zseano's methodology\" by Sean Roesner (zseano). Use when approaching a bug bounty target — program choice, first-look feature testing, filter/WAF bypass thinking, open redirect/OAuth chains, SSRF, uploads, IDOR, business logic, recon expansion, and long-term target methodology."
+description: "Knowledge base from \"zseano's methodology\" by Sean Roesner (zseano). Use when approaching a bug bounty target — program choice, first-look feature testing, filter/WAF bypass thinking, open redirect/OAuth chains, SSRF, uploads, IDOR, business logic, recon expansion, and long-term target methodology. Verify asset scope and method permission before live use."
 ---
 
 <!-- argument-hint: [vuln type, feature, or methodology step] -->
@@ -75,4 +75,4 @@ When you ask about a topic not covered below, I read the relevant chapter file b
 
 ## Scope & Limits
 
-Methodology and mindset, not a payload encyclopedia — pair with `xss-cheat-sheet` / `owasp-api-security-top-10` for payload depth. Some referenced tools age (amass/httprobe era) — the *workflow* is the durable content. For authorized testing only; follow program scope/rules. Source/version/review metadata: `sources.md`.
+Methodology and mindset, not a payload encyclopedia — pair with `xss-cheat-sheet` / `owasp-api-security-top-10` for payload depth. Some referenced tools age (amass/httprobe era) — the *workflow* is the durable content. Before live testing, verify the exact asset and technique against current program rules. This skill grants no authorization; if scope or permission is missing or unclear, stop and re-check with the program. Source/version/review metadata: `sources.md`.

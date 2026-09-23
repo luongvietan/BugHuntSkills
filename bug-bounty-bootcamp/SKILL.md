@@ -1,6 +1,6 @@
 ---
 name: bug-bounty-bootcamp
-description: Bug bounty methodology from "Bug Bounty Bootcamp" by Vickie Li (No Starch). Use when working a web target end-to-end — picking programs, scoping recon (subdomains, certs, GitHub, S3, directory brute-force), hunting the core web vuln classes (XSS, redirects, clickjacking, CSRF, IDOR, SQLi, race conditions, SSRF, deserialization, XXE, SSTI, logic errors, RCE, SOP/CORS, SAML/OAuth, info disclosure), escalating and chaining impact, source code review, Android app hacking, API testing, and fuzzing with Wfuzz/Burp Intruder. Each vuln chapter follows the author's loop: mechanism → prevention → hunting → bypassing protections → escalation → automation. Assume all testing is authorized and in scope.
+description: Bug bounty methodology from "Bug Bounty Bootcamp" by Vickie Li (No Starch). Use when working a web target end-to-end — picking programs, scoping recon (subdomains, certs, GitHub, S3, directory brute-force), hunting the core web vuln classes (XSS, redirects, clickjacking, CSRF, IDOR, SQLi, race conditions, SSRF, deserialization, XXE, SSTI, logic errors, RCE, SOP/CORS, SAML/OAuth, info disclosure), escalating and chaining impact, source code review, Android app hacking, API testing, and fuzzing with Wfuzz/Burp Intruder. Each vuln chapter follows the author's loop — mechanism → prevention → hunting → bypassing protections → escalation → automation. Verify asset scope and method permission before live use.
 ---
 
 # Bug Bounty Bootcamp — Vickie Li's End-to-End Methodology
@@ -48,4 +48,4 @@ Related skills: `web-hacking-101` (case-study driven version of the same vuln cl
 
 ## Scope & ethics
 
-All testing is assumed authorized and in scope (bug bounty / pentest). The book is explicit about restraint: use test accounts, upload only harmless test files you own (S3), avoid reading sensitive data or running destructive payloads, throttle fuzzing to avoid DoS, get written permission before rate-limit tests, and stop at the minimal PoC that proves impact. Edition/tool currency + routing metadata: `sources.md`.
+Before live testing, verify the exact asset and technique against current program rules. This skill grants no authorization; if scope or permission is missing or unclear, stop and re-check with the program. The book is explicit about restraint: use test accounts, upload only harmless test files you own (S3), avoid reading sensitive data or running destructive payloads, throttle fuzzing to avoid DoS, get written permission before rate-limit tests, and stop at the minimal PoC that proves impact. Edition/tool currency + routing metadata: `sources.md`.

@@ -15,7 +15,7 @@ The oldest trick that still wins: target → tech stack → known CVEs → PoC �
 **Cycle B — exploit-driven (1-days):**
 1. Watch threat feeds (ExploitDB, Twitter/X infosec) for newly dropped exploits.
 2. Grab/find the PoC *fast* — time is the whole game.
-3. Mass-scan all your known targets before they patch.
+3. Match the CVE only against assets verified on the program allowlist. Run an active scanner only when current rules explicitly permit it and specify an acceptable rate; otherwise use passive matching and the minimum manual proof.
 
 ## Step 1 — Identifying technologies
 
@@ -41,5 +41,5 @@ The oldest trick that still wins: target → tech stack → known CVEs → PoC �
 
 ## Decision rules
 
-- Most sites are patched → don't marry one target; exploit at scale across your asset inventory.
+- Most sites are patched → don't marry one target; prioritize verified allowlisted assets. Any scanner run still needs explicit policy permission and the program's rate limits.
 - Speed matters most for 1-days; depth matters most for obscure stacks.

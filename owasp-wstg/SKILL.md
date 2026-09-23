@@ -1,6 +1,6 @@
 ---
 name: owasp-wstg
-description: Structured test checklist distilled from the OWASP Web Security Testing Guide (WSTG) v4.2. Use when systematically testing an authorized web target end-to-end or when you need the canonical WSTG-XXX test IDs — information gathering and fingerprinting, configuration/deployment review, identity management, authentication, authorization, session management, input validation (XSS, SQLi and every other injection family), error handling, cryptography, business logic, client-side attacks, and API/GraphQL testing. Each test gives objective → procedure → interpretation so you can work a category as a checklist, quote test IDs in reports, or pick the right procedure for a suspected weakness. Assume all testing is authorized and in scope.
+description: Structured test checklist distilled from the OWASP Web Security Testing Guide (WSTG) v4.2. Use when systematically testing a web target verified in scope or when you need the canonical WSTG-XXX test IDs — information gathering and fingerprinting, configuration/deployment review, identity management, authentication, authorization, session management, input validation (XSS, SQLi and every other injection family), error handling, cryptography, business logic, client-side attacks, and API/GraphQL testing. Each test gives objective → procedure → interpretation so you can work a category as a checklist, quote test IDs in reports, or pick the right procedure for a suspected weakness. Verify asset scope and method permission before live use.
 ---
 
 # OWASP Web Security Testing Guide v4.2 — Test-ID Checklist
@@ -53,4 +53,4 @@ Related skills: `bug-bounty-bootcamp` + `web-hacking-101` (same vuln classes wit
 
 ## Scope & ethics
 
-All testing described here assumes written authorization and in-scope targets (pentest engagement or bug bounty program). WSTG itself is methodology-neutral about authorization — the restraint is yours: prefer test accounts, avoid destructive payloads (file writes, account lockout of real users, DoS tests) unless explicitly permitted, throttle brute-force and fuzzing, capture minimal proof of impact, and never access other users' real data to prove a bug.
+Before live testing, verify the exact asset and technique against current program rules. This skill grants no authorization; if scope or permission is missing or unclear, stop and re-check with the program. WSTG itself is methodology-neutral about authorization — the restraint is yours: prefer test accounts, avoid destructive payloads (file writes, account lockout of real users, DoS tests) unless explicitly permitted, throttle brute-force and fuzzing, capture minimal proof of impact, and never access other users' real data to prove a bug.
