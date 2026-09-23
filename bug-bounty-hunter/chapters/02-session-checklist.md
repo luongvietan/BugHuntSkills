@@ -1,0 +1,103 @@
+# 02-session-checklist.md — session init to wrap
+
+Copy-paste checklist for one hunting session. Boxes are ordered; a gate you
+cannot check means go back a phase, not forward on a hunch. Replace
+`<target>` with the program's short name everywhere.
+
+Suggested layout (created once per target):
+
+```
+hunt/<target>/
+  scope.md          # includes, exclusions, banned techniques, safe-harbor notes
+  notes.md          # running log: hypotheses, request pairs, anomaly list
+  evidence/         # screenshots, saved requests, PoC files per finding
+recon/<target>/<YYYYMMDD>/   # per-run pipeline output (see recon-pipeline)
+```
+
+## Session init (phase 1 gate)
+
+- [ ] Program policy read end-to-end this week (policies change silently —
+      re-read on any resume after ~7 days)
+- [ ] In-scope assets written to `hunt/<target>/scope.md` — including wildcard
+      interpretation (`*.target.com` in? out?)
+- [ ] Exclusions written to the same file — CDN/shared ranges, third-party
+      SaaS, acquired domains, "anything not listed is out" clauses
+- [ ] Banned techniques written down — DoS/volume tests, automated scanner
+      limits, social engineering, physical, spam — plus which need explicit
+      written permission first
+- [ ] Safe-harbor clause located; written authorization confirmed for any
+      active stages planned this session
+- [ ] Report channel noted (platform form vs. email vs. VDP contact) and
+      disclosure terms read (can you ever write it up?)
+- [ ] Severity/payout table reviewed so hunting effort aims at what pays
+- [ ] Two test accounts registered (different privilege levels); test data
+      seeded; credentials stored in notes, never real-user anything
+
+## Per-phase gates
+
+### Recon (phase 2)
+
+- [ ] Dated run dir `recon/<target>/<YYYYMMDD>/` created; scope files
+      snapshotted into it
+- [ ] Passive stages complete before any active stage starts
+- [ ] ACTIVE GATE: written authorization confirmed AND each active-stage
+      target re-checked against `scope.md` exclusions — including assets
+      discovered this run
+- [ ] Every tool wrote a file; artifacts normalized (`sort -u`, lowercase)
+- [ ] `new-since-last-run.txt` produced by diffing vs the previous run
+- [ ] Live hosts -> Burp scope; tech fingerprints annotated with candidate
+      vuln classes in `notes.md`
+
+### Application mapping (phase 3)
+
+- [ ] Every in-scope host walked once per privilege level
+- [ ] Endpoint + parameter + role inventory in `notes.md`
+- [ ] Both accounts' request logs captured for later A-to-B replay
+- [ ] Candidate vuln classes listed per function (from the map, not memory)
+
+### Vuln hunting (phase 4)
+
+- [ ] Classes worked one at a time with the routed chapter open
+      (`03-vuln-class-index.md` for the per-class chapter)
+- [ ] Banned-technique list re-checked before rate/volume/fuzz-heavy tests
+- [ ] Every candidate bug has a confirming request/response pair in
+      `evidence/`
+- [ ] Anomaly list written — unexplained weirdness is phase-5 fuel
+- [ ] Test accounts only; zero real-user data touched
+
+### Escalation/chaining (phase 5)
+
+- [ ] Per bug: "attacker gains X" answered with demonstrated steps, not
+      adjectives
+- [ ] Chain hypotheses tested on owned accounts only
+- [ ] PoC stopped at minimal demonstration — no pivoting beyond the claim
+- [ ] Severity hypothesis per bug, scored against the program's table
+
+### Reporting (phase 6)
+
+- [ ] One report per bug (a tested chain = one report describing the chain)
+- [ ] Repro steps verified cold — fresh session, named test accounts, <5 min
+- [ ] Title names the impact; evidence attached inline at the proving step
+- [ ] Scope re-verified for the exact asset + technique in the report
+- [ ] Submitted via the program's channel; thread link logged in `notes.md`
+
+### Continuous monitoring (phase 7)
+
+- [ ] Pipeline scheduled (cron/Task Scheduler) per `recon-pipeline`
+      `chapters/03-monitoring.md`
+- [ ] Alert fires on diff output, not on run success
+- [ ] Program scope-update feed / changelog subscribed
+- [ ] Scope-drift rule on file: every new-since-last-run asset gets the
+      phase-2 ownership + exclusion re-check before active follow-up
+
+## End of session
+
+- [ ] All confirmed bugs drafted into reports **today** — context decays
+      overnight; repro steps written cold never get easier
+- [ ] `notes.md` closed out: open hypotheses, anomalies not yet explained,
+      defenses observed (they seed next session's bypass work)
+- [ ] `new-since-last-run.txt` + asset changes logged for the next recon diff
+- [ ] Findings reviewed for lessons: which asset type / vuln class paid —
+      feeds phase 1 of the next session
+- [ ] Evidence folder matches report attachments; nothing sensitive beyond
+      your own test-account material retained
