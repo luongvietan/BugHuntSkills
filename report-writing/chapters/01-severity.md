@@ -47,20 +47,66 @@ Sanity-check the result against the class anchors:
 | Open redirect / clickjacking | Low–Info | Chained into OAuth token theft / cred-harvest flow | Standalone, no chain shown |
 | Missing best-practice headers | Informational | Rarely — needs demonstrated exploit | Almost always informative |
 
-## Step 4 — Platform bands
+## Step 4 — Severity precedence: program first, platform second, CVSS third
 
-Programs score differently; pitch to the one you're on.
+The score that pays is the program's, not yours. Apply in order:
 
-- **HackerOne** — CVSS v3.x calculator drives severity (and often bounty tables). Fill the calculator honestly and paste the vector + score into the report. Common anchors: 9.0–10.0 critical, 7.0–8.9 high, 4.0–6.9 medium, 0.1–3.9 low.
-- **Bugcrowd** — VRT (Vulnerability Rating Taxonomy) maps vuln class + context → priority P1–P5. Look up your class in the VRT *first* and cite the category in the report; VRT already bakes in typical severity, so argue only deltas (e.g., stored XSS lands ~P2 baseline for non-admin→anyone context — higher only with a privileged target or extra reach).
-- **Intigriti / YesWeHack / others** — CVSS-based with triager judgment; include vector + a one-line justification per metric you chose.
-- **Private/VDP programs** — plain-language bands; map your finding to their published table and quote the row you match.
+1. **Program rubric / severity table** — read the program's own published
+   table *first* and quote the row you match. Programs that publish "High:
+   sensitive data exposure at scale" have told you exactly where you land.
+2. **Platform taxonomy/policy** — HackerOne/Bugcrowd platform rules layer
+   under the program's (e.g., a platform minimum for a class).
+3. **CVSS** — only where the platform/program asks for it or accepts it as
+   supporting evidence. A CVSS vector *supports* the band; it doesn't set it.
 
-### CVSS quick guidance
+Platform specifics (verified 2026-09 — platform policies drift; re-check):
 
-Score in this order: **AV** (Network unless it truly needs local access) → **PR** (None/Low/High = accounts needed before exploiting) → **UI** (None vs. Required — a link click counts) → **S** (Changed only if it escapes a security authority, e.g., stored XSS reaching another user's session) → **C/I/A** (what the attacker actually reads/changes/kills — your demonstrated impact, not theoretical max).
+- **HackerOne** — programs publish their own severity/bounty tables; many
+  score with a CVSS calculator (v3.x historically, CVSS v4.0 supported on
+  newer program pages — check which version the program's calculator
+  shows). Fill the calculator honestly and paste vector + score.
+- **Bugcrowd** — VRT (Vulnerability Rating Taxonomy) maps vuln class +
+  context → priority P1–P5. Look up your class in the VRT *first* and cite
+  the category in the report; VRT already bakes in typical severity, so
+  argue only deltas (e.g., stored XSS lands ~P2 baseline for non-admin→
+  anyone context — higher only with a privileged target or extra reach).
+- **Intigriti / YesWeHack / others** — CVSS-based with triager judgment;
+  include vector + a one-line justification per metric you chose.
+- **Private/VDP programs** — plain-language bands; map your finding to
+  their published table and quote the row you match.
 
-Common mistakes that get scores cut: claiming `C:H` for a bug that reads one field; `S:C` for a same-app bug; `PR:N` when the endpoint requires login; `A:H` because "it could DoS" you never tried (and shouldn't). Keep the vector honest — you can link a public calculator with your vector pre-filled.
+### CVSS v4.0 — current FIRST standard
+
+CVSS v4.0 (FIRST, spec at `first.org/cvss/v4-0/`) replaced v3.x as the
+current version. Use it when a program's calculator shows v4 — its metric
+names differ from v3:
+
+| v4 metric | Replaces/notes | Bug-bounty call |
+|---|---|---|
+| **AV** Attack Vector | same role | Network for anything over HTTP |
+| **AC** Attack Complexity | same | Low unless specific conditions required |
+| **AT** Attack Requirements | NEW | specific conditions beyond attacker's control (race windows, victim state) — replaces part of AC |
+| **PR** Privileges Required | same | accounts needed before exploiting — test account counts |
+| **UI** User Interaction | renamed+expanded | None / **Passive** (view a page) / **Active** (perform an action) — v3's "Required" split in two |
+| **VC/VI/VA** Vulnerable-system C/I/A | replaces C/I/A | impact on the vulnerable component itself |
+| **SC/SI/SA** Subsequent-system C/I/A | replaces Scope (S) | impact beyond the vulnerable component — stored XSS reaching another user's session = subsequent-system confidentiality |
+| Threat **E** | Exploit Maturity | your demonstrated state (usually "Attacked"/P) |
+| Supplemental | NEW, optional | Safety, Automatable — rarely needed in reports |
+
+Anchor the vector to *demonstrated* impact only: `VC` = what you actually
+read, `VA` = availability you actually disrupted (none — you didn't DoS).
+Link FIRST's calculator with your vector pre-filled.
+
+### CVSS v3.x — legacy, only where required
+
+Some programs still specify v3.1. Order: **AV** → **PR** → **UI** (None vs
+Required — a link click counts) → **S** (Changed only if it escapes a
+security authority) → **C/I/A** (demonstrated impact, not theoretical max).
+
+Common mistakes that get scores cut: claiming `C:H`/`VC:H` for a bug that
+reads one field; `S:C`/subsequent-system impact for a same-app bug;
+`PR:N` when the endpoint requires login; `A:H`/`VA:H` because "it could
+DoS" you never tried (and shouldn't). Keep the vector honest.
 
 ## Argue up vs. argue down
 

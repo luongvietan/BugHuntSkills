@@ -36,7 +36,7 @@ Drafting order that works mid-hunt: fill `chapters/02-template.md` skeleton → 
 - Summary states vuln class + affected component + business impact in ≤3 sentences.
 - Repro steps: numbered, from clean state, exact requests, expected vs. actual result, all identifiers test-account-owned.
 - Impact quantifies: how many users/records, which data types, what privilege gained, pre-auth or post-auth.
-- Severity matches the rubric in `chapters/01-severity.md`; CVSS vector included if the platform scores.
+- Severity matched the program's rubric first (platform policy second, CVSS third — v4.0 where the program's calculator shows it; see `chapters/01-severity.md` for metric names).
 - Remediation suggests a concrete fix (object-level authZ check, parametrized query, CSRF token binding) — not "sanitize input".
 - Scope re-verified: asset is in-scope, technique not on the banned list, no real-user data touched, no DoS.
 - Screenshots/logs attached inline at the step they illustrate; video only if the platform accepts it and the bug needs timing/context.
@@ -53,4 +53,4 @@ Drafting order that works mid-hunt: fill `chapters/02-template.md` skeleton → 
 
 ## Scope & ethics
 
-All use of this skill assumes authorized testing against in-scope assets under a program policy you've read. When policy and opportunity conflict (out-of-scope asset, banned technique, real user data within reach), policy wins — a great out-of-scope bug pays $0 and can cost your account. Related skills: `bug-bounty-bootcamp` (per-class hunting methodology), `web-hacking-101` (case studies of real reports), `recon-pipeline` (where to point the hunting), `xss-cheat-sheet` (payloads for the PoC itself).
+All use of this skill assumes authorized testing against in-scope assets under a program policy you've read. When policy and opportunity conflict (out-of-scope asset, banned technique, real user data within reach), policy wins — a great out-of-scope bug pays $0 and can cost your account. Related skills: `bug-bounty-bootcamp` (per-class hunting methodology), `web-hacking-101` (case studies of real reports), `recon-pipeline` (where to point the hunting), `xss-cheat-sheet` (payloads for the PoC itself). Severity-source + evidence-handling metadata: `sources.md`.

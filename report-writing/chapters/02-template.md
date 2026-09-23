@@ -43,6 +43,15 @@ accounts. Include exact requests the triager can replay verbatim.)*
 *(What an attacker gains, quantified: data class × scale × privilege.
 Pull phrasing from `chapters/03-impact-library.md`; claim only what the PoC showed.)*
 
+## Scope & evidence declaration
+*(One line each — triagers check these first:*
+*- Asset in scope: `shop.example.com` matches program scope line
+  "…" (policy version/hash as of YYYY-MM-DD).*
+*- Accounts: all identifiers are test accounts I own (`bb-*@test.example`);
+  no real user data was accessed.*
+*- Data handling: tokens/PII in attached evidence are test-account values;
+  third-party data was redacted/not collected.)*
+
 ## Remediation
 *(Concrete fix: "enforce object-level authorization on `order_id` against the
 caller's account ID" — not "implement proper access control". 1–3 bullets.)*
@@ -63,12 +72,13 @@ caller's account ID" — not "implement proper access control". 1–3 bullets.)*
 - Number every step; one action per step; state expected vs. actual at the exploit step.
 - Re-verify by replaying your own steps in a fresh session before submitting. If it takes you 8 minutes, the triager needs 15 — tighten it.
 - Parameter values from your test accounts only; redact nothing the triager needs (they can't repro `order_id=REDACTED`).
+- Redact *secrets*, not identifiers: session tokens, API keys, passwords get a masked form (`sess=ak12…wxyz`) in the visible report and never ship in full — the triager replays with their own session. Third-party PII is never attached at all; describe it ("other users' email fields") instead of showing it.
 
 **Impact** — attacker-outcome language: reads what, changes what, costs whom. Quantify: "all ~enumerable order IDs", "any user with a public profile". Never speculate in this section — chains go in with evidence or in a labeled "possible escalation" sentence.
 
 **Remediation** — match the mechanism: missing object check → object-level authZ; string-built query → parametrized statements; missing token → synchronizer token bound to session. Vague fixes ("sanitize inputs") signal you didn't understand your own bug.
 
-**Attachments** — screenshots at the step they prove, cropped to the evidence. Video only for timing/multi-step bugs; still include the text steps.
+**Attachments** — screenshots at the step they prove, cropped to the evidence. Video only for timing/multi-step bugs; still include the text steps. Evidence minimization: attach only what proves the claim — a full request/response showing your test data beats a Burp workspace screenshot; crop or blur anything showing third-party data, internal hostnames you weren't testing, or secrets.
 
 ## Worked example — IDOR
 

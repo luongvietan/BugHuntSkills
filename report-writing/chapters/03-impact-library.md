@@ -2,6 +2,15 @@
 
 Copy a statement, fill the `[blanks]` with what your PoC actually showed, then check the escalate and do-NOT-claim lists. Statements are written in attacker-outcome language — swap placeholders, don't restructure.
 
+**The one rule above all:** every sentence in your report must be either
+*demonstrated* (you ran it, evidence attached) or *labeled theoretical*
+("a possible escalation path, not tested — would require X"). Never blur
+the line: a triager who catches one theoretical claim phrased as fact
+discounts the whole report. And "escalate" here means *what to demonstrate
+if it exists* — it never means exploit further than the policy permits;
+an escalation that needs real-user data, third-party systems, or banned
+techniques stays a labeled hypothesis forever.
+
 ## IDOR / broken object-level authorization
 
 - **Statement:** "The `[endpoint]` authorizes the caller's session but never verifies ownership of `[object]`. By changing `[parameter]` from my test account's `[ID A]` to `[ID B]`, I retrieved `[data fields]` belonging to a second account I control. The `[sequential/enumerable]` ID space makes this exploitable at scale — `[N]` objects are reachable with one request each."

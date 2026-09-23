@@ -6,7 +6,7 @@ The verdict isn't the end of the report — it's the start of a negotiation you 
 
 | Verdict | What it means | What usually caused it | Is it worth disputing? |
 |---|---|---|---|
-| **Not applicable (N/A)** | "No security impact" or "not a vuln" or out of scope/policy | Impact section described the bug, not the attacker outcome; or asset/technique genuinely out of scope | Only if you can attach *new* impact evidence — a chain step, a second affected object, a missed precondition. Repetition loses. |
+| **Not applicable (N/A)** | "No security impact" or "not a vuln" or out of scope/policy | Impact section described the bug, not the attacker outcome; or asset/technique genuinely out of scope | Only if you can attach *new* impact evidence — a chain step, a second affected object, a missed precondition. Repetition loses. A *theoretical* escalation ("could have chained to X") is not new evidence — evidence is something you ran. |
 | **Informative** | Real issue, real weak impact — "thanks, no bounty" | Bug is real but standalone impact is thin (missing header, verbose error, weak redirect) | Rarely. Either escalate it into a chain and resubmit, or take the signal: this program wants demonstrated harm. |
 | **Duplicate** | Someone reported it first | You hunt where everyone hunts | Almost never wins bounty. Ask *once* whether it was a known issue vs. a recent submission — then treat it as recon data. |
 | **Spam** | Report flagged as noise/invalid submission | Automated submission, wrong program, unverifiable claim, or pattern of low-effort reports | Serious — it dings your reputation/signal. Only dispute if clearly mistaken; otherwise stop, review your last reports for quality drift. |
