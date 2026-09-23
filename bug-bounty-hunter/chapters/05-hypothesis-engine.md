@@ -41,6 +41,7 @@ changes nothing — a field is evidence or it is `unknown`.
 - Invariant that may fail:
 - Attacker position / required preconditions:
 - Exact asset + scope/policy reference:
+- Exact method/action permission in current program policy (quote or reference; unknown if absent):
 - Permitted controlled-data test:
 - Confirmation condition / disconfirmation condition:
 - Plausible program-relevant impact:
@@ -65,10 +66,15 @@ changes nothing — a field is evidence or it is `unknown`.
 
 All four must pass before a hypothesis is eligible:
 
-1. **Asset + technique authorized** — the exact asset is in scope and
-   the exact technique permitted; resemblance to a permitted class is
-   not a grant.
-2. **Method permitted** — volume, rate, and class fit the policy.
+1. **Asset + technique authorized** — the exact asset is in scope, and
+   current program policy explicitly permits the planned technique,
+   including its exact HTTP method and state-changing action. Record the
+   policy line that grants it. An observed feature, ordinary app action,
+   or resemblance to a permitted class is not a grant.
+2. **Method permitted** — the planned request's method, action, volume,
+   rate, and class each fit that explicit grant. Scope for the host,
+   permission for read-only checks, low volume, and control of test
+   accounts or synthetic data do not authorize a share POST or replay.
 3. **Controlled data only** — the test runs on researcher-controlled
    accounts, IDs you minted, or synthetic data.
 4. **Impact boundary holds** — the proof stays inside what the program
@@ -76,8 +82,12 @@ All four must pass before a hypothesis is eligible:
 
 A failed **or unknown** gate blocks the hypothesis regardless of
 priority — status `blocked-by-policy`, recorded with the reason, never
-ranked into execution. Unknown means resolve at the scope contract or
-ask the program, not proceed on a guess.
+ranked or scheduled for execution. If the current policy is silent or
+ambiguous about the exact method/action, the technique gate is unknown,
+not passed. Keep a conditional card and resolve the policy wording or
+ask the program for an explicit grant; only then re-run the gates and
+consider active execution. "Verify policy at runtime" is not a reason
+to mark the card eligible now.
 
 **Gates cover the whole ladder — the primary test and every follow-up
 rung it suggests.** Each rung re-runs all four gates on its own
@@ -172,6 +182,15 @@ gets a record before it generates a hypothesis:
 
 ## Worked example — invoice share, two owned accounts
 
+This is a **conditional** example. Assume the current program policy says:
+"Researchers may create synthetic invoices and replay
+`POST /invoices/{id}/share` as either of their own accounts against
+invoices they created, including non-owner share attempts." Only under
+that explicit grant may H-01 be queued, ranked, or run. If the real
+policy grants only read-only checks, or is silent or ambiguous about
+that POST/replay, H-01 is `blocked-by-policy`, unranked, and unscheduled;
+retain the card and request the exact permission before considering a replay.
+
 ```markdown
 ### Feature card
 - Feature / business object and action: invoices — owner shares an invoice, granting viewer access, via `POST /invoices/{id}/share`
@@ -189,7 +208,8 @@ gets a record before it generates a hypothesis:
 - Hypothesis status: queued
 - Invariant that may fail: the share endpoint verifies the caller owns the invoice
 - Attacker position / required preconditions: any authenticated user with no grant on the target invoice
-- Exact asset + scope/policy reference: `POST /invoices/{id}/share` on <in-scope host>; scope.md asset line + permitted-technique line
+- Exact asset + scope/policy reference: `POST /invoices/{id}/share` on <in-scope host>; current scope.md asset line and exact technique grant, verified before ranking
+- Exact method/action permission in current program policy (quote or reference; unknown if absent): the explicit hypothetical grant above; replace it with the actual current policy line before marking eligible on a real program
 - Permitted controlled-data test: A mints synthetic invoice inv-A2, shares it with nobody; B replays A's exact share request against inv-A2 naming B as recipient — control is A's saved request pair
 - Confirmation condition / disconfirmation condition: 2xx + B reads inv-A2 → owner check missing; 401/403 → enforced at this layer; a 4xx validation error → rebuild a minimally valid request before concluding
 - Plausible program-relevant impact: unknown — to be demonstrated; if confirmed, "any authenticated user mints access to arbitrary invoices" (conditional, not asserted)
@@ -198,8 +218,10 @@ gets a record before it generates a hypothesis:
 - Ratings + evidence: impact medium — conditional claim, unproven; signal high — share POST observed crossing the ownership boundary; novelty medium — common pattern on invoice features; test cost low — one replay on owned accounts; confidence low — rule and impact both unknown
 ```
 
-Confidence `low`, so the cheapest resolving observation is the test
-itself — one replay. Whatever it returns, follow-ups re-run the gates:
+With the example's explicit policy grant verified, confidence `low`
+makes one replay the cheapest resolving observation. Without that grant,
+the next action is to resolve permission, not send the POST. Whatever a
+permitted replay returns, follow-ups re-run the gates:
 `role` tampering wants a write grant, recipient-resolution probing wants
 identifiers you minted — under a read-only, two-account permission both
 are `blocked-by-policy`, recorded as leads for a broader grant rather
