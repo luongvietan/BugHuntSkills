@@ -59,3 +59,15 @@ in the BugBounty workspace.
 - 2026-09-23: hypothesis-engine series added ch05 — original to this
   skill (no upstream source); wired into ch04 workspace records,
   SKILL.md routing, and the source hierarchy above.
+- 2026-09-23: browser-assisted program-intake series added ch06
+  (`chapters/06-authenticated-program-intake.md`) — program-URL session
+  start through the connected browser: provider/sign-in resolution,
+  allowlisted researcher-page read, workflow states + resume re-gating.
+  Original to this skill (no upstream source): it reads platform UI
+  through the available connected browser MCP/extension; no
+  Bugcrowd/HackerOne affiliation is implied and no platform policy text
+  is copied into the skill (page wording is read live, excerpted short,
+  and cited to its source URL). Wired into SKILL.md routing +
+  description, ch01 phase map, ch02 session checklist, and ch04
+  workspace fields (`engagement.md`, `allowlist.txt`); acceptance cases
+  recorded in `designs/browser-assisted-program-intake-cases.md`.
