@@ -24,7 +24,9 @@ Spec: `designs/impact-hypothesis-engine.md`. Plan:
 - **Five independent reps per prompt per condition** (the `writing-skills`
   fresh-context requirement). Reps are dispatched by the controller; outputs
   are returned for recording here.
-- **Output preservation.** Results are embedded in this document — no
+- **Output preservation.** Results are embedded in this document — the
+  per-rep result tables and failure quotes below are the eval record; raw
+  rep outputs are uncommitted scratch (paths noted per condition), not
   separate eval files. For each rep, mark the result-table cell `pass` or
   `fail (<behavior IDs>)`. Under the prompt's *Failures observed*, record the
   rep number, the violated behavior ID(s), and the verbatim offending
@@ -470,11 +472,11 @@ surfaces are observable in the outputs rather than inert:
   limits — matching the sources.md "public precedent = historical
   intelligence, leads only" tier; none treats the writeup as authorization
   or proof, and untrusted-payload warnings appear (A-1/A-2/A-4/A-5).
-- **T4 hypothesis record adopted.** Four of five C reps (C-1, C-3, C-4,
-  C-5) emit the new `04-engagement-workspace.md` record shape —
-  `# H-04 | [feature] | [invariant]` with separate `Hypothesis status` and
-  append-only `Triage events` fields; C-5 uses the `Test/proof references`
-  field verbatim. H-04 finally has a defined record home — the exact
+- **T4 hypothesis record adopted.** All five C reps emit the new
+  `04-engagement-workspace.md` record shape — `# H-04 | [feature] |
+  [invariant]` with separate `Hypothesis status` and append-only
+  `Triage events` fields; C-5 uses the `Test/proof references` field
+  verbatim. H-04 finally has a defined record home — the exact
   output-shape gap flagged in the baseline ("all improvised promoting H-04
   into `findings/`").
 - **Hard gates held on every rung.** The baseline failure pattern stays
@@ -494,3 +496,107 @@ surfaces are observable in the outputs rather than inert:
 changed (protocol permits edits only for observed failures). No failure
 traced to the T4 edits and none to ch05 text; nothing carried forward to
 T5.
+
+## Task 5 — final consistency review
+
+Implementer review of the full branch diff `75dcba5..HEAD` (`e80b692`):
+`git diff --check` clean, `git diff --stat` = 7 files (+858/−24), every
+hunk inspected. Files reviewed: `chapters/05-hypothesis-engine.md` (new),
+`chapters/01-phase-map.md`, `chapters/02-session-checklist.md`,
+`chapters/04-engagement-workspace.md`, `SKILL.md`, `sources.md`, and this
+document.
+
+### Acceptance-criteria matrix (spec §Acceptance criteria)
+
+| # | Criterion | Result | Evidence |
+|---|-----------|--------|----------|
+| 1 | mapped feature → falsifiable, scoped hypothesis without inventing missing facts | pass | ch05 feature/hypothesis card templates + mandatory `Unknowns` line + worked example; ch01 phase-3 card gate ("no card, no hypothesis") feeding phase 4; ch02 phase-3/4 gate boxes |
+| 2 | hypotheses lacking authorization, permitted method, or safe test data cannot rank into execution | pass | ch05 four hard gates before ordering; failed **or unknown** gate → `blocked-by-policy`, never ranked; mirrored in ch01 phase 4 and ch02 phase-4 HARD GATE |
+| 3 | rubric distinguishes impact/signal/novelty/cost, no bounty-probability score | pass | ch05 ordinal `low/medium/high` axes + lexicographic sort; "never combine … into a single score or expected-bounty number"; same wording in ch01 phase 4 and ch02 |
+| 4 | hypothesis status vs triage outcome separate; duplicate ≠ disconfirmed; accepted ≠ paid | pass | ch05 "Outcomes" section (status = technical verdict; program verdicts = append-only dated ledger); ch04 record's split `Hypothesis status` / `Triage events` fields; ch01 phase 6; ch02 phase-6 box |
+| 5 | precedent records keep provenance, date, applicability limits; leads only, never authorization/proof | pass | ch05 precedent record template (URL, publisher/author, disclosure date, source type, applicability limits) + "never authorization, and never proof"; sources.md tier 6; ch02 precedent box; SKILL.md trigger |
+| 6 | existing phases, validation gate, scope contract, finding lifecycle, redaction rules linked not duplicated | pass | ch05 subordinates itself to the scope contract and points at ch04 for lifecycle/gate/evidence hygiene; ch04 record delegates card format back to ch05; lifecycle, 7-question gate, and redaction rules untouched |
+| 7 | templates fit `hunt/<target>/notes.md` + optional workspace; no db/runtime tool | pass | ch05 "plain Markdown in `notes.md` … no tooling, no database"; ch02 layout comment; ch04 copyable hypothesis record |
+
+### Link check
+
+All `05-hypothesis-engine.md` references resolve to the on-disk
+`bug-bounty-hunter/chapters/05-hypothesis-engine.md`. Naming is
+consistent: `chapters/05-hypothesis-engine.md` in skill-root files
+(SKILL.md, sources.md) and bare `05-hypothesis-engine.md` for
+sibling-chapter references (ch01, ch02, ch04, ch05) — the same convention
+those files already used for `02/03/04` cross-references. Files and
+routing tables in SKILL.md name it identically.
+
+### Status-language check (brief step 3)
+
+Every `duplicate` / `disconfirmed` / `accepted` / `paid` usage conforms:
+triage events are append-only dated rows (never overwritten), the
+hypothesis-status enum (`queued|testing|confirmed|disconfirmed|
+inconclusive|blocked-by-policy|deferred`) is distinct from the
+triage-outcome enum (`accepted|paid|duplicate|N/A|informative|
+inconclusive|other`), and all learning wording scopes lessons to "this
+program + comparable feature context" — no cross-program generalization.
+
+### Gate-relaxation check (brief step 4)
+
+No touched wording relaxes authorization, real-user-data, volume, or
+exploit-depth gates. Every addition strengthens: hard gates,
+`blocked-by-policy`, controlled-data-only, "real-user data is never the
+fallback," per-rung re-gating. The scope contract, banned-technique
+gates, minimal-PoC ceiling, golden rules, and evidence-hygiene rules are
+untouched; ch05 explicitly adds no authorization and defers to the
+contract on conflict.
+
+### Watch-item rulings
+
+- **"outcome ledger" (ch01) vs "triage ledger" (ch02) vs ch05's
+  "append-only ledger / triage event":** terminology variance, not an
+  inconsistency — all name the same append-only dated-verdict ledger, and
+  the spec itself mixes the terms (§5 "learn from triage … dated outcome
+  events"). The record type is `Triage event` everywhere a template
+  appears. No fix.
+- **Mixed ref style in phase-map** (`chapters/03-vuln-class-index.md` vs
+  bare `03-vuln-class-index.md`): pre-existing in that file, not
+  introduced by this plan; the new refs use the bare form, which is the
+  majority sibling-chapter convention across ch01/ch02/ch04/ch05. No fix.
+- **Eval-doc undercount:** FIXED — full-C-2 emits the new record shape
+  (`evals/full-C-2.md` lines 8–14: `# H-04 | <feature> | <invariant>` +
+  `Hypothesis status` + append-only `Triage events`), so the T4 section
+  claim was corrected from "four of five (C-1, C-3, C-4, C-5)" to "all
+  five".
+- **`submitted` as a triage event (used by full-C-1/C-2, not in enum):**
+  LEFT AS-IS — `submitted` is a hunter-side lifecycle state already
+  tracked in the finding lifecycle (`… → submitted → triaged → …`) and
+  `submissions.md`; the triage-event enum is program-verdicts-only per
+  spec §5's exact list, and `other` formally covers unlisted verdicts.
+  Adding a hunter-side action would blur the status/event separation the
+  evals verified. Reps appending a `submitted` row is a harmless shape
+  extension — all five C reps passed.
+- **full-A-4 blocking H-01 when minting a test invoice needs a write
+  call:** defensible generalization — under a strictly read-only grant,
+  setup writes fail gate 2 (method permitted), and ch05's own rule is
+  "unknown → resolve at the scope contract or ask the program," which is
+  exactly what the rep did. Not over-blocking; no wording change.
+- **ch04's inline event row omits program/finding-ID fields** (T4 minor):
+  defensible — the per-hypothesis record is already scoped to one finding
+  in one engagement directory; ch05's standalone ledger carries the
+  fuller fields for cross-finding/program logging. No fix.
+
+### Fixes applied this task (this file only)
+
+1. T4 section: "Four of five C reps (C-1, C-3, C-4, C-5)" → "All five C
+   reps" (verified against `evals/full-C-2.md`).
+2. Protocol section: "no separate eval files" clarified — raw rep outputs
+   are uncommitted scratch; the embedded tables are the eval record
+   (closes the T1 deferred minor — a literal self-contradiction).
+
+### Unresolved noncritical gaps
+
+- Prediction section's "precedent appears once in SKILL.md" miscounts
+  (two occurrences at baseline-writing time; three now). Left as-is: it
+  is a historical prediction record and its substance — no precedent
+  record type, no leads-vs-proof rule — was correct.
+- No loaded-file wording changed this task, so no eval re-run is needed:
+  the only edited file is this document, which is not part of the skill
+  surface.
