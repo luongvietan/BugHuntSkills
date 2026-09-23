@@ -30,3 +30,5 @@ Source: `aws/general-knowledge/` (aws_cli_tips, aws_organizations_defaults, bloc
 ## Practice labs & CTFs (safe proving grounds)
 
 CloudGoat scenarios (`vulnerable_cognito` etc.), iam-vulnerable (all 21+ privesc paths), SneakyEndpoints (VPC-endpoint lab), GCP Goat, Thunder CTF, cicdont, Stratus Red Team technique library (detection validation). Reproduce chains in your own account before claiming them on a target.
+
+**Bounty-safe validation**: nothing in this chapter is target-actionable on its own — it's context for reading findings and lab material for practicing the chains in ch02–ch07. Validate every technique in your own account (SCP-guardrailed) or a listed lab before writing it into a report; organizational/structural claims about a target (org membership, service-linked roles, default role presence) still need authorization — confirm via the unauth-enum oracles in ch01 and document rather than probe further.
