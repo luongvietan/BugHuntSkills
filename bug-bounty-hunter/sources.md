@@ -39,3 +39,12 @@ companion skills.
 
 Full per-skill register: `docs/superpowers/2026-09-23-bug-bounty-source-register.md`
 in the BugBounty workspace.
+
+## Design references (attribution)
+
+- `chapters/04-engagement-workspace.md` adapts concepts (engagement
+  scaffold, finding lifecycle, triage gate, evidence hygiene) from
+  Claude-BugHunter (github.com/elementalsouls/Claude-BugHunter) —
+  wording is original to this skill; no upstream text copied.
+- 2026-09-23: T11 added ch04 (workspace, lifecycle, 7-question gate,
+  evidence hygiene, tracker) + wired into session checklist.

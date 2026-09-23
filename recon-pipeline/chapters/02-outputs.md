@@ -23,6 +23,7 @@ recon/
       scope-exclusions.txt
       scope-ip-exclusions.txt   # CDN/shared ranges excluded this run
       new-since-last-run.txt    # THE product of the run
+      unverified-leads.md       # leads ledger — provenance per lead (below)
       run.log                   # command lines, tool versions, notes
     20260923/
       ...same shape...
@@ -86,6 +87,24 @@ diff -u "$PREV/02-live-probe.txt" "$CUR/02-live-probe.txt"
 Repeat per canonical file. `comm` for membership changes (subdomains, hosts,
 ports, dirs, code leads); `diff -u` where the *content* of a line matters
 (status flipped 200->403, tech list changed).
+
+## unverified-leads.md — the leads ledger
+
+`new-since-last-run.txt` is per-run delta; `unverified-leads.md` is the
+persistent ledger of leads that have NOT been confirmed in scope. One row
+per lead, appended (never auto-promoted to `01-subdomains-allowlisted.txt`):
+
+```markdown
+| Lead | Source (tool/stage) | First seen (UTC) | Scope evidence | Status |
+|---|---|---|---|---|
+| dev-api.example.com | amass-enum 20260923 | 2026-09-23T14:02Z | — | unverified |
+```
+
+Status moves to `verified` only with scope evidence (policy asset list
+match, written confirmation) — record that evidence in the row. A lead
+with no evidence never reaches a T/I stage input file, no matter how many
+runs re-discover it. Verified rows can be copied into the next run's
+allowlist review; the ledger itself stays as audit trail.
 
 ## new-since-last-run.txt — the lead file
 

@@ -150,3 +150,37 @@ order data was accessed beyond the two IDs listed above.
 - **Impact** quantifies (contiguous ~90k range, free account sufficient) and claims only fields actually observed in the PDF.
 - **Severity** shows the vector *and* maps to the program's own table — two ways for triage to say yes.
 - **Step 5** pre-empts the "did you check rate limiting?" round-trip — the most common source of "needs more info".
+
+## Pre-draft validation gate
+
+Before turning a candidate into this template, pass the 7-question gate in
+`bug-bounty-hunter/chapters/04-engagement-workspace.md` — reproduction,
+program fit, authorization, preconditions, alternative explanation,
+impact proof (own accounts/synthetic data), submission readiness. Any
+outcome other than `continue` stops or marks that candidate; it does not
+stop the engagement.
+
+## Platform overlay
+
+This skeleton is platform-neutral. Before submitting, apply the active
+platform's *current* required fields, taxonomy, and severity policy —
+HackerOne weakness dropdown, Bugcrowd VRT category, Intigriti severity
+table, or the program's own form. The overlay is the delta, not a rewrite:
+title/severity/weakness-field get platform-shaped; summary, repro, impact,
+and remediation stay identical. Never import stale severity bands or
+taxonomy from an older snapshot — re-read the policy page at submission
+time (see `chapters/01-severity.md` for the precedence order).
+
+## Evidence checklist — before attaching anything
+
+- Prefer the minimal request/response or screenshot that proves the claim.
+- Redact session cookies, `Authorization`, CSRF/session tokens, API keys,
+  secrets in URLs/bodies — then **inspect the sanitized artifact**; a
+  redaction command that ran is not proof the output is clean.
+- Screenshots at full resolution: URL bar, side panels, terminal history,
+  hidden headers — not just the payload region.
+- Incidental third-party data: stop accessing it, redact from shared
+  copies, follow the program's handling rules; never attach real-user
+  data to strengthen impact.
+- Raw captures stay local/restricted; share sanitized copies through the
+  program channel only. Rotate any test credential that leaked.

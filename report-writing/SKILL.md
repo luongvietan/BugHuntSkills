@@ -18,7 +18,7 @@ A report is a persuasion document, not a writeup. The reader is a triager who sp
 | Writing the impact section for a specific vuln class (phrasing, escalation language, what not to claim) | `chapters/03-impact-library.md` |
 | Report came back N/A / informative / duplicate / spam, or you're considering a dispute or mediation | `chapters/04-triage.md` |
 
-Drafting order that works mid-hunt: fill `chapters/02-template.md` skeleton → write repro steps first (they force you to re-verify the bug) → pick the impact statement from `chapters/03-impact-library.md` → set severity with `chapters/01-severity.md` → proofread once against the checklist below → submit → if verdict disappoints, `chapters/04-triage.md`.
+Drafting order that works mid-hunt: pass the pre-draft validation gate (7 questions — `chapters/02-template.md`, full text in `bug-bounty-hunter/chapters/04-engagement-workspace.md`) → fill `chapters/02-template.md` skeleton → write repro steps first (they force you to re-verify the bug) → pick the impact statement from `chapters/03-impact-library.md` → set severity with `chapters/01-severity.md` → run the evidence checklist + platform overlay (`chapters/02-template.md`) → submit → if verdict disappoints, `chapters/04-triage.md`.
 
 ## Golden rules
 

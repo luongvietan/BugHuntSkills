@@ -40,7 +40,8 @@ reproducing — is how sessions produce noise instead of bounties.
 Phase detail, inputs, exit criteria, and per-phase warnings:
 `chapters/01-phase-map.md`. Session start-to-finish checklist:
 `chapters/02-session-checklist.md`. Vuln class -> chapter routing:
-`chapters/03-vuln-class-index.md`.
+`chapters/03-vuln-class-index.md`. Engagement workspace, finding lifecycle,
+and the pre-report validation gate: `chapters/04-engagement-workspace.md`.
 
 ## The scope contract — deny by default
 
@@ -143,7 +144,11 @@ Nothing below this line happens until the session-init contract in
 - `chapters/01-phase-map.md` — seven phases: purpose, inputs, actions,
   skill+chapter routing, exit criteria, do-not-skip warnings.
 - `chapters/02-session-checklist.md` — copy-paste session init, per-phase
-  gates, end-of-session wrap.
+  gates, scope pressure scenarios, end-of-session wrap.
+- `chapters/04-engagement-workspace.md` — optional engagement scaffold
+  (scope snapshot, verified-vs-leads split, finding lifecycle + record
+  template, 7-question validation gate before drafting, evidence hygiene,
+  submission tracker).
 - `chapters/03-vuln-class-index.md` — vuln class -> primary skill+chapter ->
   alternates -> payload chapter.
 

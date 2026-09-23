@@ -109,6 +109,9 @@ workaround:
 
 ### Reporting (phase 6)
 
+- [ ] Candidate passed the 7-question validation gate
+      (`04-engagement-workspace.md`) — outcome `continue`; anything else
+      stops or marks that candidate, not the engagement
 - [ ] One report per bug (a tested chain = one report describing the chain)
 - [ ] Repro steps verified cold — fresh session, named test accounts, <5 min
 - [ ] Title names the impact; evidence attached inline at the proving step

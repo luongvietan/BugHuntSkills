@@ -31,3 +31,11 @@
   v4.0 metrics added, template evidence declaration added, redaction rules
   expanded, sources.md created (methods-refresh T7).
 - Next review trigger: CVSS v4.x revision or major platform policy change.
+
+## Design references (attribution)
+
+- `chapters/02-template.md` pre-draft gate + evidence checklist adapt
+  concepts from Claude-BugHunter (github.com/elementalsouls/Claude-BugHunter);
+  wording is original to this skill.
+- 2026-09-23: T11 added platform-overlay note + evidence checklist +
+  pre-draft gate pointer.
