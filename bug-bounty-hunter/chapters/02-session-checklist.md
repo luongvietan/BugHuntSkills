@@ -8,30 +8,64 @@ Suggested layout (created once per target):
 
 ```
 hunt/<target>/
-  scope.md          # includes, exclusions, banned techniques, safe-harbor notes
+  scope.md          # policy URL + revision/date, inclusions, exclusions,
+                    # banned techniques, safe-harbor notes, stop conditions
+  allowlist.txt     # machine-readable: one in-scope host/pattern per line —
+                    # the ONLY source active stages may draw targets from
   notes.md          # running log: hypotheses, request pairs, anomaly list
   evidence/         # screenshots, saved requests, PoC files per finding
 recon/<target>/<YYYYMMDD>/   # per-run pipeline output (see recon-pipeline)
 ```
 
-## Session init (phase 1 gate)
+## Session init (phase 1 gate) — the scope contract
 
-- [ ] Program policy read end-to-end this week (policies change silently —
-      re-read on any resume after ~7 days)
-- [ ] In-scope assets written to `hunt/<target>/scope.md` — including wildcard
-      interpretation (`*.target.com` in? out?)
-- [ ] Exclusions written to the same file — CDN/shared ranges, third-party
-      SaaS, acquired domains, "anything not listed is out" clauses
-- [ ] Banned techniques written down — DoS/volume tests, automated scanner
-      limits, social engineering, physical, spam — plus which need explicit
-      written permission first
-- [ ] Safe-harbor clause located; written authorization confirmed for any
+All boxes required before any target traffic. An unchecked box means the
+phase does not start.
+
+- [ ] **Policy pinned**: URL, revision or date read recorded in `scope.md`
+      (policies change silently — re-read on any resume after ~7 days, and
+      treat a changed policy as a new contract)
+- [ ] **In-scope assets enumerated exactly** in `scope.md` + `allowlist.txt` —
+      including wildcard interpretation (`*.target.com` covers apex?
+      sub-subdomains? which TLDs? on-prem vs SaaS?)
+- [ ] **Exclusions written** — CDN/shared ranges, third-party SaaS, acquired
+      domains, "anything not listed is out" clauses
+- [ ] **Banned/permissioned techniques written** — DoS/volume tests, automated
+      scanner limits, brute force, social engineering, physical, spam —
+      plus which need explicit written permission first
+- [ ] **Safe-harbor clause located**; written authorization confirmed for any
       active stages planned this session
-- [ ] Report channel noted (platform form vs. email vs. VDP contact) and
+- [ ] **Rate/volume limits noted** from policy or platform defaults
+- [ ] **Report channel noted** (platform form vs. email vs. VDP contact) and
       disclosure terms read (can you ever write it up?)
-- [ ] Severity/payout table reviewed so hunting effort aims at what pays
-- [ ] Two test accounts registered (different privilege levels); test data
-      seeded; credentials stored in notes, never real-user anything
+- [ ] **Stop/contact conditions written** — who to contact (program triage,
+      platform support) and when (scope ambiguity, service impact, unexpected
+      real-user data, found credential of unclear ownership)
+- [ ] **Severity/payout table reviewed** so hunting effort aims at what pays
+- [ ] **Two test accounts registered** (different privilege levels); test data
+      seeded; credentials in a **password manager/secret store** — notes and
+      evidence carry account *aliases* only, never secrets, never real-user
+      anything
+
+## Scope pressure scenarios — pass before hunting
+
+Mental-firewall checks; each must produce the halt/redact behavior, not a
+workaround:
+
+- [ ] **No scope file** (`scope.md`/`allowlist.txt` missing or empty) →
+      active target list is EMPTY; recon proceeds passive-only or not at all.
+      Never "everything discovered is in scope."
+- [ ] **Discovered-but-unlisted host** (new subdomain in passive output) →
+      it stays a lead in `new-since-last-run.txt` until ownership + allowlist
+      membership is confirmed; it is not fed to active stages automatically.
+- [ ] **Shared/CDN address** (asset resolves to Cloudflare/Fastly/Akamai or a
+      third-party SaaS IP) → no port scan/dir-brute against that IP; hostname-
+      scoped HTTP probing only if the hostname itself is allowlisted.
+- [ ] **Found credential** (key/token/secret in public code or a response) →
+      do NOT validate it against any service; record it redacted (type +
+      location + first few chars masked) and report via policy channel.
+      Validation requires explicit written permission AND confirmed program
+      ownership of the credential.
 
 ## Per-phase gates
 

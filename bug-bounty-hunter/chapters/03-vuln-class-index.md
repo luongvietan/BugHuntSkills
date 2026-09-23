@@ -48,7 +48,8 @@ for files `ch02`+ (`ch10-application-logic.md` covers WAHH Chapter 11).
 | Exposed secrets / public repos | `hacking-the-cloud/chapters/ch03-found-iam-credentials.md` | `bug-bounty-playbook/chapters/ch04-exposed-databases.md`; `recon-pipeline/chapters/01-stages.md` (stage 6 code-leak hunting) | — |
 | Cloud — metadata / IAM / storage | `hacking-the-cloud/chapters/ch02-metadata-services-ssrf.md` + `ch03-found-iam-credentials.md` + `ch04-storage-buckets-snapshots.md` | `hacking-the-cloud/chapters/ch05-privesc-misconfigured-policies.md` + `ch08-multicloud-general.md`; `bug-bounty-bootcamp/chapters/ch10-ssrf.md` (the usual way in) | `payloads-all-the-things/chapters/ch05-ssrf.md` |
 | Mobile (Android/iOS) | `owasp-mas/chapters/ch01-methodology-setup.md` then `ch02-storage.md`-`ch08-resilience.md` | `bug-bounty-bootcamp/chapters/ch20-android.md`; `tbhm-methodology/chapters/ch08-mobile-aux-checklist.md` | — |
-| LLM / API misc | `web-security-academy/chapters/ch15-logic-race-api-llm.md` | `owasp-api-security-top-10/chapters/ch08-injection.md` + `ch09-improper-assets-management.md`; `hacking-apis/chapters/ch12-breaches-bounties-checklist.md` | `payloads-all-the-things/chapters/ch15-logic-misc.md` |
+| LLM / GenAI app surface | `web-security-academy/chapters/ch15-logic-race-api-llm.md` (Web LLM attack classes + OWASP GenAI Top 10 2025 mapping) | `owasp-api-security-top-10/chapters/ch08-injection.md` + `ch09-improper-assets-management.md`; `hacking-apis/chapters/ch12-breaches-bounties-checklist.md` | `payloads-all-the-things/chapters/ch15-logic-misc.md` |
+| API misc / inventory | `owasp-api-security-top-10/chapters/ch09-improper-assets-management.md` | `hacking-apis/chapters/ch03-discovering-apis.md`; `owasp-wstg/chapters/ch12-api-testing.md` | — |
 
 ## How to use the index
 
@@ -62,7 +63,9 @@ for files `ch02`+ (`ch10-application-logic.md` covers WAHH Chapter 11).
    (`chapters/ch01-basics.md` through `ch05-miscellaneous.md`).
 4. API targets: always cross-check the `owasp-api-security-top-10` row entry —
    the same bug class has an API-specific shape (BOLA vs IDOR is the canonical
-   example).
+   example). That skill now carries the **2023 edition** naming (API1 BOLA,
+   API3 BOPLA, API6 sensitive business flows, API7 SSRF, API10 unsafe API
+   consumption); rows above cite chapters by filename, not edition year.
 5. Found something the index misses? It is probably mapping back to one of:
    `owasp-wstg/chapters/ch02-configuration-deployment.md` (misconfig),
    `web-app-hackers-handbook/chapters/ch16-application-architecture.md` /

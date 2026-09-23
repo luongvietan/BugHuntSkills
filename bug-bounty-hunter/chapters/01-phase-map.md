@@ -21,9 +21,15 @@ your hours-per-week, prior reports.
 
 **Actions:**
 
-- Read the full policy: in-scope asset list, exclusions, banned techniques
-  (DoS, social engineering, automated scanning limits), safe-harbor wording,
-  payout table, response SLAs. Write scope down — see `02-session-checklist.md`.
+- Read the full policy end-to-end and pin it: record the policy URL, the
+  revision or the date you read it, in-scope asset list, exclusions, banned
+  techniques (DoS, social engineering, automated scanning limits, brute
+  force), safe-harbor wording, rate limits, payout table, response SLAs, and
+  the stop/contact conditions. Write it all down — see
+  `02-session-checklist.md` for the exact contract.
+- Produce two artifacts, not one mental note: `hunt/<target>/scope.md` (the
+  human contract) and `hunt/<target>/allowlist.txt` (the machine-readable
+  list every active stage draws targets from — recon-pipeline consumes it).
 - Check signal-vs-noise: recent resolved reports, payout ranges, triage speed,
   program age (new programs = fresh surface; old ones = picked-over but deeper
   bugs left).
@@ -61,11 +67,22 @@ next run can be diffed.
 
 **Actions:**
 
-- Run the pipeline stages in order: subdomains -> live probe -> port scan ->
-  dir enum -> screenshots -> code-leak hunting -> tech fingerprint.
+- Stage 0 is the allowlist: `hunt/<target>/allowlist.txt` is the only source
+  any target-touching stage may draw from. No allowlist file or an empty one
+  → the active target list is empty — passive collection only, or nothing.
+- Passive collection first (third-party sources: CT logs, search engines,
+  archives, DNS zone data, repo/search-code surfaces) — sends no packets to
+  the target. Everything it emits is a *lead*.
+- Target-traffic stages (HTTP probing, DNS queries against target
+  infrastructure, screenshots) run only on allowlist-derived targets after
+  the authorization re-check.
+- Intrusive/high-volume stages (port scanning, directory brute-force, DNS
+  brute-force) are a separate gate again — explicit policy permission plus
+  conservative rate; never the default.
 - Land every artifact in `recon/<target>/<YYYYMMDD>/<stage>.txt`; normalize
   (`sort -u`, lowercase, one asset per line); diff vs prior run into
-  `new-since-last-run.txt`.
+  `new-since-last-run.txt`. Discovered assets stay leads until the ownership
+  + allowlist re-check promotes them.
 - Tech fingerprint + asset types feed phase 4: an API-heavy stack routes you
   to `hacking-apis`; cloud metadata/buckets route to `hacking-the-cloud`.
 
@@ -86,14 +103,15 @@ next run can be diffed.
   subscriptions, buckets, principals.
 
 **Exit criteria:** dated run dir exists; `new-since-last-run.txt` written;
-live-host list pushed to Burp scope; tech list annotated with candidate vuln
-classes.
+live-host list pushed to Burp scope (allowlist-derived only); tech list
+annotated with candidate vuln classes.
 
-**Do not skip — active-stage gate:** DNS brute-force, port scanning, and
-directory brute-force send packets to the target. Confirm written
-authorization in the policy's safe-harbor AND re-check the asset list against
-exclusions before any active stage. Passive output naming a new asset is a
-lead — verify ownership/scope before letting it into an active stage.
+**Do not skip — the deny-by-default rule:** a discovered hostname or resolved
+IP is a lead until ownership AND allowlist membership are confirmed. Shared/
+CDN infrastructure (Cloudflare, Fastly, Akamai, third-party SaaS IPs) never
+inherits authorization from a related hostname — probe by hostname, never
+scan the shared IP. Ambiguous ownership, missing permission, or unexpected
+real-user data → halt the stage, re-check policy or contact the program.
 
 ---
 

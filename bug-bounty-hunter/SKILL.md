@@ -42,12 +42,32 @@ Phase detail, inputs, exit criteria, and per-phase warnings:
 `chapters/02-session-checklist.md`. Vuln class -> chapter routing:
 `chapters/03-vuln-class-index.md`.
 
+## The scope contract — deny by default
+
+Nothing below this line happens until the session-init contract in
+`chapters/02-session-checklist.md` is filled. In short:
+
+- **Written policy on file** — URL, revision/date read, safe-harbor clause,
+  report channel, stop/contact conditions.
+- **Exact allowlist** — in-scope assets enumerated; wildcard semantics written
+  down (`*.target.com` includes apex? sub-subdomains? which TLDs?).
+- **A discovered asset is a lead, not scope.** A hostname, IP, or bucket found
+  during recon is unverified until ownership and allowlist membership are
+  confirmed. Shared/CDN infrastructure and third-party services never inherit
+  authorization from a related hostname.
+- **Missing or ambiguous means stop.** No policy, no allowlist entry, unclear
+  technique permission, a service warning, or unexpected real-user data →
+  halt that stage, re-check policy or contact the program. Do not proceed on
+  a guess; the guess is how accounts get banned.
+- **Credentials live in a password manager/secret store.** Notes, logs, and
+  evidence carry account aliases and references only — never stored secrets.
+
 ## Routing table — phase
 
 | Phase | Primary route | Also load |
 |---|---|---|
 | 1 Program selection | `tbhm-methodology` ch01, `zseano-methodology` ch01 | `bug-bounty-bootcamp` ch01 (industry, report expectations) |
-| 2 Recon | `recon-pipeline` (all 3 files; stages 3-4 active-gated) | `tbhm-methodology` ch02, `bug-bounty-bootcamp` ch03, `zseano-methodology` ch02 |
+| 2 Recon | `recon-pipeline` (all 3 files; passive collection first, target-traffic stages run allowlist-derived lists only, intrusive stages separately gated) | `tbhm-methodology` ch02, `bug-bounty-bootcamp` ch03, `zseano-methodology` ch02 |
 | 3 App mapping | `web-app-hackers-handbook` ch03, `tbhm-methodology` ch03 | `owasp-wstg` ch01, `zseano-methodology` ch05-ch06 |
 | 4 Vuln hunting | `chapters/03-vuln-class-index.md` picks the per-class chapter | `bug-bounty-bootcamp`, `web-security-academy`, `owasp-wstg`, `web-app-hackers-handbook` |
 | 5 Escalation/chaining | `bug-bounty-playbook` (exploitation-phase ops) | `bug-bounty-bootcamp` ch14, `web-hacking-101` (chain precedent) |
@@ -58,7 +78,15 @@ Phase detail, inputs, exit criteria, and per-phase warnings:
 
 - **API target** -> `hacking-apis` (ch03 discover, ch05 auth, ch07 BOLA/BFLA,
   ch08 mass assignment, ch09 injection, ch11 GraphQL) + `owasp-api-security-top-10`
-  as the vuln-class checklist.
+  as the vuln-class checklist — aligned to the **2023 edition** (API1 BOLA,
+  API3 BOPLA, API6 sensitive business flows, API7 SSRF, API10 unsafe API
+  consumption; 2019 names are historical labels inside that skill).
+- **AI/LLM product surface** (chatbots, agents, RAG features, LLM-backed
+  endpoints) -> `web-security-academy` ch15 for Web LLM attack classes +
+  OWASP GenAI Top 10 2025 risk names (prompt injection, sensitive info
+  disclosure, excessive agency, vector/embedding, unbounded consumption) —
+  test owned prompts/agents only; never aim a lab technique at shared model
+  capacity.
 - **General web testing** -> `bug-bounty-bootcamp` per-class chapters, or
   `web-app-hackers-handbook` for deeper mechanism, `owasp-wstg` for checklist
   coverage, `web-security-academy` for the modern class.
@@ -80,7 +108,13 @@ Phase detail, inputs, exit criteria, and per-phase warnings:
   `tbhm-methodology`.
 - **Exploitation-phase ops** (brute-forcing with Burp, known-CVE checks, CMS,
   cache attacks, OSRF) -> `bug-bounty-playbook`.
-- **Report drafting, severity, triage disputes** -> `report-writing`.
+- **Report drafting, severity, triage disputes** -> `report-writing`. Severity
+  is program-rubric first, platform policy second; CVSS v4.0 is the current
+  FIRST standard but only where a program accepts or requests it — never a
+  universal score.
+- **Scope or permission question mid-hunt** -> stop; re-read
+  `hunt/<target>/scope.md` and the live policy. If the answer is still
+  ambiguous, contact the program — the router has no "probably fine" route.
 
 ## Golden rules
 
