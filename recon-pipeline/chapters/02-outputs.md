@@ -1,4 +1,4 @@
-# outputs.md — layout, normalization, diffing
+# 02-outputs.md — layout, normalization, diffing
 
 The convention everything else depends on:
 
@@ -117,9 +117,14 @@ One file per run, generated right after the last stage. Format:
 Generator skeleton (drop into the run script):
 
 ```bash
-gen_section() {  # $1=label $2=prev-file $3=cur-file
+gen_new() {  # $1=label $2=prev-file $3=cur-file  — items in CUR only
   comm -13 <(sort -u "$2") <(sort -u "$3") | sed 's/^/+ /' \
     | { c=$(cat); [ -n "$c" ] && printf '## + %s (%s)\n%s\n\n' "$1" \
+        "$(printf '%s\n' "$c" | wc -l)" "$c"; }
+}
+gen_gone() { # $1=label $2=prev-file $3=cur-file  — items in PREV only
+  comm -23 <(sort -u "$2") <(sort -u "$3") | sed 's/^/- /' \
+    | { c=$(cat); [ -n "$c" ] && printf '## - %s (%s)\n%s\n\n' "$1" \
         "$(printf '%s\n' "$c" | wc -l)" "$c"; }
 }
 {
@@ -127,16 +132,25 @@ gen_section() {  # $1=label $2=prev-file $3=cur-file
   echo "# target: $TARGET   run: $(basename "$CUR")   vs: $(basename "$PREV")"
   echo "# generated: $(date -u)"
   echo
-  gen_section subdomains "$PREV/01-subdomains-scoped.txt" "$CUR/01-subdomains-scoped.txt"
-  gen_section "live hosts" "$PREV/02-live-hosts.txt"       "$CUR/02-live-hosts.txt"
-  gen_section "open ports" "$PREV/03-ports.txt"            "$CUR/03-ports.txt"
-  gen_section "dirs/endpoints" "$PREV/04-dirs.txt"         "$CUR/04-dirs.txt"
-  gen_section "code leads" "$PREV/06-code-leads.txt"       "$CUR/06-code-leads.txt"
+  gen_new  subdomains "$PREV/01-subdomains-scoped.txt" "$CUR/01-subdomains-scoped.txt"
+  gen_gone subdomains "$PREV/01-subdomains-scoped.txt" "$CUR/01-subdomains-scoped.txt"
+  gen_new  "live hosts" "$PREV/02-live-hosts.txt"       "$CUR/02-live-hosts.txt"
+  gen_gone "live hosts" "$PREV/02-live-hosts.txt"       "$CUR/02-live-hosts.txt"
+  gen_new  "open ports" "$PREV/03-ports.txt"            "$CUR/03-ports.txt"
+  gen_gone "open ports" "$PREV/03-ports.txt"            "$CUR/03-ports.txt"
+  gen_new  "dirs/endpoints" "$PREV/04-dirs.txt"         "$CUR/04-dirs.txt"
+  gen_new  "code leads" "$PREV/06-code-leads.txt"       "$CUR/06-code-leads.txt"
 } > "$CUR/new-since-last-run.txt"
 ```
 
 First run against a target has no `$PREV` — the lead file is the full
 `+` listing; note `vs: none` in the header.
+
+`+`/`-` sections are membership diffs (`comm`) and the generator covers them.
+`~` change sections are *content* diffs — no membership change, so `comm` can't
+see them. Append those by hand after reviewing
+`diff -u "$PREV/02-live-probe.txt" "$CUR/02-live-probe.txt"` and the same for
+`07-tech.txt`, one `~ host : old -> new` line per changed line.
 
 ## Reading the lead file
 

@@ -1,4 +1,4 @@
-# monitoring.md — continuous recon
+# 03-monitoring.md — continuous recon
 
 One-shot recon rots. The point of the dated layout + diff convention is a loop:
 run on a schedule, alert only on delta, hunt the leads, repeat.
@@ -23,7 +23,11 @@ curl -s "https://crt.sh/?q=%25.$TARGET&output=json" \
   | jq -r '.[].name_value' | tr 'A-Z' 'a-z' | sed 's/^\*\.//' | sort -u > "$OUT/raw-crtsh.txt"
 amass enum -passive -d "$TARGET" -o "$OUT/raw-amass-passive.txt" || true
 cat "$OUT/raw-crtsh.txt" "$OUT/raw-amass-passive.txt" | sort -u > "$OUT/01-subdomains.txt"
-grep -vFf scope-exclusions.txt "$OUT/01-subdomains.txt" > "$OUT/01-subdomains-scoped.txt" || true
+if [ -s scope-exclusions.txt ]; then
+  grep -vFf scope-exclusions.txt "$OUT/01-subdomains.txt" > "$OUT/01-subdomains-scoped.txt" || true
+else
+  cp "$OUT/01-subdomains.txt" "$OUT/01-subdomains-scoped.txt"
+fi
 
 # stage 2 (gated: only with --active)
 if [ "$ACTIVE" = "--active" ]; then
@@ -31,7 +35,7 @@ if [ "$ACTIVE" = "--active" ]; then
   # stages 3-7 here, behind the same flag
 fi
 
-# diff + lead file (see outputs.md gen_section)
+# diff + lead file (see 02-outputs.md gen_new/gen_gone)
 ln -sfn "$OUT" "recon/$TARGET/latest"
 echo "[done]"
 ```
@@ -74,7 +78,7 @@ changed. Tail of `run-recon.sh`:
 
 ```bash
 LEAD="$OUT/new-since-last-run.txt"
-# ... generate it (outputs.md) ...
+# ... generate it (02-outputs.md) ...
 if grep -q '^+ ' "$LEAD"; then
   COUNT=$(grep -c '^+ ' "$LEAD")
   MSG="recon $TARGET: $COUNT new assets — $LEAD"

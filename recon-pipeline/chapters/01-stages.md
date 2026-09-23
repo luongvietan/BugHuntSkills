@@ -1,4 +1,4 @@
-# stages.md — the seven stages
+# 01-stages.md — the seven stages
 
 Conventions used below:
 
@@ -6,7 +6,7 @@ Conventions used below:
 TARGET=example.com                 # scoped root domain
 ORG=example                        # org name for code searches
 DATE=$(date +%Y%m%d)
-OUT="recon/$TARGET/$DATE"          # dated run dir (see outputs.md)
+OUT="recon/$TARGET/$DATE"          # dated run dir (see 02-outputs.md)
 WL_DNS=/usr/share/seclists/Discovery/DNS/subdomains-top1million-110000.txt
 WL_DIR=/usr/share/seclists/Discovery/Web-Content/raft-medium-directories.txt
 mkdir -p "$OUT"
@@ -53,7 +53,11 @@ grep -oE '[a-z0-9._-]+\.[a-z0-9.-]+' "$OUT"/raw-gobuster-dns.txt "$OUT"/raw-amas
 cat "$OUT"/01-subdomains-passive.txt "$OUT"/01b-subdomains-active.txt 2>/dev/null \
   | sort -u > "$OUT/01-subdomains.txt"
 # drop known out-of-scope exclusions (keep a scoped copy for diffing)
-grep -vFf scope-exclusions.txt "$OUT/01-subdomains.txt" > "$OUT/01-subdomains-scoped.txt"
+if [ -s scope-exclusions.txt ]; then
+  grep -vFf scope-exclusions.txt "$OUT/01-subdomains.txt" > "$OUT/01-subdomains-scoped.txt" || true
+else
+  cp "$OUT/01-subdomains.txt" "$OUT/01-subdomains-scoped.txt"   # no exclusions = all in scope
+fi
 ```
 
 **Output files:** `01-subdomains.txt` (all), `01-subdomains-scoped.txt` (in-scope),
@@ -69,8 +73,13 @@ grep -vFf scope-exclusions.txt "$OUT/01-subdomains.txt" > "$OUT/01-subdomains-sc
 - amass v4 renamed flags (`enum` subcommand flags differ); check `amass enum -h`
   for `-passive`/`-active`/`-brute` on your build.
 - `gobuster dns` prints `Found: host [IP]` — hence the `grep -oE` extraction above.
+- `grep -vFf` treats exclusion lines as fixed strings: `api.example.com` also drops
+  `test-api.example.com`, and a wildcard like `*.dev.example.com` matches nothing.
+  Write exclusions as literal names, or switch to regex (`grep -vE 'dev\.example\.com$'`).
 - Wildcard DNS makes every brute-forced name resolve; spot-check a random name
-  (`dig does-not-exist-12345.$TARGET`) and subtract the wildcard answer IPs.
+  (`dig +short A does-not-exist-12345.$TARGET`) and subtract the wildcard answer IPs.
+  Plain `dig +short` also prints CNAME targets mid-chain — ask for `A` explicitly
+  and filter to `^[0-9.]+$` when you want IPs only.
 
 **Passive/active gating:** crt.sh, amass `-passive`, sublist3r = passive (target
 sees nothing). `gobuster dns` and amass `-active -brute` query resolvers for
@@ -129,7 +138,8 @@ for depth/service ID.
 
 ```bash
 # resolve scoped hosts to IPs first (scans run against IPs, not URLs)
-dnsx -l "$OUT/01-subdomains-scoped.txt" -a -resp-only -o "$OUT/raw-ips.txt"   # or: dig +short per host
+dnsx -l "$OUT/01-subdomains-scoped.txt" -a -resp-only -o "$OUT/raw-ips.txt"
+# dig fallback per host: dig +short A host | grep -E '^[0-9.]+$'  (+short prints CNAMEs too)
 sort -u "$OUT/raw-ips.txt" > "$OUT/03-ips.txt"
 
 # breadth (needs root, watch the rate)
@@ -138,9 +148,18 @@ sudo masscan -iL "$OUT/03-ips.txt" -p1-65535 --rate=10000 -oL "$OUT/raw-masscan.
 # depth (top ports + service detection)
 nmap -iL "$OUT/03-ips.txt" --top-ports 1000 -sV -oA "$OUT/raw-nmap-top1000"
 # parse open ports into the canonical artifact
+# masscan -oL lines: "open tcp 443 1.2.3.4 <ts>" -> ip:port
 grep -h 'open' "$OUT/raw-masscan.txt" 2>/dev/null | awk '{print $4":"$3}' > "$OUT/03-ports.txt"
-grep -hE '^[0-9]+/(tcp|udp).*open' "$OUT/raw-nmap-top1000.gnmap" 2>/dev/null \
-  >> "$OUT/03-ports.txt"
+# nmap .gnmap lines: "Host: 1.2.3.4 ()\tPorts: 22/open/tcp//ssh///, 80/open/tcp//http///, ..."
+grep -h 'Ports:' "$OUT/raw-nmap-top1000.gnmap" 2>/dev/null | awk '{
+  ip = $2
+  plist = substr($0, index($0, "Ports:") + 6)
+  n = split(plist, ent, ",")
+  for (i = 1; i <= n; i++) {
+    split(ent[i], f, "/")
+    if (f[2] == "open") print ip ":" f[1]
+  }
+}' >> "$OUT/03-ports.txt"
 sort -u "$OUT/03-ports.txt" -o "$OUT/03-ports.txt"
 ```
 
@@ -154,6 +173,9 @@ sort -u "$OUT/03-ports.txt" -o "$OUT/03-ports.txt"
   `--excludefile` for known-sensitive ranges.
 - masscan output lines look like `open tcp 443 1.2.3.4 1695555555` — field order
   is `state proto port ip ts`; the awk above prints `ip:port`.
+- nmap `.gnmap` is NOT line-per-port — ports are a comma-separated `port/state/proto`
+  list inside the `Ports:` field of the host line. `grep '^[0-9]+/tcp'` matches
+  nothing; the awk above splits `Host:`/`Ports:` fields instead.
 - Hosts behind Cloudflare/Fastly/etc. answer every port open-looking or none —
   CDN ranges are usually out of scope anyway; scan owned space (ASN/netblocks),
   not CDN edges.
@@ -280,7 +302,7 @@ while read -r r; do gh repo clone "$r" -- --depth 50; done < "../raw-gh-repos.tx
 cd - >/dev/null
 
 # secret scanning (finds committed keys/tokens/config)
-trufflehog github --org="$ORG" --only-verified -o "$OUT/raw-trufflehog.json"
+trufflehog github --org="$ORG" --results=verified --json > "$OUT/raw-trufflehog.json"
 for d in "$OUT"/gh-clones/*/; do
   gitleaks detect --source "$d" --report-path "$OUT/raw-gitleaks-$(basename "$d").json"
 done
@@ -296,9 +318,9 @@ done
 diffable lead list:
 
 ```bash
-jq -r '.SourceMetadata.Github.Repository // .repo // empty' \
+jq -r '.SourceMetadata.Data.Github.repository // .SourceMetadata.Data.Git.repository // empty' \
   "$OUT"/raw-trufflehog.json 2>/dev/null | sort -u > "$OUT/06-code-leads.txt"
-jq -r '.File' "$OUT"/raw-gitleaks-*.json 2>/dev/null | sort -u >> "$OUT/06-code-leads.txt"
+jq -r '.[].File' "$OUT"/raw-gitleaks-*.json 2>/dev/null | sort -u >> "$OUT/06-code-leads.txt"
 sort -u "$OUT/06-code-leads.txt" -o "$OUT/06-code-leads.txt"
 # append manual dork hits as "DORK <query> -> <where>" lines
 ```
@@ -310,7 +332,12 @@ matters).
 **Failure notes**
 
 - trufflehog v3 syntax is `trufflehog git <url>` / `trufflehog github --org=X`;
-  the v2 `--regex --entropy=True URL` form is gone. `-o` writes JSONL.
+  the v2 `--regex --entropy=True URL` form is gone. There is no `-o` — `--json`
+  prints one JSONL result per line on stdout, so redirect with `>`. Repo names
+  live at `.SourceMetadata.Data.Github.repository` (`.Data.Git.repository` for
+  `trufflehog git` output) — not `.SourceMetadata.Github.Repository`.
+- gitleaks `--report-path` writes a top-level JSON *array* — parse with `.[].File`,
+  not `.File`.
 - gitleaks needs the git history (`--depth` still sees recent commits; drop the
   flag for full history on high-value repos).
 - GitHub code search needs auth — `gh auth login` or an API token; unauthenticated
@@ -339,7 +366,9 @@ Java + specific versions -> CVE search.
 
 ```bash
 # httpx already collected it in stage 2 — split it out for the artifact
+# (bracket groups also hold [200] status codes and [1.2.3.4] IPs — filter them)
 grep -oE '\[[a-zA-Z0-9._ /-]+\]' "$OUT/02-live-probe.txt" | tr -d '[]' \
+  | grep -vE '^[0-9]{3}$|^[0-9]{1,3}(\.[0-9]{1,3}){3}$' \
   | sort -u > "$OUT/raw-tech-tags.txt"
 
 # whatweb: aggressive level 3 over the live list
