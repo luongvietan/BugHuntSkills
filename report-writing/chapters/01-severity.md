@@ -52,7 +52,7 @@ Sanity-check the result against the class anchors:
 Programs score differently; pitch to the one you're on.
 
 - **HackerOne** — CVSS v3.x calculator drives severity (and often bounty tables). Fill the calculator honestly and paste the vector + score into the report. Common anchors: 9.0–10.0 critical, 7.0–8.9 high, 4.0–6.9 medium, 0.1–3.9 low.
-- **Bugcrowd** — VRT (Vulnerability Rating Taxonomy) maps vuln class + context → priority P1–P5. Look up your class in the VRT *first* and cite the category in the report; VRT already bakes in typical severity, so argue only deltas (e.g., VRT lists stored XSS → P1 baseline).
+- **Bugcrowd** — VRT (Vulnerability Rating Taxonomy) maps vuln class + context → priority P1–P5. Look up your class in the VRT *first* and cite the category in the report; VRT already bakes in typical severity, so argue only deltas (e.g., stored XSS lands ~P2 baseline for non-admin→anyone context — higher only with a privileged target or extra reach).
 - **Intigriti / YesWeHack / others** — CVSS-based with triager judgment; include vector + a one-line justification per metric you chose.
 - **Private/VDP programs** — plain-language bands; map your finding to their published table and quote the row you match.
 

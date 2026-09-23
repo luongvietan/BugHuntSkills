@@ -41,7 +41,7 @@ accounts. Include exact requests the triager can replay verbatim.)*
 
 ## Impact
 *(What an attacker gains, quantified: data class × scale × privilege.
-Pull phrasing from impact-library.md; claim only what the PoC showed.)*
+Pull phrasing from `chapters/03-impact-library.md`; claim only what the PoC showed.)*
 
 ## Remediation
 *(Concrete fix: "enforce object-level authorization on `order_id` against the
@@ -55,7 +55,7 @@ caller's account ID" — not "implement proper access control". 1–3 bullets.)*
 
 **Summary** — if the triager reads only this, do they know class + component + impact? No background, no "I found during testing…".
 
-**Severity** — one band + evidence. If you list a CVSS vector, every metric must be defensible from the repro steps below (see `severity.md`).
+**Severity** — one band + evidence. If you list a CVSS vector, every metric must be defensible from the repro steps below (see `chapters/01-severity.md`).
 
 **Steps** — the make-or-break section:
 - Step 1 is always environment setup: accounts, roles, starting URL. Never assume the triager's session state.

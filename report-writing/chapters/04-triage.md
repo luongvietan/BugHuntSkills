@@ -11,7 +11,7 @@ The verdict isn't the end of the report — it's the start of a negotiation you 
 | **Duplicate** | Someone reported it first | You hunt where everyone hunts | Almost never wins bounty. Ask *once* whether it was a known issue vs. a recent submission — then treat it as recon data. |
 | **Spam** | Report flagged as noise/invalid submission | Automated submission, wrong program, unverifiable claim, or pattern of low-effort reports | Serious — it dings your reputation/signal. Only dispute if clearly mistaken; otherwise stop, review your last reports for quality drift. |
 | **Out of scope** | Asset or technique excluded | Policy mismatch — domain not listed, banned technique (DoS, social engineering) | Only if the scope text genuinely covers it (quote the line). "But it's the same app" loses. |
-| **Triaged → severity lower than claimed** | Accepted, scored down | Over-scoped CVSS metrics; scale claimed but not shown | Sometimes — see the argue-up table in `severity.md`. Accept with grace unless you hold concrete new evidence. |
+| **Triaged → severity lower than claimed** | Accepted, scored down | Over-scoped CVSS metrics; scale claimed but not shown | Sometimes — see the argue-up table in `chapters/01-severity.md`. Accept with grace unless you hold concrete new evidence. |
 | **Resolved + bounty** | Done | — | Thank-you note naming the fix helps; verify the fix later if policy allows retest. |
 
 ## Response playbook per verdict
@@ -73,7 +73,7 @@ Both HackerOne and Bugcrowd run formal mediation; smaller platforms have informa
 - You've delivered your best evidence and the verdict stands — further arguing trades future-report credibility for this one.
 - The program's pattern is hostile triage across *many* reporters (check platform stats/disclosures) — your reports are worth more elsewhere; programs that won't pay aren't a character flaw to fix, they're a lead-quality problem.
 - The dispute would require revealing more exploitation than policy allows (to "prove" impact you'd have to touch real user data) — policy wins, withdraw gracefully, keep the account.
-- It's the third dispute this quarter on the same program — you're either hunting in their blind spot (adjust targeting) or misreading their taxonomy (recalibrate with `severity.md`). Either way, the next report matters more than this fight.
+- It's the third dispute this quarter on the same program — you're either hunting in their blind spot (adjust targeting) or misreading their taxonomy (recalibrate with `chapters/01-severity.md`). Either way, the next report matters more than this fight.
 
 ## The long game
 
