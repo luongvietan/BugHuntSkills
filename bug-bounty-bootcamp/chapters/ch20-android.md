@@ -1,5 +1,7 @@
 # Ch23: Hacking Android Apps
 
+> **Era note:** the IPC/storage/webview *classes* are durable; the systematic current procedure (MASWE → test → tools) lives in `owasp-mas` (MASTG v2.0.0) — use this chapter for concept grounding, that skill for the actual assessment.
+
 Source: Chapter 23. Mobile hacking ≈ web hacking + device/tooling layer. Fewer hunters per program → less duplication, more bugs. OWASP MSTG is the deep reference.
 
 ## Setup

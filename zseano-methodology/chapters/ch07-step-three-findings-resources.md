@@ -1,5 +1,7 @@
 # Step Three — Rinse & Repeat, Automation, Case Studies & Resources
 
+> **Currency note:** automation and monitoring cadence is durable; referenced tools and case-study payouts are era-marked. Continuous recon with diff triage lives in `recon-pipeline` ch03; severity/reporting norms in `report-writing`.
+
 ## Core Idea
 Months in, you hold a complete mental map + notes. Now: automate the repeatable recon, monitor for change, rotate across 5-6 wide-scope programs, and let patches/new-features generate your next leads. Real findings below show the loop paying out.
 

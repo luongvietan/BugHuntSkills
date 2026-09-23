@@ -1,5 +1,7 @@
 # Ch 7 — Subdomain Takeover + Stale-Asset Abuse
 
+> **Marker-only rule:** claim the dangling resource and serve your own marker page — no real content, no cookie harvesting, no victim redirect. Third-party provider specifics age fast; verify the service still allows claims before reporting.
+
 ## The mechanic
 
 DNS entry points a subdomain at a third-party service resource that nobody claims anymore:

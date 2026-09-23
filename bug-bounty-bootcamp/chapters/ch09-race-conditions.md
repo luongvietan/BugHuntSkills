@@ -1,5 +1,7 @@
 # Ch12: Race Conditions
 
+> **Volume + ownership:** race proofs run at minimal parallel counts on *your own* objects (coupon, balance, invites) — volumetric rules apply; shared-resource races are report narrative. Current tooling: Burp "send group in parallel" / Turbo Intruder single-packet (`web-security-academy` ch15).
+
 Source: Chapter 12. Race condition = the app checks a condition (balance, coupon use, invite limit) and *then* acts on it — two+ requests arriving in the check→act window both pass. Classic TOCTOU bug.
 
 ## Hunting

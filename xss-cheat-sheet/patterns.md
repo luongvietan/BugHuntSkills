@@ -1,5 +1,7 @@
 # Patterns & Techniques — XSS Cheat Sheet
 
+> 2018-era vectors — mutate against the observed filter, not the documented one. Proof ceiling + routing: `sources.md`.
+
 ## Context → Vector Mapping
 **When to use**: every injection point, always first step
 **How**: locate reflection → classify (tag / block-tag / attribute-inline / attribute-source / JS-string / JS-logical-block / header / DOM) → pick vector family → adapt quote style

@@ -1,5 +1,7 @@
 # Ch11 — GraphQL Injection
 
+> **Live-program ceiling:** one introspection query + one escalating cost/alias sequence proves the gap — batch floods and nesting bombs are DoS probes, gated by explicit permission.
+
 > Endpoint discovery, introspection/schema enum, query/mutation payload shapes, batching abuse, injection through GraphQL args.
 > Sources: `GraphQL Injection/`.
 

@@ -1,5 +1,7 @@
 # Ch08 — OS Command Injection & Argument Injection
 
+> **Live-program ceiling:** `id`, `hostname`, `sleep 5` prove execution — no reverse shells, no lateral movement, no data reads beyond the marker command.
+
 > Chaining/substitution payloads, whitespace/character/filter bypasses, blind (time/DNS) channels, argument injection vectors.
 > Sources: `Command Injection/` (README), plus argument-injection references.
 

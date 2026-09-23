@@ -1,5 +1,7 @@
 # Ch14 — HTTP Protocol & Infrastructure Attacks
 
+> **Live-program ceiling:** desync/cache probes that touch only *your* connection/cache-buster key — queue poisoning and victim-traffic capture are shared-infra impact, explicit permission required (academy ch01/ch02 rules).
+
 > Request smuggling (CL.TE/TE.CL/TE.TE/H2), client-side desync, web cache deception & poisoning, CRLF injection, HTTP parameter pollution, CORS misconfig, XS-Leaks, virtual hosts, reverse-proxy paths, exposed panels, leaked SCM.
 > Sources: `Request Smuggling/`, `Web Cache Deception/`, `CRLF Injection/`, `HTTP Parameter Pollution/`, `CORS Misconfiguration/`, `XS-Leak/`, `Virtual Hosts/`, `Reverse Proxy Misconfigurations/`, `Insecure Management Interface/`, `Insecure Source Code Management/`.
 

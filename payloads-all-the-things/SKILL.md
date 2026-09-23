@@ -49,6 +49,7 @@ Related skills: `bug-bounty-bootcamp` + `web-hacking-101` (vuln-class methodolog
 5. **Blind channel when there's no output.** Time delays (SLEEP/WAITFOR/sleep), DNS lookups, HTTP callbacks to tester-controlled infrastructure (interactsh/Burp Collaborator). Never point OOB payloads at infrastructure you don't control or aren't authorized to use.
 6. **Minimal proof.** `id`, `hostname`, a benign `alert(document.domain)`, reading `/etc/hostname` — enough to prove impact. No data dumping, no destructive commands, no reverse shells unless explicitly authorized.
 7. **Throttle.** Fuzzing, brute force, race conditions, and batch attacks are rate-sensitive — slow down, respect program limits, ask before volumetric tests.
+8. **Lab payloads ≠ live payloads.** This library documents the *family* — including exploit-chain payloads meant for labs and writeups. On a live program the first payload that confirms the class is the last payload you send: one safe marker (`alert(document.domain)`, a 5-second sleep, a DNS hit to your own listener, a canary file) proves the bug; everything deeper is report narrative. Escalation payloads exist here so you can describe the mechanism — executing them needs the policy's explicit permission.
 
 ## Scope & ethics
 

@@ -1,5 +1,7 @@
 # Ch13: Server-Side Request Forgery
 
+> **Metadata boundary:** cloud-metadata reach is read-only proof (harmless key/role name — never mint/use creds, `hacking-the-cloud` ch02/03 gates); internal-network sweeping needs explicit permission. SSRF = API7:2023 in the current taxonomy.
+
 Source: Chapter 13. SSRF = make the *server* send a request to a destination you choose. Turns the server into a proxy: reach internal networks, cloud metadata, and localhost services invisible from the internet. Blind SSRF = no response body, only side effects (DNS/timing) — still exploitable.
 
 ## Hunting — where URL-fetching hides

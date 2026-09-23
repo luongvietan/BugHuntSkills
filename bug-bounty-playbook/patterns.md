@@ -1,6 +1,6 @@
 # Patterns — Bug Bounty Playbook V2
 
-Decision rules and recurring signals, by chapter.
+Decision rules and recurring signals, by chapter. Live-program ceilings per chapter callouts; source/edition metadata in `sources.md`.
 
 ## Signals → immediate tests
 

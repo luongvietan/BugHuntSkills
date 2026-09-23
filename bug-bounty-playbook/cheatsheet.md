@@ -1,5 +1,7 @@
 # Cheatsheet — Bug Bounty Playbook V2
 
+> Live-program ceilings are set per chapter (`> **…rule/gate/boundary:**` callouts) — the techniques below are family knowledge, not volume defaults. See `sources.md`.
+
 ## Recon → exploit cycle
 
 ```

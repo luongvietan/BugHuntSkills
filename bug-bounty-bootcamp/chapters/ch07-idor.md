@@ -1,5 +1,7 @@
 # Ch10: Insecure Direct Object References
 
+> **Current naming:** IDOR is the book's name; the 2023 taxonomy splits it into BOLA (object) + BOPLA (property read/write) — quote `owasp-api-security-top-10` IDs on API targets; proofs stay on your own two accounts.
+
 Source: Chapter 10. IDOR = the app exposes a reference to an object (ID in URL/body/filename) and fails to check whether *this* user may access *that* object. Li's framing: it's **broken object-level authorization**, not merely "guessable IDs" — unpredictable UUIDs don't fix missing authZ.
 
 ## Hunting

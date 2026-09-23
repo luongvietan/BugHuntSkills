@@ -1,5 +1,7 @@
 # Section 1: Basics — HTML & JavaScript Context Injections
 
+> **Proof marker:** on a live program the confirming payload is the ceiling — `alert(document.domain)` (domain > `1`: proves origin context for the report). Everything beyond confirmation belongs in the report narrative, not the browser.
+
 ## Core Idea
 XSS payload selection is driven by *where the input lands*. Identify the reflection context (HTML tag, block tag, attribute, script string) first, then pick the matching vector — never spray payloads blindly.
 

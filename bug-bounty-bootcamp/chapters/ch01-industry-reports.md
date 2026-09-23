@@ -1,5 +1,7 @@
 # Ch1-2: Picking Programs & Writing Reports
 
+> **Currency note:** platform names, payout norms, and program mechanics are era-specific (book ~2021) — the *selection criteria* and report discipline are durable; current severity/reporting rules live in `report-writing`.
+
 Source: Chapters 1-2. Bug bounty = find vulns in a scoped app, report via a platform (HackerOne, Bugcrowd, Intigriti, Synack, Cobalt…), get paid on severity. Li's framing: treat it as a profession — program selection, report quality, and dispute handling are skills separate from hacking.
 
 ## Choosing a program

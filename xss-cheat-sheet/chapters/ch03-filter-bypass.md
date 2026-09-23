@@ -1,5 +1,7 @@
 # Section 3: Filter Bypass — Evading WAFs, Sanitizers & CSP
 
+> **Era + boundary note:** 2018-era filter material — WAF rules and browser quirks drift; mutate against the *observed* filter, not the documented one. Evasion pacing and volumetric runs need explicit policy permission; the proving payload is still `alert(document.domain)`.
+
 ## Core Idea
 Filters fail on edge cases: case sensitivity, double-decoding, missing chars, tag-name allowlists, regex blind spots. Diagnose *what* the filter blocks, then pick the bypass class that removes exactly that dependency.
 

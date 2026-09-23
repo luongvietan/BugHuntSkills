@@ -1,5 +1,7 @@
 # Ch15 — IDOR, Logic & Miscellaneous Injection Families
 
+> **Live-program ceiling:** IDOR/race/logic proofs run on your own two accounts at minimal counts; prompt-injection and dependency-confusion payloads prove on assets/tenants you own — ReDoS/CSV-injection-to-exec are lab material.
+
 > Identifier tampering, race conditions, mass assignment, hidden params, prototype pollution, type juggling, CSV/LaTeX/SSI/ESI injection, ReDoS, dependency confusion, prompt injection, encoding tricks, business logic.
 > Sources: `Insecure Direct Object References/`, `Race Condition/`, `Mass Assignment/`, `Hidden Parameters/`, `External Variable Modification/`, `Prototype Pollution/`, `Type Juggling/`, `Business Logic Errors/`, `CSV Injection/`, `LaTeX Injection/`, `Server Side Include Injection/`, `Regular Expression/`, `Dependency Confusion/`, `Prompt Injection/`, `Encoding Transformations/`, `Denial of Service/`, `ORM Leak/` (→ch03), `XSLT Injection/` (→ch06), `Google Web Toolkit/`, `Headless Browser/`, `Java RMI/`.
 

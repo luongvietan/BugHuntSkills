@@ -1,5 +1,7 @@
 # Ch06 — XML External Entity (XXE) & XML Payloads
 
+> **Live-program ceiling:** an OOB DNS/HTTP hit or a benign local file (`/etc/hostname`, a file you planted) proves XXE — billion-laughs/DoS entity payloads are lab-only, never production.
+
 > Entity/DTD payload families: file read, SSRF, blind OOB channels, error-based (local/remote DTD), XInclude, encoding bypasses, SOAP/office formats.
 > Sources: `XXE Injection/` (README + SVG/SOAP/DOCX/XLSX sub-files), `XSLT Injection/` cross-ref.
 

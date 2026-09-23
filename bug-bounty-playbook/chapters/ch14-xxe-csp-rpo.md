@@ -1,5 +1,7 @@
 # Ch 14 — XXE, CSP Bypass, RPO
 
+> **Marker-only rule:** XXE = OOB DNS hit or benign file read (`/etc/hostname`); CSP bypass = a harmless `alert` demonstrating script execution under the policy; billion-laughs/exfil chains are lab material (`payloads-all-the-things` ch06 ceiling).
+
 ## XXE — XML External Entity
 
 **Rule: see `<?xml version="1.0"?>` in a request → test XXE immediately.**

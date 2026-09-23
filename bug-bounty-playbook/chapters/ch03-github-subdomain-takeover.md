@@ -1,5 +1,7 @@
 # Ch 3 — GitHub Dorking + Subdomain Takeover
 
+> **Credentials & takeover rules:** dorking is passive, but a found credential is reported not exercised (masked prefix; validation only under explicit policy authorization — `hacking-the-cloud` ch03). Subdomain takeover PoC = claim the dangling resource and serve *your own marker page* — never real content, never cookies.
+
 Two of the easiest high/critical findings in the book — low skill, high payout.
 
 ## GitHub sensitive-info mining

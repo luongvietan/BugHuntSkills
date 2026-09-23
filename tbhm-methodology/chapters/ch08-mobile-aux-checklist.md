@@ -1,5 +1,7 @@
 # Ch8: Mobile, Auxiliary "Noise" Vulns & the Fast-Testing Checklist
 
+> **Currency note:** mobile section is era-thin — current systematic mobile assessment lives in `owasp-mas` (MASTG v2.0.0). The fast-testing checklist stays useful for time-boxed passes; pair with `owasp-wstg` test IDs when reporting.
+
 Source: `10_Mobile` + `11_Auxiliary_Info` + `Fast Testing Checklist`. Wrap-up stage: mobile storage, the low-severity classes that still report, and Haddix's time-boxed assessment for maximum results in a fixed window.
 
 ## Mobile — data storage first

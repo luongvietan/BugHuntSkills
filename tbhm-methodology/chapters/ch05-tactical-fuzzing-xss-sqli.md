@@ -1,5 +1,7 @@
 # Ch5: Tactical Fuzzing — XSS & SQLi
 
+> **Ceiling note:** polyglots and error-based probes are detection payloads — confirmation ends the test (`alert(document.domain)`, sleep); extraction is report narrative. Payload families: `payloads-all-the-things` ch01/02.
+
 Source: `05_XSS` + `06_SQLi`. Tactical fuzzing = the 80/20 of input testing: for time-sensitive hunting, lead with multi-context **polyglot** payloads, then escalate to targeted payloads only where the polyglot lands. Per feature, ask the core question first.
 
 ## XSS — "does the page functionality display something to the user?"

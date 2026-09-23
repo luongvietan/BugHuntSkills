@@ -1,5 +1,7 @@
 # Cheatsheet — zseano Methodology Decision Rules
 
+> Era-marked tooling routes to `recon-pipeline`; per-class proof ceilings in chapter callouts and `payloads-all-the-things` (see `sources.md`).
+
 ## The loop
 1. Pick wide-scope program (months horizon) → 2. Mine disclosed bugs for leads → 3. Manual first pass (feature question lists, hunt FILTERS) → 4. Dork + subdomain/robots/wayback + param replay → 5. Deep second pass (read every `.js`) → 6. Automate recon + diff monitoring → 7. Rotate 5-6 programs; patches & new features = new leads.
 

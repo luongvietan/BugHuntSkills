@@ -1,5 +1,7 @@
 # Ch25: Automatic Vulnerability Discovery Using Fuzzers
 
+> **Volume gate:** fuzzing is volumetric by definition — policy-permitted rates and technique lists only; many programs ban automated scanning on some assets. Detection-first small batches before any wide run.
+
 Source: Chapter 25. Fuzzing = send masses of invalid/unexpected input, watch for anomalies. Li's framing: manual first (learn the target, find logic bugs), then automate the grind — fuzzers are *metal detectors*, not metal.
 
 ## The 4-step process

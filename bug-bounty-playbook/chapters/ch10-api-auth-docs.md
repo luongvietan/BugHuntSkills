@@ -1,5 +1,7 @@
 # Ch 10 — API Authentication + Documentation
 
+> **Volume rule:** auth attacks (brute force, spraying, OTP guessing) prove the *missing control* at low volume on your own accounts — lockout absence, unlimited OTP attempts. A real attack run needs explicit permission; JWT forgery targets your own tokens (`web-security-academy` ch07 rules).
+
 Break auth → ATO → privesc. Three schemes + how to find the docs that reveal design flaws.
 
 ## HTTP Basic

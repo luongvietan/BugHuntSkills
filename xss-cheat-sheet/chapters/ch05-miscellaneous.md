@@ -1,5 +1,7 @@
 # Section 5: Miscellaneous — Utilities, Niche Vectors & Encoding Reference
 
+> **Era note:** encoding tables and polyglot tricks age slowly but sandbox/browser behaviors do — verify exotic vectors in your own lab before sending them at a program. OOB utilities point only at tester-controlled infrastructure.
+
 ## Core Idea
 Grab-bag of force multipliers: one-shot filter-aware vectors, delay tricks, shortest-possible XSS, mobile handlers, Crosspwn cross-origin tool, a PHP static-analysis finder, Node.js RCE, and the ASCII encoding table for building bypasses.
 

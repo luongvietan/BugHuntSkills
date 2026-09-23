@@ -1,5 +1,7 @@
 # Ch7: CSRF, Privilege, IDOR, Transport & Business Logic
 
+> **Ownership + taxonomy note:** all cross-account checks use your own two accounts; "IDOR" now splits to BOLA/BOPLA in the 2023 API taxonomy (`owasp-api-security-top-10`). Business-logic abuse = API6:2023 — see `web-app-hackers-handbook` ch11 for durable technique.
+
 Source: `08_CSRF` + `09_Privledge_Logic_Transport` + `12_IDOR` (a stub — the real IDOR content lives in §9). These classes share one model: *who can do what, and how is it enforced* — mostly manual work scanners miss.
 
 ## CSRF quick-test battery

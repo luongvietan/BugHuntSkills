@@ -1,5 +1,7 @@
 # Section 2: Advanced — Multi-Reflection, Upload, DOM & Framework Injections
 
+> **Delivery boundary:** upload/stored vectors land where *other users* browse — stored/blind XSS payloads run only in your own account's surfaces unless the policy explicitly authorizes victim-visible delivery. `alert(document.domain)` is still the whole PoC.
+
 ## Core Idea
 Real applications reflect input multiple times, in weird sinks (uploads, DOM writes, postMessage, templates). These vectors exploit compound reflections and non-HTML-parser sinks where basic vectors fail.
 

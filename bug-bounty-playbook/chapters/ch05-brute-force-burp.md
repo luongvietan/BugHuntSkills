@@ -1,5 +1,7 @@
 # Ch 5 — Brute Forcing + Burp Suite
 
+> **Volume gate:** brute-force concepts are taught at scale; on a program you prove the missing control — a handful of attempts showing no lockout — on *your own* accounts only. Any real wordlist/spray/credential-stuffing run needs explicit policy permission; never test passwords you didn't generate.
+
 ## Brute forcing
 
 **Rule of thumb: "if there is a login screen it should be brute forced."** Passwords are the weak point — guessable, reused, or left as defaults.

@@ -1,5 +1,7 @@
 # Cheatsheet — Web Hacking 101
 
+> Historical case studies — payloads and chains below are illustrative of era; live-program ceilings per chapter callouts and `sources.md`.
+
 ## Recon quick-fire
 
 ```

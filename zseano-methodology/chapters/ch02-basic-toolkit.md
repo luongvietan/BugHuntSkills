@@ -1,5 +1,7 @@
 # Basic Toolkit — What zseano Actually Uses
 
+> **Era note:** the *stack shape* (proxy + subdomains + content discovery + screenshots) is durable; named tools are dated (httprobe-era). Version-verified equivalents live in `recon-pipeline`'s runbook.
+
 ## Core Idea
 Minimal tool stack: one proxy, a recon chain, a fuzzer, good wordlists, and a few self-built scripts that all serve one purpose — **finding new content, parameters, and functionality before anyone else**.
 

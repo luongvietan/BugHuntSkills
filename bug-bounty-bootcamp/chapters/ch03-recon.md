@@ -1,5 +1,7 @@
 # Ch5: Introduction to Reconnaissance
 
+> **Currency note:** the recon *stages* are durable; specific tools/flags have moved — current command runbook with version-verified syntax + allowlist-derived scope lives in `recon-pipeline`.
+
 Source: Chapter 5. Recon = discovering the target's attack surface *before* testing: assets, technologies, and forgotten entry points. Li's split: **passive** (no packets to target: OSINT, cert logs, Wayback) vs **active** (talking to the target: brute-forcing, port scans — confirm the program allows it).
 
 ## The recon pipeline

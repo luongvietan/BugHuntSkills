@@ -1,6 +1,6 @@
 # Patterns — Reusable Heuristics from TBHM
 
-Cross-cutting heuristics distilled from Haddix's methodology. Per-stage details live in `chapters/`; execution runbook lives in `recon-pipeline`.
+Cross-cutting heuristics distilled from Haddix's methodology. Per-stage details live in `chapters/`; execution runbook lives in `recon-pipeline`. Source/era metadata: `sources.md`.
 
 ## The master stage loop
 

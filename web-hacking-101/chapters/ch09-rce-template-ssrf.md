@@ -1,5 +1,7 @@
 # Ch 9 — RCE, Template Injection, SSRF
 
+> **Proof ceiling:** RCE = `id`/`hostname`; SSTI = arithmetic; SSRF = your listener / harmless metadata read — no credential use, no internal sweep (`payloads-all-the-things` ch04/05 ceilings; `hacking-the-cloud` ch02/03 for the cloud chain).
+
 ## Remote Code Execution / Command Injection
 
 Input reaches `eval()` or `system()` unsanitized: `index.php?page=1;phpinfo()`.

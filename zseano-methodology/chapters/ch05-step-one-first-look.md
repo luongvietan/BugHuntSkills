@@ -1,5 +1,7 @@
 # Step One — Getting a Feel for Things (First-Look Playbook)
 
+> **Flow note:** the click-everything first pass is durable and low-volume by nature — but it runs *after* the scope contract (`bug-bounty-hunter` session init): allowlist confirmed, technique restrictions read.
+
 ## Core Idea
 Before scanners: (0) read prior disclosed bugs for leads, then (1) manually walk the app's key features asking a fixed battery of questions. Assumption: *it should be secure* — your job is to challenge that on every input. This pass builds the mental map + notes + first findings.
 

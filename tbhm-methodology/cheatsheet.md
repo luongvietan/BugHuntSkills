@@ -1,6 +1,6 @@
 # Cheatsheet — The Bug Hunter's Methodology (TBHM)
 
-Quick-lookup card. Stage detail in `chapters/`; heuristics in `patterns.md`; terms in `glossary.md`. Authorized, in-scope testing only.
+Quick-lookup card. Stage detail in `chapters/`; heuristics in `patterns.md`; terms in `glossary.md`. Authorized, in-scope testing only. Era notes per chapter; current-tool routing in `sources.md`.
 
 ## Session kickoff (stage order)
 

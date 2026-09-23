@@ -75,4 +75,4 @@ When you ask about a topic not covered below, I read the relevant chapter file b
 
 ## Scope & Limits
 
-Methodology and mindset, not a payload encyclopedia — pair with `xss-cheat-sheet` / `owasp-api-security-top-10` for payload depth. Some referenced tools age (amass/httprobe era) — the *workflow* is the durable content. For authorized testing only; follow program scope/rules.
+Methodology and mindset, not a payload encyclopedia — pair with `xss-cheat-sheet` / `owasp-api-security-top-10` for payload depth. Some referenced tools age (amass/httprobe era) — the *workflow* is the durable content. For authorized testing only; follow program scope/rules. Source/version/review metadata: `sources.md`.

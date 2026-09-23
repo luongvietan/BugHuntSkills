@@ -1,5 +1,7 @@
 # Ch 1 — Basic Hacking: Known Vulnerabilities
 
+> **Exploit-module rule:** public PoC/exploit code is run first against your own lab instance — a stranger's exploit is untrusted code *and* often oversized for a report. On the program, the minimal confirming request is the ceiling; the full exploit chain is report narrative.
+
 The oldest trick that still wins: target → tech stack → known CVEs → PoC → exploit. Most hunters skip this phase entirely — free wins for those who don't.
 
 ## The two cycles

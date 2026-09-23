@@ -1,5 +1,7 @@
 # Ch 9 — API Types: REST, RPC, SOAP, GraphQL
 
+> **Current taxonomy:** map what you find to the OWASP API Top 10 **2023** list — BOLA, BOPLA (exposure+mass-assignment merged), sensitive business flows, SSRF, unsafe consumption — crosswalk in `owasp-api-security-top-10`; authorization-boundary matrix in `hacking-apis` ch04.
+
 Modern apps split: JS frontend (React/Angular) ↔ backend API. **Step one is always: which API type?** — detection hints below. Then all the normal OWASP bugs apply on top (SQLi, XSS, IDOR…).
 
 ## REST

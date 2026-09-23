@@ -1,5 +1,7 @@
 # Ch01 — Cross-Site Scripting (XSS) & DOM Clobbering
 
+> **Live-program ceiling:** prove with `alert(document.domain)` on your own session — cookie-exfil/beef/persistence payloads are lab material; report the sink + context, never deliver to victims.
+
 > Payload families for HTML/attribute/JS/URI contexts, filter bypasses, polyglots, CSP bypass, Angular CSTI, blind XSS.
 > Sources: `XSS Injection/` (README, filter bypass, polyglot, WAF bypass, CSP bypass, Angular), `DOM Clobbering/`.
 

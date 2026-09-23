@@ -1,6 +1,6 @@
 # Patterns — Reusable Heuristics from Bug Bounty Bootcamp
 
-Cross-cutting heuristics that apply across vuln classes. Per-class details live in `chapters/`.
+Cross-cutting heuristics that apply across vuln classes. Per-class details live in `chapters/`. Era-marked tooling routes to current skills — see `sources.md`.
 
 ## The master loop (every vuln chapter)
 

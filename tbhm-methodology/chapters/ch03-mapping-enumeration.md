@@ -1,5 +1,7 @@
 # Ch3: Mapping & Enumeration
 
+> **Volume note:** smart directory brute-force and spidering are volumetric — policy rate limits and technique bans apply; consolidate into few, well-chosen lists. Platform-ID and status-code escalation reasoning is durable.
+
 Source: `03_Mapping` (+ the `v4/` wordlist payload). Mapping converts the discovered host list into a content map + technology profile — what exists, what it runs, and what it's already known to be vulnerable to.
 
 ## Mapping toolbox

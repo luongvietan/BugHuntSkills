@@ -1,6 +1,6 @@
 # Patterns — Web Hacking 101
 
-Distilled "if you see X → test Y" rules from the case takeaways.
+Distilled "if you see X → test Y" rules from the case takeaways. Proofs stay minimal — escalation is report narrative (`sources.md`).
 
 ## Recon signals
 

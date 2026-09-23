@@ -1,6 +1,6 @@
 # Patterns — payload selection heuristics
 
-Reusable rules that decide *which* payload family to try and *how* to mutate it. Ordered roughly by frequency of payoff.
+Reusable rules that decide *which* payload family to try and *how* to mutate it. Ordered roughly by frequency of payoff. Live-program ceiling per class in each chapter's header callout (see `sources.md`).
 
 ## The master loop
 

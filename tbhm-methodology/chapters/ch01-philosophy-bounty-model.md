@@ -1,5 +1,7 @@
 # Ch1: Philosophy — the Crowdsourced Game
 
+> **Era note:** TBHM is competition-shaped (find it first, speed wins) — durable as mindset, but the ecosystem changed: duplicates policy, AI triage, private invites. Speed never overrides the scope contract (`bug-bounty-hunter` session init).
+
 Source: `01_Philosophy`. TBHM opens by framing *which* game you're playing — bug hunting in a bounty is not a solo pentest, and the economics shape the entire methodology.
 
 ## Single-sourced vs crowdsourced testing

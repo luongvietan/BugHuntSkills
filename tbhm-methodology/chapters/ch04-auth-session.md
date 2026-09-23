@@ -1,5 +1,7 @@
 # Ch4: Authorization & Session — the Quick Batteries
 
+> **Ownership note:** session-fixation, CSRF-on-auth, and privilege-escalation batteries run on *your own two accounts* — never on discovered user data. Modern auth surface (JWT/OAuth/SAML) routes to `web-security-academy` ch07/08.
+
 Source: `04_Authorization_and_Session`. Haddix's header says it twice: these checks "better be quick." Auth/session weaknesses are fast to test and frequently payout — run the battery early, before deep feature work. (Privilege escalation and transport get their own stage — see ch07.)
 
 ## Auth battery (authentication & account flows)

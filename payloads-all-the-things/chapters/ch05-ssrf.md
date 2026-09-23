@@ -1,5 +1,7 @@
 # Ch05 — Server-Side Request Forgery (SSRF) & DNS Rebinding
 
+> **Live-program ceiling:** a callback to *your* listener + one internal-reach proof. Cloud-metadata hits: read-only key/role name, never mint/use creds (`hacking-the-cloud` ch03 gate). `gopher:`/`file://` chains need explicit permission.
+
 > Host-reachability payloads, localhost/metadata targets, filter-bypass families (encoding, parsing, redirect, DNS), URL-scheme smuggling, blind channels.
 > Sources: `Server Side Request Forgery/`, `DNS Rebinding/`.
 

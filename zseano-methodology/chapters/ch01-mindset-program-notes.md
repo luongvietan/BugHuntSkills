@@ -1,5 +1,7 @@
 # Mindset, Choosing a Program & Note-Taking
 
+> **Currency note:** program-choice heuristics are durable (age, scope size, response time); payout norms and platform features are era-marked. Current program/severity policy flows through `bug-bounty-hunter` session init and `report-writing`.
+
 ## Core Idea
 Bug bounty success = curiosity-driven questioning + months of depth on ONE program. You're not spraying payloads — you're reverse-engineering how developers think, finding their filters, and asking "what did they forget?"
 

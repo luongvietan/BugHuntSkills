@@ -1,5 +1,7 @@
 # Ch04 — Server-Side Template Injection (SSTI)
 
+> **Live-program ceiling:** `{{7*7}}`/`${7*7}` arithmetic or a harmless marker proves injection — the RCE escape chain is report narrative unless the policy explicitly authorizes code execution.
+
 > Detection polyglots, engine fingerprinting, per-engine breakout and code-execution payload families.
 > Sources: `Server Side Template Injection/` (README + per-engine files for Jinja2, Twig, Freemarker, Velocity, Mako, ERB, Smarty, Pebble, Jinjava, Tornado, Thymeleaf, Groovy, EL, Blade, Latte, etc.).
 

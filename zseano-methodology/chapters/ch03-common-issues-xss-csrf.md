@@ -1,5 +1,7 @@
 # Common Issues I Start With — XSS & CSRF (Filter Hunting)
 
+> **Ceiling note:** filter-hunting probes are detection payloads — `alert(document.domain)` confirms and ends it. CSRF PoCs run on your own account; the filter-bypass depth lives in `xss-cheat-sheet` ch03 (era-marked) and `web-security-academy` ch01.
+
 ## Core Idea
 First-pass vuln classes are chosen to expose *filters*. XSS is the ideal probe: easiest bug to prevent, so a filter's existence tells you about dev maturity — and their filter choices leak their security thinking (same blind spots recur on SSRF, uploads, CORS).
 

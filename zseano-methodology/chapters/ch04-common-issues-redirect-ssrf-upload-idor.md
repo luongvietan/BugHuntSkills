@@ -1,5 +1,7 @@
 # Common Issues I Start With — Redirects, SSRF, Uploads, IDOR, CORS, SQLi, Logic
 
+> **Ceiling + taxonomy note:** redirects → own-domain destination; SSRF → own listener / harmless metadata read only (`hacking-the-cloud` gates); uploads → harmless file you own; IDOR → own two accounts, now named BOLA/BOPLA (`owasp-api-security-top-10`); SQLi → differential proof. Escalation chains are report narrative.
+
 ## Core Idea
 Same playbook as XSS: every vuln class is a filter-hunting exercise. Find the feature that *should* be protected, map its filter, bypass it, then chain the "harmless" result into impact (redirect→token leak, SSRF→AWS keys, upload→RCE).
 

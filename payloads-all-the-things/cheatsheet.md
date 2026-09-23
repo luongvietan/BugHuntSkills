@@ -1,6 +1,6 @@
 # Cheatsheet — context → payload quick map
 
-The "what do I send first" card. Details and variants live in the chapters.
+The "what do I send first" card. Details and variants live in the chapters. Live-program rule: the first confirming payload is also the last — harmless markers only (see `sources.md`).
 
 ## Universal detection probes
 

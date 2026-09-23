@@ -1,5 +1,7 @@
 # Ch6: Tactical Fuzzing — File Inclusion, Uploads & Redirects
 
+> **Ceiling note:** LFI = benign file marker; uploads = harmless test file you own; redirects = own-domain destination — no shells, no credential reads, no victim chains (`payloads-all-the-things` ch07/09/12).
+
 Source: `07_File_Upload`. Three related classes around one core idea: **can the app interact with the server filesystem, or take a file/URL as input?**
 
 ## Local file inclusion (LFI)

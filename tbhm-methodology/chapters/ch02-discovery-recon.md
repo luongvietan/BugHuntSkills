@@ -1,5 +1,7 @@
 # Ch2: Discovery — Find the Road Less Traveled
 
+> **Currency note:** the *stages* (acquisitions → ASN/IP ranges → subs → ports → content) are durable; the named tools are dated (Recon-ng-era). Current tool runbook with version-verified commands, allowlist gating, and CDN/shared-infra exclusions lives in `recon-pipeline`.
+
 Source: `02_Discovery`. On wide-scoped programs the flagship application is heavily assessed; your edge is finding the applications (or parts of applications) that are *less tested*.
 
 ## Surface-expansion checklist

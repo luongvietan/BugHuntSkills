@@ -1,5 +1,7 @@
 # Ch 13 — OSRF, Prototype Pollution, CSTI
 
+> **Shared-state boundary:** server-side prototype pollution and OSRF gadgets can alter the app for everyone — canary property on your own session only, no gadget that flips global state (`web-security-academy` ch04 rules). CSTI/XSS proofs = `alert(document.domain)`, no victim delivery.
+
 Three underrated classes most hunters never test.
 
 ## OSRF — On-site Request Forgery

@@ -1,5 +1,7 @@
 # Ch24: API Hacking
 
+> **Current taxonomy:** route to `owasp-api-security-top-10` for the 2023 risk list (BOLA/BOPLA/business-flows/SSRF/unsafe-consumption) and `hacking-apis` for the test method — this chapter is the intro-level version.
+
 Source: Chapter 24. APIs = the same vuln classes behind a thinner UI and often weaker controls. Mobile apps and SPAs are API-clients — hack the API, not just the page. Deeper treatment in companion skill `hacking-apis`.
 
 ## API shapes & recon

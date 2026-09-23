@@ -43,3 +43,5 @@ description: Case-study knowledge base from "Web Hacking 101" by Peter Yaworski.
 - **Don't alert() in reports** — explain what the bug does to *their* site ("steal session of any user who views this page"), not what XSS is.
 - Read the disclosure guidelines *before* hunting — his first Shopify report was a known-out-of-scope bug: -5 rep and a lesson.
 - Bug bounty is relationships: triagers fight noise, prioritization, confirmation, resourcing — write reports that make their job easy.
+
+Era note: case studies are historical (book ~2017) — payouts, tools, and even some techniques are period artifacts. The durable value is how researchers *found and reasoned about* the bugs. Current-method routing + proof ceilings: `sources.md` and per-chapter callouts.

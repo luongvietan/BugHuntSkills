@@ -1,5 +1,7 @@
 # Cheatsheet — XSS Decision Rules (Brute Logic)
 
+> Live-program ceiling: `alert(document.domain)` proves the bug — victim delivery, session/token capture, and blind-exfil receivers are report narrative unless explicitly authorized (`sources.md`).
+
 ## Context → Payload (first-pass)
 
 | Reflection lands in | Use |

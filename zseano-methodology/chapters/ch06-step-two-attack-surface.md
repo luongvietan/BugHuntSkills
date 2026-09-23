@@ -1,5 +1,7 @@
 # Step Two — Expanding the Attack Surface
 
+> **Volume + scope note:** expanding surface via brute-force/subdomain/content discovery is volumetric — allowlist-derived targets and policy rate limits apply (`recon-pipeline` class labels P/T/I). Discovered assets are leads until confirmed in scope.
+
 ## Core Idea
 After the manual first pass, widen out: dork for indexed content, triage subdomains by *functionality* (not just liveness), mine `robots.txt` + Wayback for forgotten files, fuzz for content with meaningful wordlists, then do a **deeper second pass** through the main app — this time reading the `.js` files.
 

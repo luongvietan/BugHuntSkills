@@ -1,5 +1,7 @@
 # Patterns & Techniques — zseano's methodology
 
+> Detection-first probes confirm; escalation is report narrative. Era/currency notes per chapter (`sources.md`).
+
 ## Filter-First First Pass
 **When to use**: first hours on any new program
 **How**: probe features that *should* be protected; catalog what the filter blocks/allows (encodings, tags, extensions); treat each filter as both a bug-lead and a dev-mindset fingerprint

@@ -1,5 +1,7 @@
 # Ch 6 — SQL Injection + Open Redirect
 
+> **Minimal-proof rule:** SQLi confirmation = a true/false differential or a short sleep — data extraction is escalation narrative, not PoC (`payloads-all-the-things` ch02 ceiling). Open-redirect PoC = a single safe destination (your own domain); chains into OAuth/token theft are report narrative.
+
 ## SQL Injection (the book's angle: framework vulns, not just `' OR 1=1`)
 
 The chapter's case is **Drupal SQL Injection (Drupalgeddon, SA-CORE-2014-005)** — a framework-level flaw, not dev string-concat: Drupal's `expandArguments` built `IN (...)` placeholders from array keys; attacker-controlled array keys became part of the query → unauthenticated SQLi → admin hash extraction → RCE.

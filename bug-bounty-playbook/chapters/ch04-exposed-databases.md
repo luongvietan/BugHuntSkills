@@ -1,5 +1,7 @@
 # Ch 4 — Exposed Databases
 
+> **Exposure ceiling:** connection success + a database/collection listing proves the misconfig — that is the entire PoC. Never read rows, never sample "just one record": if the listing shows personal-data names (users, customers, patients), report the listing itself.
+
 Databases are frequently internet-exposed **without authentication by default**. Zero-skill, maximum-impact: connect → dump.
 
 ## Indicator table

@@ -1,6 +1,6 @@
 # Cheatsheet — Bug Bounty Bootcamp
 
-Quick-lookup card. Details in `chapters/`; mindset in `SKILL.md`; terms in `glossary.md`.
+Quick-lookup card. Details in `chapters/`; mindset in `SKILL.md`; terms in `glossary.md`. Edition-era notes per chapter; modern routing + sources in `sources.md`.
 
 ## Session kickoff
 

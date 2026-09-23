@@ -48,4 +48,4 @@ Related skills: `web-hacking-101` (case-study driven version of the same vuln cl
 
 ## Scope & ethics
 
-All testing is assumed authorized and in scope (bug bounty / pentest). The book is explicit about restraint: use test accounts, upload only harmless test files you own (S3), avoid reading sensitive data or running destructive payloads, throttle fuzzing to avoid DoS, get written permission before rate-limit tests, and stop at the minimal PoC that proves impact.
+All testing is assumed authorized and in scope (bug bounty / pentest). The book is explicit about restraint: use test accounts, upload only harmless test files you own (S3), avoid reading sensitive data or running destructive payloads, throttle fuzzing to avoid DoS, get written permission before rate-limit tests, and stop at the minimal PoC that proves impact. Edition/tool currency + routing metadata: `sources.md`.

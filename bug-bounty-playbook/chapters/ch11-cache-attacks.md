@@ -1,5 +1,7 @@
 # Ch 11 — Web Cache Poisoning + Deception
 
+> **Shared-cache boundary:** poisoning a cache entry serves your payload to *other users*. Prove with your own cache-buster parameter / your own cached page (`web-security-academy` ch03 rules); a victim-facing poison entry is shared-infra impact requiring explicit permission.
+
 ## How caching works (the model that matters)
 
 Cache sits in front: first request for a key → web server → response saved; later identical requests served from cache. "Identical" is decided by **cache keys** — usually only method + path + host (e.g. `GET /embed/v4.js?_=160…`, `Host: play.vidyard.com`). Everything else is **unkeyed input**: it changes the response but NOT the cache lookup. The `Vary` header lists extra keyed values (`Accept-Encoding`, `User-Agent`…). Cache indicators in responses: `X-Cache: hit|miss`, `Age: <seconds>`.
