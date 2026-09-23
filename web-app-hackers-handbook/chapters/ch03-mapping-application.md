@@ -1,5 +1,11 @@
 # Ch4: Mapping the Application
 
+> **Edition note (2011):** the mapping *discipline* is durable; the surface has
+> grown — add JS-bundle endpoint extraction, API/GraphQL discovery, SPA
+> routing, and subdomain/cloud asset enumeration to this chapter's checklist.
+> Modern procedures: `web-security-academy` (API/graphql) and
+> `recon-pipeline` (asset discovery).
+
 Source: Chapter 4. Mapping builds the attack-surface inventory everything else depends on: you cannot test a parameter you haven't found. Output = a catalogue of content, functionality, entry points, and technology guesses.
 
 ## Enumeration — content & functionality

@@ -2,6 +2,11 @@
 
 Source: `/web-security/websockets`. **GAP CLASS.** WebSockets are long-lived, bidirectional channels initiated by an HTTP `Upgrade` handshake — after the handshake there are no CSRF tokens, no Same-Origin Policy on messages, and input-validation assumptions from HTTP often don't transfer.
 
+> **Lab vs live (bounty-safe):** message-level probes on your own socket are
+> safe. CSWSH (cross-site WebSocket hijacking) is a victim-delivery attack —
+> prove it against your own session from your own page; never deploy a
+> working exploit page against real users.
+
 ## Mechanism
 
 Handshake: client sends `GET /chat HTTP/1.1` with `Upgrade: websocket`, `Connection: Upgrade`, `Sec-WebSocket-Key`, `Sec-WebSocket-Version`, optional `Sec-WebSocket-Protocol`; server answers `101 Switching Protocols`. Everything after is framed messages in both directions — usually JSON, frequently carrying the same actions/data as the HTTP API.

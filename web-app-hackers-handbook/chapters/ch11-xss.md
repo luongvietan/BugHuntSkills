@@ -1,5 +1,12 @@
 # Ch12: Attacking Users — Cross-Site Scripting
 
+> **Edition note (2011):** predates CSP, framework auto-escaping, Trusted
+> Types, and modern DOM sinks — the three-varieties model and SOP reasoning
+> are durable; current filter/CSP bypass and context-specific vectors live
+> in `xss-cheat-sheet` and `web-security-academy` ch10. Victim-delivery
+> payloads (cookie theft, BeEF) are lab concepts — bounty proof = harmless
+> `alert`/marker on your own session.
+
 Source: Chapter 12 (~75% of real-world XSS is the simple reflected case). XSS works because of the **same-origin policy**: script delivered *by the application* runs with that origin's privileges — cookies, DOM, actions. Three varieties: **reflected** (request→response), **stored** (input saved, later rendered to users — hits admins), **DOM-based** (client JS reads attacker-controlled DOM data and writes to a sink; may never reach the server).
 
 ## Payloads & impact

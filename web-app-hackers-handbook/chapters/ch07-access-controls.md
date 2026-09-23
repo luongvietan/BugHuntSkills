@@ -1,5 +1,9 @@
 # Ch8: Attacking Access Controls
 
+> **Edition note (2011):** fully durable — the trust-boundary model maps
+> 1:1 onto modern IDOR/BOLA/BFLA. For API object/property authorization use
+> the 2023 taxonomy in `owasp-api-security-top-10` (BOLA + BOPLA + BFLA).
+
 Source: Chapter 8. Access control = logic deciding whether a request may proceed given the authenticated identity. Broken when users access resources/actions outside their privilege — **vertical** (user→admin) or **horizontal** (user→user). The core flaw: the app trusts something user-controllable (URL, parameter, stage reached, Referer, IP) to indicate authority.
 
 ## Mechanism → canonical failure points

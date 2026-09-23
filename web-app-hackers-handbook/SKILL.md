@@ -5,6 +5,12 @@ description: Deep vulnerability-mechanics knowledge base from "The Web Applicati
 
 # The Web Application Hacker's Handbook — Stuttard & Pinto's Vulnerability Mechanics
 
+> **Edition note:** 2nd Edition (2011) — a historical-era source kept for its
+> unmatched *mechanics* coverage, not for current tools or attack surfaces.
+> Chapters carry `> **Edition note (2011):**` callouts routing era-dependent
+> material (tooling, auth mechanisms, XSS filters, automation stack) to the
+> maintained modern skills. Metadata: `sources.md`.
+
 Knowledge base distilled from *The Web Application Hacker's Handbook: Finding and Exploiting Security Flaws*, 2nd Edition (21 chapters). Where `bug-bounty-bootcamp` gives the hunter's loop, this skill gives the *mechanics*: what the server actually does with your input, the assumption a developer made, and the precise point where that assumption breaks. Its signature per vulnerability class:
 
 **Mechanism → Attack → Defense/evasion → Hack-steps checklist.**

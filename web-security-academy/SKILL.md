@@ -34,7 +34,8 @@ Related skills: `bug-bounty-bootcamp` + `web-hacking-101` (same classic classes,
 - SSRF + XXE → `chapters/ch12-ssrf-xxe.md`
 - Command injection + SSTI + path traversal + file upload + deserialization → `chapters/ch13-injection-files.md`
 - Access control + authentication + information disclosure → `chapters/ch14-access-authn-info.md`
-- Business logic + race conditions + API testing + GraphQL + LLM → `chapters/ch15-logic-race-api-llm.md`
+- Business logic + race conditions + API testing + GraphQL + LLM attacks
+  (mapped to OWASP GenAI Top 10 2025) → `chapters/ch15-logic-race-api-llm.md`
 
 - Terms → `glossary.md`; cross-cutting heuristics → `patterns.md`; quick ref → `cheatsheet.md`
 - Lab index (free, registration required): `https://portswigger.net/web-security/all-labs` — each chapter ends with its topic anchor.
@@ -53,3 +54,5 @@ Related skills: `bug-bounty-bootcamp` + `web-hacking-101` (same classic classes,
 ## Scope & ethics
 
 All testing is assumed authorized and in scope (bug bounty / pentest / Academy labs). Extra restraint for the classes here: request smuggling and cache poisoning affect *other users'* responses — prefer detection probes that only affect your own session (timing, cache-buster params, your own cached page) and stop at the minimal proof. WebSocket and LLM testing can generate real messages/actions in shared systems — use test accounts and test workspaces. Follow each program's rules on volumetric testing before racing or fuzzing.
+
+Per-chapter **Lab vs live** callouts (ch01, ch02, ch04, ch06–ch08, ch15) spell out where lab-authorized exploitation ends and live-program proof stops — labs never equal live authorization. Edition/source metadata: `sources.md`.

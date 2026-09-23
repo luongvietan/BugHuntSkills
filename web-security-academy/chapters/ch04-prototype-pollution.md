@@ -2,6 +2,12 @@
 
 Source: `/web-security/prototype-pollution`. **GAP CLASS — no book covers this.** A JavaScript bug where an attacker adds properties to `Object.prototype` (or other built-in prototypes); every object that doesn't own the property then inherits the attacker's value.
 
+> **Lab vs live (bounty-safe):** server-side PP gadgets can alter app behavior
+> for *everyone* (status-code override, maintenance mode, shell injection).
+> Confirm pollution with a canary property visible only to your own
+> session/request; a gadget that flips shared state = stop at proof-of-
+> pollution and report — do not chain to RCE on a live program.
+
 ## Mechanism
 
 Every JS object inherits from a prototype chain ending at `Object.prototype`. A recursive merge/assign that copies attacker-controlled keys *without sanitizing* lets `__proto__` (or `constructor.prototype`) slip through: the merge writes to the prototype object, not the target. JSON input is a prime vector because `JSON.parse('{"__proto__":{...}}')` produces a real `__proto__` key (unlike an object literal, where it's the setter).

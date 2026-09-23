@@ -1,5 +1,11 @@
 # Ch21: A Web Application Hacker's Methodology
 
+> **Edition note (2011):** the coverage-is-the-methodology doctrine is
+> durable — but its checklist predates APIs, cloud, mobile, GraphQL, and
+> modern client classes. Use `bug-bounty-hunter`'s seven-phase loop +
+> `owasp-wstg` test IDs as the current checklist scaffold; this chapter
+> remains the reasoning underneath.
+
 Source: Chapter 21. The end-to-end assessment loop: exhaustive mapping → systematic per-area testing → reporting. Coverage is the methodology — each area gets *all* its checks, because the one you skip is where the bug is.
 
 ## Phase 1 — Map & prepare

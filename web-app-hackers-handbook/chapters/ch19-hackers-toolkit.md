@@ -1,5 +1,10 @@
 # Ch20: A Web Application Hacker's Toolkit
 
+> **Edition note (2011):** tool *roles* are durable (proxy sees all, scanner
+> improvises nothing); specific versions are historical — current stack:
+> Burp Suite Pro + extensions (Param Miner, Turbo Intruder), Caido/ZAP,
+> ffuf, httpx, Nuclei. Recon tooling currency: `recon-pipeline`.
+
 Source: Chapter 20. The toolset is small: browser + intercepting proxy + (optionally) scanner + custom scripts. What matters is *what each tool is for* and *where each one fails* — a scanner that improvises nothing and a proxy that sees everything complement each other.
 
 ## Browsers

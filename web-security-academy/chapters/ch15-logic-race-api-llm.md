@@ -25,6 +25,7 @@ Check-then-act window: the app reads state (balance, coupon-used, invite-count),
 - **Time-sensitive attacks**: password-reset tokens, expiring codes — collision/single-packet at the moment of validity.
 - **Connection warming**: send an innocuous request first to warm the back-end connection, then fire the race group so all requests land simultaneously.
 - **Methodology**: predict potential collisions → probe for clues (response deltas on parallel sends) → prove with minimal count needed for impact, then stop (volumetric rules apply).
+- **Bounty-safe boundary**: races against *your own* objects (own coupon, own balance, own invites) only. A successful race on a shared resource (event seats, stock, another user's quota) can cause real financial/inventory damage — prove with the smallest parallel count on owned resources and stop; never keep hammering "to be sure."
 
 ## API testing
 
@@ -47,13 +48,52 @@ Check-then-act window: the app reads state (balance, coupon-used, invite-count),
 
 ## LLM attacks (web LLM)
 
-- **Surface**: LLM features call APIs/plugins/functions — map which (ask it, or infer from responses); treat every LLM-callable API as publicly accessible.
-- **Prompt injection (direct)**: make the model ignore instructions → invoke functions it shouldn't (delete, refund, send email).
-- **Indirect prompt injection**: poison a data source the LLM reads (web page, email, product description, support ticket) → when the *victim's* LLM reads it, the payload executes in their context — CSRF-equivalent for AI.
-- **Insecure output handling**: LLM output rendered as HTML/JS → XSS via crafted model responses; output passed to shell/SQL → injection through the model.
-- **Training-data / sensitive-data leakage**: prompt the model to regurgitate sensitive context, system prompt, or other users' data.
-- **Plugin/function abuse**: excessive agency — the model calls real APIs with the victim's permissions; chain injection→function call→data theft/action.
-- **AI-scanner SSRF** (newest): AI-powered scanners/proxies fetch URLs — prompt-inject the scanner into fetching internal resources (routing-based SSRF) or carrying injected payloads onward.
+Mapped against the **OWASP Top 10 for LLM Applications** (GenAI Security
+Project, 2025 list — `genai.owasp.org/llm-top-10/`). Academy labs cover the
+web-visible subset; the fuller risk model:
+
+- **Surface mapping**: LLM features call APIs/plugins/functions — map which
+  (ask it, or infer from responses); treat every LLM-callable API as
+  publicly accessible. Document the model's reachable action set before
+  attacking it.
+- **LLM01 Prompt injection — direct**: make the model ignore instructions →
+  invoke functions it shouldn't (delete, refund, send email). Escalate
+  gradually: get it to reveal its instructions, then to violate one.
+- **LLM01 Prompt injection — indirect**: poison a data source the LLM reads
+  (web page, email, product description, support ticket) → when the
+  *victim's* LLM reads it, the payload executes in their context —
+  CSRF-equivalent for AI. Bounty-safe version: poison a document *you* own
+  that only your own session/agent will read.
+- **LLM02 Sensitive information disclosure**: prompt the model to regurgitate
+  sensitive context, PII in its context window, secrets in its system
+  prompt, or other users' conversation data. Own-context proof only —
+  demonstrate with data you planted or your own account's data.
+- **LLM05 Improper output handling**: LLM output rendered as HTML/JS → XSS
+  via crafted model responses; output passed to shell/SQL → injection
+  through the model. Verify with a harmless marker payload.
+- **LLM06 Excessive agency / unsafe tool calls**: the model calls real
+  APIs with the user's permissions — chain injection→function call→data
+  theft/action. Inventory the tool list first; a model that can *only read*
+  is low-impact, one that can *send/delete/pay* is the finding.
+- **LLM07 System prompt leakage**: coax out the hidden instructions — often
+  contains role definitions, secrets, or business logic worth a report on
+  its own; also maps the model's intended limits for the next probe.
+- **LLM08 RAG / vector-store isolation**: knowledge-grounded bots retrieve
+  per-tenant documents — test whether your queries surface another tenant's
+  chunks (embedding-space cross-tenant leak) or whether poisoned documents
+  rank-manipulate answers. Own-tenant data only.
+- **LLM10 Unbounded consumption / resource risks**: expensive queries,
+  recursive tool loops, context-window stuffing — a per-request cost
+  amplifier. Demonstrate *one* expensive request; never a load test —
+  volumetric rules apply exactly as for API4:2023.
+- **AI-scanner SSRF** (newest): AI-powered scanners/proxies fetch URLs —
+  prompt-inject the scanner into fetching internal resources
+  (routing-based SSRF) or carrying injected payloads onward.
+- **Lab vs live**: PortSwigger labs authorize full exploitation chains. On a
+  live program, LLM testing stays inside: your own documents/accounts, no
+  real-user data, no destructive tool calls, no spam/resource abuse — a
+  model doing a real action (email sent, record deleted) needs a test-
+  owned endpoint to receive it, and stops there.
 
 ## Lab reference
 

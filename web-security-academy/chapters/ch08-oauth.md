@@ -2,6 +2,12 @@
 
 Sources: `/web-security/oauth` + SAML synthesis (no dedicated Academy SAML topic exists — `/web-security/saml` is not on the site; SAML coverage here aligns with `bug-bounty-bootcamp` ch17 and standard SAML attack research). OAuth = delegated authorization framework (client app ↔ resource owner ↔ OAuth provider); SAML = XML-based SSO assertion flow (IdP → SP). Both implement "log in with another identity" — the trust bridge (token or signed assertion) is the attack surface. Companion to `ch07-jwt.md` (OIDC tokens are JWTs).
 
+> **Lab vs live (bounty-safe):** OAuth/OIDC/SAML attack chains (redirect_uri
+> abuse, code interception, account linking, signature bypass) are victim-
+> delivery class. Demonstrate with your own client app and your own two
+> accounts; a working token/authorization-code capture against a real user
+> is out of bounds without explicit permission.
+
 ## Mechanism & recon
 
 - **Grant types**: **authorization code** (server-side code→token exchange, `redirect_uri` + `state` + `client_secret` protected) vs **implicit** (token delivered through the browser in the URL fragment — inherently weaker, mostly legacy but still found).

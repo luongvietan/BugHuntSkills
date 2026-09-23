@@ -2,6 +2,9 @@
 
 Quick-lookup card. Mechanics in `chapters/`; mindset in `SKILL.md`; terms in `glossary.md`. Authorized, in-scope testing only — minimal PoCs, throttled volume, test accounts.
 
+**Edition (2011):** mechanics durable; tool/platform specifics era-marked —
+see per-chapter edition notes + `sources.md` for modern routing.
+
 ## Assessment loop
 
 1. Map everything: walkthrough per privilege level + spider + hidden content + public sources.

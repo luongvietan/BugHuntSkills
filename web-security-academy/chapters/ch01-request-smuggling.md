@@ -2,6 +2,15 @@
 
 Source: `/web-security/request-smuggling`. **GAP CLASS — no book covers this.** Request smuggling = interfering with how a site processes *sequences* of HTTP requests on a shared front-end→back-end connection. Front-end and back-end disagree about where one request ends and the next begins; the leftover bytes get prepended to the *next user's* request.
 
+> **Lab vs live (bounty-safe):** desync is the class where a careless probe
+> harms *other users* — a poisoned prefix lands in the next request on a
+> shared connection. Detection probes (CL.TE/TE.CL differential, timeout
+> behavior, single-connection confirmation) are live-safe; exploitation that
+> prepends data into other users' requests, poisons the response queue, or
+> captures foreign traffic is shared-infrastructure impact — needs explicit
+> policy permission; demonstrate desync existence, document the queue-poison
+> mechanism in the report, stop.
+
 ## Mechanism
 
 HTTP/1 offers two ways to mark a request's end: `Content-Length` (byte count) and `Transfer-Encoding: chunked` (hex-length-prefixed chunks, `0\r\n\r\n` terminator). When both are present and the two servers pick different ones, the request desynchronizes:

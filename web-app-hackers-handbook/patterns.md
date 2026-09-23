@@ -1,6 +1,6 @@
 # Patterns — Reusable Heuristics from the WAHH
 
-Cross-cutting heuristics that apply across vuln classes. Per-class mechanics live in `chapters/`.
+Cross-cutting heuristics that apply across vuln classes. Per-class mechanics live in `chapters/`. Edition (2011): heuristics are mechanism-level and durable; era-specific tool references are marked in chapters.
 
 ## The signature loop (per vulnerability class)
 

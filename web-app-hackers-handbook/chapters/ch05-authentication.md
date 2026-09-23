@@ -1,5 +1,11 @@
 # Ch6: Attacking Authentication
 
+> **Edition note (2011):** predates MFA-everywhere, OAuth/OIDC SSO, JWT
+> sessions, magic links, and WebAuthn — the design/implementation defect
+> model still applies but the mechanism-specific attacks live in
+> `web-security-academy` ch07 (JWT), ch08 (OAuth/SAML). Rate-limit/credential-
+> stuffing guidance: run low-volume on own accounts only.
+
 Source: Chapter 6. Authentication is a chain: login quality + password recovery + remember-me + impersonation + credential handling — and the chain's strength is its weakest link. Attacks split into **design defects** and **implementation defects**; even "secure" designs fail in code.
 
 ## Mechanism → attack surface

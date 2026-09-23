@@ -5,6 +5,12 @@ description: Structured test checklist distilled from the OWASP Web Security Tes
 
 # OWASP Web Security Testing Guide v4.2 — Test-ID Checklist
 
+> **Edition status (verified 2026-09-23):** v4.2 is the **current stable**
+> WSTG release. A v5.0 rewrite is in development upstream (rolling, unstable)
+> — its drafts are not quoted here. WSTG-BUSL-10 (Test Payment Functionality)
+> was added to live WSTG after the v4.2 PDF froze; it is synthesized in
+> ch10 with provenance marked. Version/review metadata: `sources.md`.
+
 Knowledge base distilled from OWASP WSTG v4.2 (the successor to OTGv4). The guide's signature is a **numbered test catalog**: 98 named tests organized into 12 categories (97 in the frozen v4.2 PDF plus WSTG-BUSL-10 added in live WSTG), each identified by a stable ID of the form `WSTG-<CATEGORY>-<NN>` (e.g. `WSTG-INFO-02` = the second Information Gathering test). Quote these IDs in findings to anchor each vulnerability to a recognized methodology.
 
 Mental model: testing splits into **passive** (walk the app through a proxy, understand logic, map every access point — parameters, headers, cookies, APIs) and **active** (work the 12 categories below against each access point found). Every test follows the same skeleton: objective → how to test (black-box first, gray-box where code/config is available) → what a positive result looks like → remediation. Error messages, version banners, and anomalous responses are the raw material; a reported finding must still name its impact.

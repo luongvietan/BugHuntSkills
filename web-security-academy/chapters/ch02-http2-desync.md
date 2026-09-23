@@ -2,6 +2,12 @@
 
 Source: `/web-security/request-smuggling` advanced section. **GAP CLASS — the deepest no-book coverage in the set.** HTTP/2 front-ends talking to HTTP/1 back-ends ("HTTP/2 downgrading") recreate the smuggling problem with new primitives — and HTTP/2-exclusive vectors smuggle without length confusion at all.
 
+> **Lab vs live (bounty-safe):** same boundary as ch01 — H2 desync primitives
+> are proved with differential/timeout probes; queue poisoning, response
+> smuggling to other users, and request tunnelling that surfaces foreign data
+> are shared-infra impact requiring explicit permission. Confirm the desync,
+> write up the mechanism, stop.
+
 ## Mechanism
 
 HTTP/2 replaces CL/TE with a built-in binary frame length — no ambiguity on the front-end hop. But when the front-end *downgrades* the request to HTTP/1 for the back-end, it must generate the HTTP/1 headers — and whatever it writes (`Content-Length`, `Transfer-Encoding`) reintroduces the disagreement:

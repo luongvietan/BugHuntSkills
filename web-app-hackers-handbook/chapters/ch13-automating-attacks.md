@@ -1,5 +1,11 @@
 # Ch14: Automating Customized Attacks
 
+> **Edition note (2011):** the "detect the hit, respect the session machine"
+> doctrine is durable; tooling has moved — Turbo Intruder (incl. single-
+> packet race), ffuf/feroxbuster, Nuclei, and scripted Burp extensions are
+> the current automation stack. Any high-volume fuzzing needs explicit
+> policy permission + rate caps.
+
 Source: Chapter 14. Manual probing finds the *mechanism*; automation multiplies it — enumerate identifiers, harvest data, fuzz parameters. The hard part isn't sending requests, it's **detecting hits** and **staying inside the app's session/state machine**.
 
 ## Uses

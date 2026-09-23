@@ -2,6 +2,11 @@
 
 Source: `/web-security/jwt`. JWTs are signed (JWS) or encrypted (JWE) JSON tokens — `base64url(header).base64url(payload).signature`. Used for auth/session/access-control, so flaws = impersonation and priv-esc. The spec is deliberately flexible; bugs live in the *implementation's* verification, not the format.
 
+> **Lab vs live (bounty-safe):** alg-confusion, `kid` injection, `jku`/`jwk`
+> tricks are tested with tokens issued to *your own* account — forge yours,
+> impersonate your second test account, never a real user. Secret cracking
+> (weak HMAC) happens offline on your own token.
+
 ## Mechanism recap
 
 Header = metadata (`alg`, `typ`, plus attack-relevant `jwk`, `jku`, `kid`); payload = claims (`sub`, `role`, `exp`, `iat`, custom); signature = keyed hash over header+payload. Anyone can read/forge the contents — only the signature protects integrity. **Every JWT attack is a way to get the server to accept a signature you can produce.**
