@@ -20,6 +20,7 @@ Quick-lookup card. Details in `chapters/`; doctrine in `SKILL.md`; terms in `glo
 | CSWSH | handshake w/ victim cookies from foreign origin (no `Origin` check) | socket opens authenticated → read/send as victim |
 | JWT | change claim, send unchanged sig | accepted → try `alg:none`, crack secret, `jwk`/`jku`/`kid`, RS256→HS256 |
 | OAuth | `redirect_uri=evil.tld` / suffix / `evil.com@tld`; drop `state` | code/token leaks to you; login CSRF |
+| SAML | decode `SAMLResponse`; strip `<ds:Signature>`; modify `NameID` | accepted → XSW wrapping (SAML Raider), comment-split `adm<!--x-->in@`, replay |
 | CORS | `Origin: https://attacker.example` (+ `Origin: null`) | reflected ACAO + `Allow-Credentials` → read authed data |
 
 ## Classic-class quick tests

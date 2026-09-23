@@ -1,6 +1,6 @@
 ---
 name: web-security-academy
-description: PortSwigger Web Security Academy topic guides distilled into a hunting reference. Use when testing for modern web vuln classes no book covers — HTTP request smuggling (CL.TE/TE.CL/TE.TE, HTTP/2 desync H2.CL/H2.TE, response queue poisoning, request tunnelling, CL.0/client-side desync), web cache poisoning & deception, Host header attacks, prototype pollution (client & server-side), DOM clobbering & taint-flow sinks, WebSocket attacks (CSWSH), JWT attacks, OAuth 2.0/OIDC flaws — plus the standard classes (XSS, SQLi/NoSQLi, CSRF, CORS, clickjacking, SSRF, XXE, command injection, SSTI, path traversal, file upload, insecure deserialization, access control, authN, info disclosure, logic flaws, race conditions, API/GraphQL, LLM attacks). Each chapter runs mechanism → detection signals → exploitation → lab reference. Assume all testing is authorized and in scope.
+description: PortSwigger Web Security Academy topic guides distilled into a hunting reference. Use when testing for modern web vuln classes no book covers — HTTP request smuggling (CL.TE/TE.CL/TE.TE, HTTP/2 desync H2.CL/H2.TE, response queue poisoning, request tunnelling, CL.0/client-side desync), web cache poisoning & deception, Host header attacks, prototype pollution (client & server-side), DOM clobbering & taint-flow sinks, WebSocket attacks (CSWSH), JWT attacks, OAuth 2.0/OIDC flaws, SAML signature/validation attacks — plus the standard classes (XSS, SQLi/NoSQLi, CSRF, CORS, clickjacking, SSRF, XXE, command injection, SSTI, path traversal, file upload, insecure deserialization, access control, authN, info disclosure, logic flaws, race conditions, API/GraphQL, LLM attacks). Each chapter runs mechanism → detection signals → exploitation → lab reference. Assume all testing is authorized and in scope.
 ---
 
 # Web Security Academy — PortSwigger Topic Guides
@@ -23,7 +23,7 @@ Related skills: `bug-bounty-bootcamp` + `web-hacking-101` (same classic classes,
 - DOM taint-flow sinks & DOM clobbering → `chapters/ch05-dom-attacks.md`
 - WebSocket vulnerabilities & CSWSH → `chapters/ch06-websockets.md`
 - JWT attacks → `chapters/ch07-jwt.md`
-- OAuth 2.0 & OpenID Connect → `chapters/ch08-oauth.md`
+- SSO attacks: OAuth 2.0, OpenID Connect & SAML → `chapters/ch08-oauth.md`
 
 **Cross-origin client attacks**
 - CORS + CSRF + clickjacking → `chapters/ch09-cors-csrf-clickjacking.md`

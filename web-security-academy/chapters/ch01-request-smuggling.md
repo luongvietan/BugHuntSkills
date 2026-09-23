@@ -17,7 +17,7 @@ Why browsers don't hit this accidentally: browsers don't send chunked request bo
 Probe with requests engineered so a vulnerable server produces an *observable* anomaly — never ambiguous requests that could poison a real user's request:
 
 - **CL.TE timing probe**: send a small CL with a TE body that leaves a partial request hanging (e.g. body `0\r\n\r\n` followed by a partial line). Back-end waits for the rest → response delay/timeout vs baseline.
-- **TE.CL timing probe**: CL shorter than the chunk body; back-end waits for bytes the front-end never sent → delay.
+- **TE.CL timing probe**: send `Content-Length` *larger* than the de-chunked body; the back-end reads CL bytes and waits for bytes that never arrive → delay. (The other direction — CL *smaller* than the body — is the attack itself: the back-end stops early and the leftover becomes a smuggled prefix → differential response on the next request.)
 - **Differential responses**: smuggle a complete second request to a known endpoint; the *next* normal request (yours, via Repeater) returns the smuggled endpoint's response or a 404/unrecognized-method error like `"GPOST"`.
 - Use a non-existent method prefix (`GPOST`) so a confirmed desync produces an obvious error — and can't match a real endpoint, limiting blast radius.
 

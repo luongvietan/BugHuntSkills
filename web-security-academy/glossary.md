@@ -55,6 +55,9 @@ PortSwigger-specific vocabulary and protocol terms. For generic bug-bounty terms
 - **`redirect_uri` validation** — the check that decides where codes/tokens get sent; loose parsing leaks them to attacker hosts.
 - **OIDC / ID token / UserInfo** — OpenID Connect: standardized login layer on OAuth; ID token = JWT of identity claims.
 - **Dynamic client registration / `request_uri`** — OIDC endpoints that accept client metadata or fetch the auth request by URL → SSRF/metadata injection surface.
+- **SAML / IdP / SP / assertion** — XML-based SSO: Identity Provider authenticates, Service Provider consumes the signed `<Assertion>` (claims like `NameID`) in the `SAMLResponse` POSTed back.
+- **XSW (XML signature wrapping)** — duplicating/moving the signed assertion so the validator verifies one copy while the parser reads identity from an attacker-modified copy; ~8 canonical layouts; SAML Raider automates them.
+- **Canonicalization attack / comment injection** — XML canonicalization differences between signature-check and parse: `adm<!--x-->in` signs as one string, reads as another.
 
 ## Client-side & cross-origin
 

@@ -30,7 +30,7 @@ Sources: `/web-security/os-command-injection`, `/web-security/server-side-templa
 - **Config override**: upload `.htaccess`/`web.config`/`user.ini` mapping an innocent extension to code execution (`AddType application/x-httpd-php .xyz`) — then upload `shell.xyz`.
 - **Content validation bypass**: polyglot files (valid image + appended PHP), metadata-level checks fooled by real magic bytes, EXIF/JS comments carrying payloads.
 - **Parser exploitation**: crafted files that crash/exploit the image lib (ImageTragick-class), XXE via `.docx`/`.svg`, XSS via HTML/SVG upload served same-origin.
-- **Race conditions**: file validated then moved — race the window between upload and AV-move (`ch15` race techniques; URL-based fetch uploads have their own TOCTOU).
+- **Race conditions**: file validated then moved — race the window between upload and AV-move (`ch15-logic-race-api-llm.md` race techniques; URL-based fetch uploads have their own TOCTOU).
 - **PUT uploads**: if `PUT /shell.php` is enabled on the web root, skip the form entirely.
 - **No-RCE impact fallback**: stored XSS via SVG/HTML, XXE, path-traversal overwrite (filename `../`), DoS (decompression bombs, pixel floods).
 

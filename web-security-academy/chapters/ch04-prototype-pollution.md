@@ -17,7 +17,7 @@ Exploitation needs three parts — missing any one = trivia, not a bug:
 - **Manual source hunting**: in DevTools, run `Object.prototype` after injecting `?__proto__[test]=test` via URL/hash/JSON — a polluted property on `{}` confirms the source. Try `__proto__`, `constructor.prototype`, `__proto__.x`, and encoded/bracket forms.
 - **DOM Invader** (Burp's browser) has a dedicated prototype-pollution mode that finds sources and scans for reachable gadgets — the intended tool.
 - **Via the constructor**: `?__proto__` blocked? Try `?constructor[prototype][x]=y` or `constructor.prototype.x` — same object reached through the prototype chain.
-- **Flawed key sanitization bypass**: filters strip literal `__proto__` but miss obfuscation — `__proto__` inside nested objects, unicode/encoding variants, `__defineGetter__`, or `constructor.prototype` routes.
+- **Flawed key sanitization bypass**: filters strip literal `__proto__` but miss the other routes to the same object — `__proto__` inside *nested* objects (filter checks only top-level keys), unicode/encoding variants that decode after the check, and `constructor.prototype` / `constructor[prototype]` chains that reach `Object.prototype` without the magic string.
 - **External libraries**: jQuery `$.extend`, lodash `merge`, and similar recursive merges historically carry known PP gadgets — check bundled libs' versions.
 - **Via browser APIs**: `fetch(url, options)` and `Object.defineProperty()` consume option objects; polluting a property they read (`headers`, `body`, `method`, `credentials`) turns a benign call into a gadget — no app code needed.
 - **Goal on the client**: usually DOM XSS — pollute a property that lands in a script URL, `innerHTML`, or eval-like sink.
@@ -32,7 +32,7 @@ Harder to detect — you can't inspect `Object.prototype` remotely. PortSwigger'
 - **Charset override**: polluted charset changes response encoding.
 - **Scanning for sources**: try `__proto__` in JSON bodies, multipart fields, URL params — watch for any behavioral delta.
 - **Filter bypass**: server-side key blocklists have the same gaps as client-side (constructor route, nesting, encoding).
-- **RCE path**: Node's `child_process` reads options objects — `child_process.fork()` and `execSync()` honor inherited properties like `shell`, `input`, `env`, `argv0`. Polluting `shell`/`execArgv`-style options on an object passed to fork/exec → command injection. Identify the request that reaches a `child_process` call, then pollute the inherited option it reads.
+- **RCE path**: Node's `child_process` reads options objects — `fork()`/`execSync()` honor inherited properties like `shell` (run command via a shell), `input` (stdin payload), `execArgv` (Node flags for the child), and `env` (e.g. injecting `NODE_OPTIONS=--require /tmp/x.js`). Polluting the inherited option a fork/exec call reads → command injection. Identify the request that reaches a `child_process` call, then pollute the option it consumes.
 
 ## Prevention knowledge (for remediation notes)
 

@@ -50,6 +50,17 @@ Two components parse the same input differently → find the seam → exploit th
 - **WS and LLM actions are real**: a CSWSH PoC or prompt-injected function call may send actual messages — use test accounts and harmless actions.
 - **Lab vs live**: Academy labs guarantee the bug exists; on live targets the same probe returning clean = move on, don't escalate force.
 
+## Hunting the unknown (Academy "essential skills" methodology)
+
+The Academy's essential-skills material is about finding vulns that *don't have a name yet*:
+
+- **Model intended behavior first** — walk the feature, write down what each component is *supposed* to enforce; unknown vulns live where enforcement was assumed, not coded.
+- **Map hidden attack surface** — endpoints reachable but unlinked, undocumented params, alternate transports (WS/GraphQL/webhooks), admin/debug paths, legacy API versions. Every reachable input is a hypothesis.
+- **Probe for anomalies, not signatures** — send unexpected types/encodings/sequences and catalog the deltas; a response that's merely *odd* (not classically vulnerable) is where novel bugs start.
+- **Use tooling as an anomaly filter, not an oracle** — Burp Scanner + extensions (Param Miner, DOM Invader, JWT Editor) during manual testing flag candidate deltas; the human decides which anomaly is exploitable.
+- **Obfuscate to isolate parsers** — systematically rotate URL/double/hex/unicode encodings and structural tricks; each component that accepts a different encoding of your probe reveals a parser you can desync.
+- **Reproduce in a lab before reporting** — Academy labs exist to let you confirm whether an odd behavior is a real vuln class; build a minimal repro on a disposable target first.
+
 ## Workflow patterns
 
 - **Topic → lab → live**: practice the technique on the Academy lab for that class (every chapter links its labs), then apply to the bounty target — the probe sequence is identical, the tolerance is lower.
