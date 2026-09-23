@@ -45,6 +45,7 @@ Quick-lookup card. Procedures per test in `chapters/`; methodology in `SKILL.md`
 | CRYP-01 TLS | testssl/nmap `ssl-enum-ciphers`; cert SAN/expiry/alg | legacy proto/weak cert |
 | CRYP-02 pad oracle | flip last bit of block-1 in b64 blob | 3 response states |
 | BUSL limits | replay capped action (coupon/vote/download) | applies again |
+| BUSL-10 payment | tamper amount/qty/currency; abandon, replay, race txn | tampered/negative value accepted |
 | CLNT-07 CORS | `Origin: https://evil.tld` | ACAO reflect + credentials |
 | CLNT-09 clickjack | iframe test page | loads + sensitive action |
 | CLNT-11 postMsg | find `message` listener | no `event.origin` check |
