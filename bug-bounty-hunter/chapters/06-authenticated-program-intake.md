@@ -177,12 +177,23 @@ chapter exists to prevent:
   the written policy, through the normal gates. The authenticated page
   is where you *read* the policy; it confers nothing itself.
 
-For any target activity, the invocation covers an action only when the
-current policy clearly authorizes all six — exact asset, technique,
-exact method/action, test account/data, rate/volume, and impact
-boundary — each cited to its policy line. These are the four hard gates
-of `05-hypothesis-engine.md` wearing intake labels: a failed **or
-unknown** gate is `blocked-by-policy`, unranked, unscheduled.
+For any target activity, the invocation covers an action only when both
+sides of the authorization hold:
+
+- **Policy grants** — the current policy clearly authorizes the exact
+  asset, technique, and method/action; the gate cites the policy line.
+  Rate/volume limits and test-account rules the policy states bind the
+  check.
+- **Conduct conditions** — recorded and satisfied by the researcher,
+  not granted by policy: controlled test accounts or synthetic data,
+  volume and rate inside the stated limits, and a proof that stays
+  inside the permitted impact boundary.
+
+These are the four hard gates of `05-hypothesis-engine.md` wearing
+intake labels: a failed **or unknown** gate is `blocked-by-policy`,
+unranked, unscheduled. A policy silent on the method leaves the gate
+unknown no matter how clean the conduct side is; a conduct-side gap is
+fixed by changing the plan, never by re-reading the policy.
 
 - **Clearly authorized low-impact checks proceed** — no redundant
   re-confirmation of what the hunt invocation already requested.

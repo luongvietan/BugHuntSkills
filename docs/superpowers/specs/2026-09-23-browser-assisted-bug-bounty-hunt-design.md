@@ -235,4 +235,3 @@ The implementation plan should include acceptance checks for:
   different working directory.
 - Which low-impact target actions can be treated as implicitly requested by
   the hunt invocation versus requiring a per-action user confirmation.
-
