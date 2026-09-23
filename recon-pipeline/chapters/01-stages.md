@@ -157,6 +157,7 @@ grep -h 'Ports:' "$OUT/raw-nmap-top1000.gnmap" 2>/dev/null | awk '{
   n = split(plist, ent, ",")
   for (i = 1; i <= n; i++) {
     split(ent[i], f, "/")
+    sub(/^[ \t]+/, "", f[1])   # entries keep a leading space after ","
     if (f[2] == "open") print ip ":" f[1]
   }
 }' >> "$OUT/03-ports.txt"

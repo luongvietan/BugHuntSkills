@@ -120,12 +120,12 @@ Generator skeleton (drop into the run script):
 gen_new() {  # $1=label $2=prev-file $3=cur-file  — items in CUR only
   comm -13 <(sort -u "$2") <(sort -u "$3") | sed 's/^/+ /' \
     | { c=$(cat); [ -n "$c" ] && printf '## + %s (%s)\n%s\n\n' "$1" \
-        "$(printf '%s\n' "$c" | wc -l)" "$c"; }
+        "$(printf '%s\n' "$c" | wc -l)" "$c"; true; }
 }
 gen_gone() { # $1=label $2=prev-file $3=cur-file  — items in PREV only
   comm -23 <(sort -u "$2") <(sort -u "$3") | sed 's/^/- /' \
     | { c=$(cat); [ -n "$c" ] && printf '## - %s (%s)\n%s\n\n' "$1" \
-        "$(printf '%s\n' "$c" | wc -l)" "$c"; }
+        "$(printf '%s\n' "$c" | wc -l)" "$c"; true; }
 }
 {
   echo "# new-since-last-run.txt"
