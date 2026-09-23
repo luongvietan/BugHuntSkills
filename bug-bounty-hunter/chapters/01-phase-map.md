@@ -118,7 +118,7 @@ real-user data → halt the stage, re-check policy or contact the program.
 ## Phase 3 — application mapping
 
 **Purpose:** turn "hosts exist" into "here is every feature, role, parameter,
-and trust boundary" — the map that phase 4 hunts on.
+and trust boundary" — the map + feature cards phase 4's queue is built from.
 
 **Inputs:** live hosts + tech fingerprints from phase 2; test accounts at two
 privilege levels.
@@ -131,6 +131,11 @@ privilege levels.
   by the frontend, alternate subdomains running old versions.
 - Classify each function: authZ boundary? parser? file handling? state
   machine? — each answer names candidate vuln classes for phase 4.
+- Land each meaningful feature on a feature card in `notes.md`
+  (`05-hypothesis-engine.md`): roles, state transitions, trust boundaries,
+  expected invariant, dated evidence, and an `unknowns` line that is never
+  optional — a field is evidence or it is `unknown`. Phase 4 generates
+  tests from these cards; no card, no hypothesis.
 
 **Skill routing:**
 
@@ -147,9 +152,12 @@ privilege levels.
   `chapters/ch04-endpoint-analysis.md`.
 - Mobile target: `owasp-mas/chapters/ch01-methodology-setup.md` for
   environment + app analysis setup.
+- `05-hypothesis-engine.md` — the feature-card format the map lands in;
+  hypothesis cards, hard gates, and ordering are phase 4's entry.
 
 **Exit criteria:** endpoint+parameter inventory exists in notes; every
-in-scope host walked once; candidate vuln classes listed per function.
+in-scope host walked once; candidate vuln classes listed per function;
+feature cards recorded — evidence dated, every gap labeled `unknown`.
 
 **Do not skip:** privilege-level diffing during mapping, not after. Replaying
 admin-account requests as the low-priv account is where half of phase 4's
@@ -159,17 +167,31 @@ IDOR/BFLA findings actually surface — log both sessions' requests as you map.
 
 ## Phase 4 — vuln hunting
 
-**Purpose:** work the candidate classes from phase 3, one at a time, with the
-per-class chapter open — not a memory of it.
+**Purpose:** turn phase 3's feature cards into a gated, ordered hypothesis
+queue — then work the selection with the per-class chapter open, not a
+memory of it.
 
-**Inputs:** the map from phase 3; `chapters/03-vuln-class-index.md` for
-per-class routing.
+**Inputs:** the map + feature cards from phase 3;
+`chapters/03-vuln-class-index.md` for per-class routing.
 
 **Actions:**
 
 - Pick classes by the map: forms/reflection -> XSS; parameters -> injection
   family; object IDs -> IDOR/BOLA; integrations/webhooks -> SSRF; front-end
   state -> DOM classes.
+- Turn feature cards into falsifiable hypothesis cards
+  (`05-hypothesis-engine.md`) — one claim each: invariant, attacker
+  position, permitted controlled-data test, confirmation/disconfirmation,
+  stop condition. "Test IDOR" is a class label, not a hypothesis.
+- Run the four hard gates **before** ordering — exact asset + technique
+  authorized, method permitted, controlled data only, impact boundary
+  holds. A failed **or unknown** gate is `blocked-by-policy`: recorded with
+  the reason, never ranked into execution.
+- Order eligible cards ordinally — impact -> signal -> novelty -> cost,
+  `low|medium|high` with a one-line evidence note each, never a combined
+  score — then route the selected hypothesis to its class's chapter via
+  `03-vuln-class-index.md`. ch05 prioritizes the queue; the per-class
+  skills do the technical execution.
 - For each class: open the routed chapter, run its hunting loop, try its
   documented bypasses against observed defenses, log every anomaly (even
   unexplained ones — they are phase-5 material).
@@ -178,6 +200,8 @@ per-class routing.
 
 **Skill routing (the short version — full table in `03-vuln-class-index.md`):**
 
+- `05-hypothesis-engine.md` — hypothesis cards, the four hard gates, and
+  the ordinal ordering that picks the queue's top card.
 - Core web classes -> `bug-bounty-bootcamp` ch04-ch18 (per-class loop:
   mechanism -> hunting -> bypass -> escalate).
 - Modern classes -> `web-security-academy` ch01-ch09 (smuggling, HTTP/2
@@ -195,9 +219,10 @@ per-class routing.
   `chapters/ch22-fuzzing.md`, `hacking-apis/chapters/ch06-fuzzing.md`,
   `web-app-hackers-handbook/chapters/ch13-automating-attacks.md`.
 
-**Exit criteria:** every candidate class attempted with its chapter's loop;
-each candidate bug has a confirming request pair logged in notes; anomalies
-list written.
+**Exit criteria:** queued hypotheses hard-gated, then worked in priority
+order with each class's chapter; card statuses current (`confirmed` /
+`disconfirmed` / `inconclusive` / `blocked-by-policy`); each candidate bug
+has a confirming request pair logged in notes; anomalies list written.
 
 **Do not skip:** the policy's banned-technique list applies hardest here —
 rate-limit/volume tests, DoS-shaped payloads, and spam vectors often need
@@ -211,7 +236,8 @@ impact" — that proof is built in phase 5 within the policy, not outside it.
 **Purpose:** convert "the bug exists" into "a malicious actor gains X" —
 escalate single bugs and chain lows into a payable whole.
 
-**Inputs:** confirmed bugs + anomalies from phase 4; program severity table.
+**Inputs:** confirmed hypotheses + anomalies from phase 4; program severity
+table.
 
 **Actions:**
 
@@ -223,6 +249,11 @@ escalate single bugs and chain lows into a payable whole.
   test them on your own accounts.
 - Re-check impact claims against demonstrated scale only — what you proved on
   test accounts, not what could theoretically exist.
+- Write the result back to the hypothesis card (`05-hypothesis-engine.md`):
+  demonstrated impact replaces the card's conditional claim, and each
+  follow-up rung the escalation suggests re-runs the four hard gates on its
+  own technique and identifiers — a write-side step under a read-only grant
+  is `blocked-by-policy`, never scheduled.
 
 **Skill routing:**
 
@@ -242,8 +273,9 @@ escalate single bugs and chain lows into a payable whole.
   + `chapters/ch06-lateral-movement.md` when found IAM material or SSRF
   reaches the control plane.
 
-**Exit criteria:** each bug's impact statement is demonstrated, not asserted;
-viable chains tested on owned accounts; severity hypothesis per bug.
+**Exit criteria:** each bug's impact statement is demonstrated, not asserted,
+and written back to its hypothesis card; viable chains tested on owned
+accounts; severity hypothesis per bug.
 
 **Do not skip — minimal viable PoC:** escalate exactly far enough to prove
 the claimed impact, then stop. Pivoting further "to show how bad it could be"
@@ -269,6 +301,10 @@ in under five minutes — while the context is still in your head.
   triager finds out for you.
 - Attach evidence inline at the step it proves; all identifiers belong to
   your test accounts.
+- Log the submission for the outcome ledger (`05-hypothesis-engine.md`):
+  each program verdict appends a dated triage event — `accepted` then
+  `paid` are two events; `duplicate` is novelty/competition evidence,
+  never a disconfirmation of the technical claim.
 
 **Skill routing:**
 
@@ -310,6 +346,10 @@ changelog/scope-update feed.
   new endpoints are the least-hunted surface on any program.
 - Feed findings back: note which assets/classes produced bugs — phase 1 data
   for the next session's target choice.
+- Outcome review: verdicts appended as dated triage events
+  (`05-hypothesis-engine.md`) feed only this program's notes + comparable
+  feature context into the next queue — sparse verdicts do not build a
+  cross-program model.
 
 **Skill routing:**
 
@@ -324,7 +364,7 @@ changelog/scope-update feed.
   checklist for programs with app surfaces you revisit periodically.
 
 **Exit criteria:** pipeline scheduled; alert fires on diffs; next session's
-lead file will exist without a manual kickoff.
+lead file will exist without a manual kickoff; outcome ledger current.
 
 **Do not skip — scope drift:** a host that appears between runs (new
 acquisition, new subdomain) is a scope question before it is a target.

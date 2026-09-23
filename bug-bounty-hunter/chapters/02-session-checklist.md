@@ -12,7 +12,9 @@ hunt/<target>/
                     # banned techniques, safe-harbor notes, stop conditions
   allowlist.txt     # machine-readable: one in-scope host/pattern per line —
                     # the ONLY source active stages may draw targets from
-  notes.md          # running log: hypotheses, request pairs, anomaly list
+  notes.md          # running log: feature + hypothesis cards, request
+                    # pairs, anomaly list, triage events
+                    # (formats: 05-hypothesis-engine.md)
   evidence/         # screenshots, saved requests, PoC files per finding
 recon/<target>/<YYYYMMDD>/   # per-run pipeline output (see recon-pipeline)
 ```
@@ -88,14 +90,32 @@ workaround:
 - [ ] Endpoint + parameter + role inventory in `notes.md`
 - [ ] Both accounts' request logs captured for later A-to-B replay
 - [ ] Candidate vuln classes listed per function (from the map, not memory)
+- [ ] Feature card per meaningful feature in `notes.md`
+      (`05-hypothesis-engine.md`) — evidence dated, every gap labeled
+      `unknown`; no card, no hypotheses
 
 ### Vuln hunting (phase 4)
 
+- [ ] Hypothesis cards written off the feature cards
+      (`05-hypothesis-engine.md`) — one falsifiable claim each; "test
+      IDOR" is a class label, not a hypothesis
+- [ ] HARD GATE: all four ch05 gates pass **before** ordering — a failed
+      OR unknown gate blocks execution regardless of priority
+      (`blocked-by-policy`, recorded with the reason)
+- [ ] Ordering ordinal (impact -> signal -> novelty -> cost, never a
+      combined score); the selected hypothesis runs via its vuln-class
+      chapter — ch05 prioritizes, the class skills execute
+- [ ] Public precedents filed as leads only — never authorization, never
+      proof of a live bug; scope/policy re-checked before any derived
+      test
+- [ ] No safe controlled-data proof → stop and clarify with the program;
+      real-user data is never the fallback
 - [ ] Classes worked one at a time with the routed chapter open
       (`03-vuln-class-index.md` for the per-class chapter)
 - [ ] Banned-technique list re-checked before rate/volume/fuzz-heavy tests
 - [ ] Every candidate bug has a confirming request/response pair in
-      `evidence/`
+      `evidence/`; card status updated (`confirmed` / `disconfirmed` /
+      `inconclusive`)
 - [ ] Anomaly list written — unexplained weirdness is phase-5 fuel
 - [ ] Test accounts only; zero real-user data touched
 
@@ -106,6 +126,9 @@ workaround:
 - [ ] Chain hypotheses tested on owned accounts only
 - [ ] PoC stopped at minimal demonstration — no pivoting beyond the claim
 - [ ] Severity hypothesis per bug, scored against the program's table
+- [ ] Demonstrated impact + verdict written back to the hypothesis card;
+      each escalation rung re-ran the four gates on its own technique and
+      identifiers
 
 ### Reporting (phase 6)
 
@@ -117,6 +140,9 @@ workaround:
 - [ ] Title names the impact; evidence attached inline at the proving step
 - [ ] Scope re-verified for the exact asset + technique in the report
 - [ ] Submitted via the program's channel; thread link logged in `notes.md`
+- [ ] Each program verdict appends a dated triage event
+      (`05-hypothesis-engine.md`) — append-only: `duplicate` is novelty
+      evidence, not disconfirmation; `accepted` then `paid` = two events
 
 ### Continuous monitoring (phase 7)
 
@@ -126,13 +152,19 @@ workaround:
 - [ ] Program scope-update feed / changelog subscribed
 - [ ] Scope-drift rule on file: every new-since-last-run asset gets the
       phase-2 ownership + exclusion re-check before active follow-up
+- [ ] Outcome review folded into the next queue for this program +
+      comparable feature context only — sparse verdicts never build a
+      cross-program model
 
 ## End of session
 
 - [ ] All confirmed bugs drafted into reports **today** — context decays
       overnight; repro steps written cold never get easier
-- [ ] `notes.md` closed out: open hypotheses, anomalies not yet explained,
-      defenses observed (they seed next session's bypass work)
+- [ ] `notes.md` closed out: open hypotheses with card statuses current,
+      anomalies not yet explained, defenses observed (they seed next
+      session's bypass work)
+- [ ] Triage ledger current — every verdict received appended as a dated
+      event; lessons scoped to this program + comparable features
 - [ ] `new-since-last-run.txt` + asset changes logged for the next recon diff
 - [ ] Findings reviewed for lessons: which asset type / vuln class paid —
       feeds phase 1 of the next session
