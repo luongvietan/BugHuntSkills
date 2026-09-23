@@ -16,6 +16,11 @@ companion skills.
    lab reproduction ≠ bounty-safe validation, ever.
 4. **Tool vendor docs** — version-scoped command syntax only.
 5. **Books/community methods** — foundational context; edition limits labeled.
+6. **Public precedent** — disclosed reports, writeups, vendor advisories,
+   patch analyses. Historical intelligence, not authority: generates
+   leads/candidate hypotheses only and never proves a current target is
+   vulnerable, in scope, or unfixed — live policy (1) plus fresh
+   observation decide. Record format: `chapters/05-hypothesis-engine.md`.
 
 ## What changed in the 2026 refresh
 
@@ -28,6 +33,9 @@ companion skills.
   (OWASP GenAI 2025), severity precedence (program > platform > CVSS v4).
 - Scope pressure scenarios added to session checklist (no scope file,
   unlisted host, CDN/shared IP, found credential).
+- Impact hypothesis engine added (`chapters/05-hypothesis-engine.md`) —
+  authored methodology: feature/hypothesis cards, hard gates, ordinal
+  ranking, append-only outcome ledger, precedent records as leads.
 
 ## Companion-skill freshness pointers
 
@@ -48,3 +56,6 @@ in the BugBounty workspace.
   wording is original to this skill; no upstream text copied.
 - 2026-09-23: T11 added ch04 (workspace, lifecycle, 7-question gate,
   evidence hygiene, tracker) + wired into session checklist.
+- 2026-09-23: hypothesis-engine series added ch05 — original to this
+  skill (no upstream source); wired into ch04 workspace records,
+  SKILL.md routing, and the source hierarchy above.

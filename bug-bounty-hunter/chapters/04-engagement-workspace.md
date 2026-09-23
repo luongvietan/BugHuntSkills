@@ -17,7 +17,7 @@ engagements/<program-or-alias>/<YYYY-MM-DD>/
     F-001.md
   evidence/              # restricted local storage; share sanitized copies only
   submissions.md         # platform IDs, dates, state, next action — no creds/PII
-  notes.md               # hypotheses, dead ends, tool/version notes
+  notes.md               # feature map, hypothesis queue, precedents, outcomes, dead ends
 ```
 
 The layout is a default, not a requirement — `recon-pipeline`'s dated
@@ -51,11 +51,51 @@ read — never a standing authorization; re-check on schedule.
 
 ### Scratchpad sections (`notes.md`)
 
-Optional sections that pay off on multi-session targets: **leads**,
-**hypotheses** (what should be testable and where), **dead ends** (so you
-don't retest them), **tool/version notes** (what ran, when, against
-what). No raw secrets, no unnecessary personal data — locations and
-masked identifiers only.
+Optional sections that pay off on multi-session targets:
+
+- **feature map** — one card per meaningful feature; evidence dated,
+  gaps labeled `unknown` (format: `05-hypothesis-engine.md`).
+- **hypothesis queue** — hypothesis records in priority order with
+  current status; record template below, method in
+  `05-hypothesis-engine.md`.
+- **public precedents** — writeup/advisory/disclosure references that
+  generated leads: URL, publisher, disclosure date, applicability
+  limits. Leads, never proof.
+- **outcome events** — append-only triage ledger: dated verdicts
+  (`accepted`, `paid`, `duplicate`, `N/A`, `informative`, …) with the
+  evidence-based reason.
+- **leads**, **dead ends** (so you don't retest them), **tool/version
+  notes** (what ran, when, against what).
+
+These sections carry references and masked identifiers only — no
+credentials, secrets, or personal data in any field; raw captures stay
+in `evidence/`.
+
+### Hypothesis record — copy into `notes.md`, one per falsifiable claim
+
+Tracking record, not the analytic card — the card format, hard gates,
+and ranking rubric live in `05-hypothesis-engine.md`. `confirmed` here
+is a technical verdict only: it enters the finding lifecycle + gate
+below before drafting, like any other candidate.
+
+```markdown
+# H-### | [Feature] | [invariant that may fail]
+
+- Hypothesis status: queued | testing | confirmed | disconfirmed |
+  inconclusive | blocked-by-policy | deferred
+- Triage events — append-only, one dated line per program verdict,
+  never overwrite:
+  - [YYYY-MM-DD UTC] accepted | paid | duplicate | N/A | informative |
+    inconclusive | other — evidence-based reason; next action
+- Hypothesis card ref / linked feature card:
+- Exact asset + scope/policy reference:
+- Test/proof references: sanitized request-pair or evidence-file IDs —
+  raw material stays in `evidence/`; no credentials/secrets/PII here
+- Source provenance: target observation | prior engagement outcome |
+  public precedent (URL + disclosure date under precedents)
+- Applicability limits: what transfers to this target and what doesn't
+- Stop condition:
+```
 
 ## Finding lifecycle
 

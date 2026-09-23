@@ -42,6 +42,8 @@ Phase detail, inputs, exit criteria, and per-phase warnings:
 `chapters/02-session-checklist.md`. Vuln class -> chapter routing:
 `chapters/03-vuln-class-index.md`. Engagement workspace, finding lifecycle,
 and the pre-report validation gate: `chapters/04-engagement-workspace.md`.
+Hypothesis queue, ordinal prioritization, and outcome/precedent learning:
+`chapters/05-hypothesis-engine.md`.
 
 ## The scope contract — deny by default
 
@@ -70,7 +72,7 @@ Nothing below this line happens until the session-init contract in
 | 1 Program selection | `tbhm-methodology` ch01, `zseano-methodology` ch01 | `bug-bounty-bootcamp` ch01 (industry, report expectations) |
 | 2 Recon | `recon-pipeline` (all 3 files; passive collection first, target-traffic stages run allowlist-derived lists only, intrusive stages separately gated) | `tbhm-methodology` ch02, `bug-bounty-bootcamp` ch03, `zseano-methodology` ch02 |
 | 3 App mapping | `web-app-hackers-handbook` ch03, `tbhm-methodology` ch03 | `owasp-wstg` ch01, `zseano-methodology` ch05-ch06 |
-| 4 Vuln hunting | `chapters/03-vuln-class-index.md` picks the per-class chapter | `bug-bounty-bootcamp`, `web-security-academy`, `owasp-wstg`, `web-app-hackers-handbook` |
+| 4 Vuln hunting | `chapters/05-hypothesis-engine.md` (gated hypothesis queue) -> `chapters/03-vuln-class-index.md` picks the per-class chapter | `bug-bounty-bootcamp`, `web-security-academy`, `owasp-wstg`, `web-app-hackers-handbook` |
 | 5 Escalation/chaining | `bug-bounty-playbook` (exploitation-phase ops) | `bug-bounty-bootcamp` ch14, `web-hacking-101` (chain precedent) |
 | 6 Reporting | `report-writing` (all 4 files) | `web-hacking-101` ch10, `bug-bounty-bootcamp` ch01 |
 | 7 Monitoring | `recon-pipeline` 03-monitoring | `zseano-methodology` ch07 (review findings, pick next target) |
@@ -107,6 +109,10 @@ Nothing below this line happens until the session-init contract in
   precedent showing the class paid out before.
 - **Methodology / mindset / "how do good hunters work"** -> `zseano-methodology`,
   `tbhm-methodology`.
+- **"What should I test next?"** -> `chapters/05-hypothesis-engine.md` — gated hypothesis queue off the feature map.
+- **"Prioritize this feature"** -> `chapters/05-hypothesis-engine.md` — ordinal sort on impact/signal/novelty/cost, never a score.
+- **"Learn from public writeups"** -> `chapters/05-hypothesis-engine.md` — precedent records; leads only, never authorization or proof.
+- **"Learn from my outcomes"** (duplicate / N/A / paid) -> `chapters/05-hypothesis-engine.md` — append-only triage events per verdict.
 - **Exploitation-phase ops** (brute-forcing with Burp, known-CVE checks, CMS,
   cache attacks, OSRF) -> `bug-bounty-playbook`.
 - **Report drafting, severity, triage disputes** -> `report-writing`. Severity
@@ -151,6 +157,9 @@ Nothing below this line happens until the session-init contract in
   submission tracker).
 - `chapters/03-vuln-class-index.md` — vuln class -> primary skill+chapter ->
   alternates -> payload chapter.
+- `chapters/05-hypothesis-engine.md` — feature cards, falsifiable
+  hypothesis cards, hard gates + ordinal ranking, append-only outcome
+  ledger, public-precedent records.
 
 ## Scope & ethics
 
