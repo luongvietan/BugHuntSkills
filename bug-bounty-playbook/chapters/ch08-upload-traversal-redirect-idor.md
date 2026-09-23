@@ -1,5 +1,7 @@
 # Ch 8 — File Upload, Directory Traversal, Open Redirect, IDOR
 
+> **Webshell boundary:** a webshell is a *persistent executable artifact* on the target — live PoC is an inert file you own (marker `.txt`, `.svg` proving type-confusion), browsed-to once. `?cmd=` never fires unless policy explicitly permits code execution; traversal reads a harmless marker (`/etc/hostname`), not configs/credentials.
+
 ## File upload → RCE
 
 Any upload feature = test. Goal: upload executable code inside the web root → browse to it → RCE.
@@ -15,8 +17,8 @@ Any upload feature = test. Goal: upload executable code inside the web root → 
 
 App uses user input to fetch files (`?page=index.html`) → `../` walks the tree.
 
-- `?page=../../../../etc/passwd` — classic PoC on Linux (`%2e%2e%2f`, `..;/`, `....//` for filters).
-- Targets beyond `/etc/passwd`: **config files, source code, credentials**; on upload features, traversal can mean **arbitrary file overwrite** (`../../var/www/x.php`).
+- `?page=../../../../etc/passwd` — the book's classic PoC; on a live program swap the marker (`/etc/hostname` or a canary file) per the callout — passwd/credential reads are escalation narrative.
+- Targets beyond `/etc/passwd`: **config files, source code, credentials** *(book list — narrative only on live targets)*; on upload features, traversal can mean **arbitrary file overwrite** (`../../var/www/x.php`).
 
 ## Open redirect
 

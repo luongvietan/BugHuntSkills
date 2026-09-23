@@ -1,5 +1,7 @@
 # Ch 6 — SQL Injection
 
+> **Extraction is narrative:** the `group_concat`/`concat` credential dumps below are the book's lab-grade escalation examples — on a live program the PoC is a true/false differential or a short `sleep()`. Never pull rows, never dump `uname:pass` — "dumping users' data violates the program" (see `sources.md` payload policy).
+
 Root cause: string concatenation of user input into queries. Detection is universal: **throw single and double quotes (`'`, `"`, `%27`) at every parameter until you see an SQL error** — then read the error for the DB fingerprint (`psycopg2` → Postgres, `ORA-` → Oracle, mysql syntax → MySQL).
 
 Do it by hand first — SqlMap after you understand the process (`github.com/sqlmapproject/sqlmap`).

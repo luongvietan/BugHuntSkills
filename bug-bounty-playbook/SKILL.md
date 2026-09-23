@@ -10,7 +10,7 @@ description: Exploitation-phase playbook from "Bug Bounty Playbook V2" by Alex T
 ## The meta-loop
 
 1. **Fingerprint → known vulns**: identify the tech stack (Wappalyzer + footer/banner fallbacks), search Google/ExploitDB/NVD for vulns, find a PoC (GitHub/ExploitDB — beware fake PoCs), test on a local vuln box, then hit the target.
-2. **1-day racing**: monitor exploit feeds (ExploitDB, Twitter). When a new CVE drops, mass-scan your known targets before defenders patch. Speed is the exploit.
+2. **1-day racing**: monitor exploit feeds (ExploitDB, Twitter). When a new CVE drops, check your *allowlisted* targets before defenders patch — volumetric sweeps stay inside policy rate limits and the recon-pipeline class-I gate. Speed is the exploit.
 3. **OWASP core**: ~80% of bounties come from a handful of classes — XSS (most-paid), SQLi, IDOR. Know them cold, by hand, across DB engines and contexts.
 4. **Everything is a lead in Burp**: live in HTTP history; POST → stored XSS/CSRF, URL with id/email/username → IDOR, JSON MIME → API, `url=`/`callback=` params → SSRF/SOP bypass.
 
@@ -41,7 +41,7 @@ description: Exploitation-phase playbook from "Bug Bounty Playbook V2" by Alex T
 
 ## Field instincts (author's calibration)
 
-- *"If there is a login screen it should be brute forced"* — try default creds first (SecLists), it's cheap.
+- *"If there is a login screen it should be brute forced"* — the book's doctrine; on a program, default-cred checks run low-volume on *your own* accounts only (ch05's gate), and real wordlist/spray runs need explicit permission.
 - *"If you see `<?xml` in Burp → test XXE immediately."*
 - *"If you see `*.firebaseio.com` → append `/.json`."*
 - Adobe AEM ≈ instant win — riddled with public vulns (`aemhacker`).
@@ -50,5 +50,9 @@ description: Exploitation-phase playbook from "Bug Bounty Playbook V2" by Alex T
 - Un-guessable IDs may just be `md5(int)` — hash small integers and check.
 - Demonstrated impact sells — but on live programs the PoC stops at the marker (`alert(document.domain)`); cookie theft → ATO chains are report narrative unless explicitly authorized.
 - When you find an unknown CMS/service: ExploitDB CVEs → GitHub scanner → else move on (unless hunting 0-days).
+
+## Scope & limits
+
+All procedures assume an authorized, in-scope engagement. This playbook is offense-shaped by design — every risky class carries a chapter-level callout (`> **…gate/ceiling/boundary/rule:**`) that is the contract: harmless markers prove the bug (`alert(document.domain)`, `id`, a canary file you own), credential/extraction/victim-facing steps are report narrative or explicitly permission-gated, and volumetric actions (scanners, brute force, fuzzing) follow policy rates. When a chapter's example exceeds its callout, the callout wins.
 
 Source/version/review metadata: `sources.md`.

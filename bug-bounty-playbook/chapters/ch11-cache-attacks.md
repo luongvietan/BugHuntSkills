@@ -13,6 +13,10 @@ Cache sits in front: first request for a key → web server → response saved; 
 2. **Weaponize the unkeyed input** — does it reflect? Self-XSS, open redirect, header injection. Normally self-XSS is unpayoutable…
 3. **Force the poisoned response into cache** — page already cached won't re-render. Path is a cache key → **append/change a random GET param** (`?test=2`) → `X-Cache: miss` + `Age: 0` = fresh cache write.
 4. Re-send with payload in the unkeyed header + bumped param → payload is now **cached and served to every visitor** → self-XSS becomes stored XSS.
+   *On a program you stop here:* your own cache-busted URL serving your
+   marker is the PoC — "served to every visitor" is the report's impact
+   paragraph, not a state you leave live. Purge/expire your entry after
+   the screenshot.
 
 **Checklist**: unkeyed input (param miner) → exploitable reflection → cacheable response (`miss`/`Age` behavior) → confirm by fetching URL in a fresh browser.
 
@@ -37,6 +41,7 @@ Opposite direction: get the victim's *private* page cached publicly, then read i
 Web server and cache **parse the same URL differently** → server returns the private page → cache stores it under a public `.css` URL.
 
 **Recipe**: find page with sensitive per-user data (`/users/me`, settings, billing) → try path-confusion suffixes → check `X-Cache: miss→hit`/`Age` → fetch URL unauthenticated → victim PII for anyone with the link → potentially ATO (session/reset tokens on the page).
+*Live-program bound:* run this against **your own** `/users/me` page — the deception works on your data, the shared-cache PII sentence is the demonstrated mechanism you describe, not other users' pages you fetch.
 
 ## Difference in one line
 

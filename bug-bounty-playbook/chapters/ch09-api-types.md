@@ -39,7 +39,7 @@ Single endpoint replaces many REST routes; one request queries whatever fields y
 /graphql?query={User{username,password}}
 ```
 
-→ unauthenticated credential dump in the author's example. GraphQL also carries IDOR inside queries — object fields often trust whatever id you pass.
+→ unauthenticated credential dump in the author's example. *Live-program bound:* introspection revealing a `password` field is itself reportable — stop at the schema; don't execute the credential query against real data. GraphQL also carries IDOR inside queries — object fields often trust whatever id you pass.
 
 ## Play
 

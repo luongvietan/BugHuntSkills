@@ -57,7 +57,7 @@ Quick-lookup card. Procedures per test in `chapters/`; methodology in `SKILL.md`
 ```bash
 curl -sI https://target/                                  # banners, HSTS, cookie flags
 curl -s -D- https://target | grep -i strict               # HSTS check
-nmap -Pn -sT -sV -p0-65535 TARGET                         # non-standard ports (INFO-04)
+nmap -Pn -sT -sV -p0-65535 TARGET                         # non-standard ports (INFO-04) — full-port connect scan = class-I volumetric; explicit permission + conservative rate, see recon-pipeline gating
 nmap -p 443 --script http-methods --script-args http-methods.url-path='/index.php' TARGET
 nmap --script ssl-enum-ciphers -p 443 TARGET              # TLS posture (CRYP-01)
 dig CNAME sub.target.tld +short && dig NS target.tld +short   # takeover recon

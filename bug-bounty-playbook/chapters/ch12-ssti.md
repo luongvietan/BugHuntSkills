@@ -1,5 +1,7 @@
 # Ch 12 — Server-Side Template Injection (SSTI)
 
+> **Marker ceiling:** `{{7*7}}`→`49` or `{{config}}` proves injection — the Jinja2/Tornado/ERB RCE chains below are escalation narrative. `payloads-all-the-things` ch04 sets the same ceiling.
+
 MVC: controller → model → **view = template engine** — placeholders like `{{name}}` replaced at render. Engines are powerful: functions, methods, loops, arithmetic → user input concatenated into a template = code execution. Impact ranges: info leak → file read → **RCE**.
 
 ## Detect + fingerprint

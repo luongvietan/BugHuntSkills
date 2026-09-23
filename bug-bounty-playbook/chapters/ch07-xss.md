@@ -1,5 +1,7 @@
 # Ch 7 — Cross-Site Scripting (XSS)
 
+> **Marker ceiling:** the cookie-stealer, keylogger, and BeEF payloads below are impact *narrative* for reports — identical pattern to `xss-cheat-sheet` ch04. On a live program `alert(document.domain)` proves the bug; victim delivery and session/token capture need explicit authorization, and real-user cookies are never collected.
+
 Most-reported and most-paid bug class. Three types: reflected, stored, DOM. For deep payload technique see the `xss-cheat-sheet` skill — this chapter is the playbook's exploitation flow.
 
 ## Reflected XSS — break out of the context

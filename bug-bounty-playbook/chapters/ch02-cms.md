@@ -1,5 +1,7 @@
 # Ch 2 — Basic Hacking: CMS
 
+> **Volume gate:** dedicated scanners (wpscan, droopescan, joomscan, aemhacker) are volumetric — class-I equivalents needing policy-permitted rates; prefer version-detect + CVE lookup over full vuln scans. Note `aemhacker` callbacks hit *your* public IP — verify flag semantics before running.
+
 ~62% of the internet runs a CMS; ~39% is WordPress. Don't hand-test a CMS — run the platform-specific scanner, then check known misconfigs.
 
 ## Scanner-per-CMS table

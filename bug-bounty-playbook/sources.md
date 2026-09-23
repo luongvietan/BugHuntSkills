@@ -14,11 +14,14 @@
 
 - Chapters are technique synthesis, era ≈ book publication; tool versions
   and platform specifics are point-in-time.
-- Per-chapter callouts (`> **…rule/gate/boundary:**`) convert risky default
-  actions to theory or permission-gated, test-owned procedures:
-  exploit modules → own lab first; found creds → report not exercise;
-  exposed DBs → listing-only PoC; brute force → low-volume own-account
-  proof; cache poisoning → own cache-buster; XXE/CSP → markers.
+- Per-chapter callouts (`> **…rule/gate/boundary/ceiling:**`) bound every
+  risky class: exploit modules → own lab first; scanners → volume gate;
+  found creds → report not exercise; exposed DBs → listing-only PoC;
+  brute force → low-volume own-account proof; SQLi/XSS/SSTI/XXE/CSP →
+  markers; uploads/webshells → inert owned files; cache poisoning → own
+  cache-buster; GraphQL introspection → schema, not credential queries.
+  Where a body example exceeds its callout (book's escalation chains),
+  the callout wins — inline notes mark those spots.
 - The playbook mindset is offense-shaped by design — the callouts are the
   contract that keeps it inside program policy.
 

@@ -20,25 +20,28 @@ Unauthenticated by default; find via Shodan or port scans.
 
 ```
 GET /                        → confirms ES + version
-GET /_cat/indices?v          → list all indexes ("databases")
+GET /_cat/indices?v          → list all indexes ("databases") ← the PoC ceiling
 GET /_stats/?pretty=1        → service details
-GET /_all/_search?q=email    → full-text search across all indexes
 GET /INDEX/_mapping?pretty=1 → list field names (columns)
-GET /_all/_search?q=_exists:email&pretty=1 → docs having an "email" field
 ```
 
-**Search keywords**: `username`, `email`, `password`, `token`, `secret`, `key`.
-Replace `_all` with a specific index name to scope queries.
+The listing proves the misconfig — an index named `users`/`customers` plus
+field names like `email`, `password`, `token` is the report. Search
+queries (`_search?q=…`) return document *contents* = reading real user
+data; they are not part of a bounty PoC.
 
 ## MongoDB recipe (port 27017)
 
-No auth by default. `mongo <ip>` → issue any command. `unauthorized` error = auth enabled (move on); arbitrary command execution = full dump.
+No auth by default. `mongo <ip>` connects → `show dbs` listing is the
+proof ceiling. `unauthorized` error = auth enabled (move on).
 
 ## Firebase recipe
 
-Any `*.firebaseio.com` reference → try `https://<name>.firebaseio.com/.json`. If auth wasn't enabled, the entire realtime DB exports as JSON — often including plaintext passwords.
+Any `*.firebaseio.com` reference → `https://<name>.firebaseio.com/.json`.
+An unauthenticated 200 with data confirms exposure — capture the response
+*shape* (top-level keys, redacted), not the export.
 
 ## Play
 
-- These are misconfigurations, not exploits — impact is immediate (PII/creds → report fast, don't over-extract).
-- Combine: dumped creds → login to app → deeper access.
+- These are misconfigurations, not exploits — impact is immediate (PII/creds → report fast, never over-extract).
+- A found credential is reported, not exercised — login chains are escalation narrative, never a live step (`hacking-the-cloud` ch03 rule).

@@ -16,9 +16,11 @@ INPUT = ../../admin/add?username=ghost%26password=lulz%26dummy=
 → browser requests /admin/add?username=ghost&password=lulz&dummy=.jpg
 ```
 
+*(Book example — the `/admin/add` target creates an admin account = global state change; on a live program the gadget targets a harmless endpoint/marker per the callout above, and the state-changing variant is report narrative.)*
+
 - `%26` = `&` URL-encoded so extra params bind to the *inner* request, not the outer URL.
 - Trailing junk (`.jpg` appended by the app) → soak it with a **dummy param** (`&dummy=`).
-- Confirm: `../` works → path traversal in URL construction = OSRF. Then find interesting endpoints (`/admin/add`, state-changing GETs).
+- Confirm: `../` works → path traversal in URL construction = OSRF. Then find interesting endpoints — on a live program, read-only/markers only; state-changing GETs are described, not invoked.
 
 ## Prototype pollution (JavaScript)
 

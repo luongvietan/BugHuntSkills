@@ -22,7 +22,7 @@ Source: Chapter 6. Authentication is a chain: login quality + password recovery 
 
 1. Instrument a **baseline**: two test accounts → record full responses to every credential-related request.
 2. Username enum across login/register/recover → wordlist run.
-3. Password attack: spray common passwords across *many* usernames (safer than hammering one account); respect lockouts — pause before threshold.
+3. Password attack: *(book doctrine — spraying across usernames targets accounts you don't own)* on a program, prove the missing control: a few attempts showing no lockout/rate-limit on *your own* accounts; a real spray run needs explicit policy permission.
 4. Multistage: skip stages, reorder, resubmit stage-1 with stage-3 params, test each stage's re-validation.
 5. Exercise recovery + remember-me end-to-end; decode every token; test token↔account binding.
 6. Post-auth checks: change-password, change-email — try cross-account parameter swaps (your session + victim's username parameter = **username parameter privilege escalation**).

