@@ -1,0 +1,19 @@
+# 4.3 Identity Management (WSTG-IDNT)
+
+Source: WSTG v4.2 §4.3. Tests how the app defines and provisions identities: roles, registration, provisioning, and whether account existence leaks. Small category, big payoff — enumeration feeds every brute-force and authz test.
+
+## Test list
+
+- **WSTG-IDNT-01 — Test role definitions.** Objective: document roles and try to switch/access another role. Procedure: enumerate roles from docs, comments, and fuzzing (`role=admin`, `isAdmin=True` cookie vars, `/admin`/`/mod` paths, known users like `admin`/`backup`); attempt to invoke each identified role's functions; review whether role permissions match need-to-know (support ≠ admin powers; sensitive admin actions need maker-checker or MFA — the 2020 Twitter incident is the canonical failure). Interpretation: finding a role value isn't a bug — *switching* to it is; also flag over-broad role granularity.
+- **WSTG-IDNT-02 — Test user registration process.** Objective: verify identity requirements match the app's security needs. Procedure: walk registration and answer — can anyone register? vetted by human or auto-granted? same identity multiple times? register for elevated roles? what proof of identity is required, and is it verified? can identity data be forged or tampered mid-flight? Interpretation: self-registration reaching privileged roles, or vetting enforced only client-side, is the flaw.
+- **WSTG-IDNT-03 — Test account provisioning process.** Objective: map which roles can provision which accounts. Procedure: determine who provisions whom — verification/vetting of provisioning and de-provisioning; can an admin create other admins; can anyone provision above their own privilege; can users de-provision themselves; what happens to a de-provisioned user's data (deleted? transferred?). Interpretation: provisioning above own privilege = vertical escalation; missing de-provision vetting = rogue persistence.
+- **WSTG-IDNT-04 — Account enumeration & guessable accounts.** Objective: harvest valid usernames via divergent responses. Procedure: submit three probes — valid user/valid pass, valid user/wrong pass, invalid user/wrong pass — and diff status, body length, message text ("password incorrect" vs "user not recognized"), error codes, redirect targets (`err.jsp?Error=0` vs `2`), page titles; probe recovery flows ("reset sent" only for real users), URI-per-user (`/account1` → 403 vs 404), and response timing (email-sending paths are slower); for guessing, exploit structure (sequential `CN000100`, `fmercury` conventions, REALM prefixes) with scripted loops. Interpretation: any consistent response delta = enumerable users; gray-box check is "identical generic error for every failed attempt." Caution: enumeration trips lockouts and IP bans — run late, throttle.
+- **WSTG-IDNT-05 — Weak or unenforced username policy.** Objective: determine if predictable naming renders accounts enumerable. Procedure: derive the name structure from samples (emails, profiles, OSINT); test responses to valid vs invalid names; run name dictionaries against login/registration/recovery. Interpretation: structured usernames + any IDNT-04 oracle = scripted enumeration of the whole user base.
+
+## Common findings
+
+Login errors that differ for bad-user vs bad-pass; password-reset enumeration; `/users/<name>` 403/404 split; timing oracle via mail-sending; sequential employee IDs; admin role obtainable by adding `role=admin` at signup.
+
+## Escalation notes
+
+Enumerated usernames are ammunition for ATHN-02 default/weak password guessing and ATHN-03 lockout abuse, plus IDOR validation (ATHZ-04 — does an object exist for user X?). Role-switch success combines with BUSL-03 (hidden fields) — a `role` or `profile` parameter is often just a client-side claim. Username policy weaknesses also boost IDNT-04: guessing is faster than enumerating.
