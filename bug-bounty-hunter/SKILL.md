@@ -77,7 +77,7 @@ Nothing below this line happens until the session-init contract in
 ## Decision rules — target type and situation
 
 - **API target** -> `hacking-apis` (ch03 discover, ch05 auth, ch07 BOLA/BFLA,
-  ch08 mass assignment, ch09 injection, ch11 GraphQL) + `owasp-api-security-top-10`
+  ch08 mass assignment = BOPLA-write, ch09 injection, ch11 GraphQL) + `owasp-api-security-top-10`
   as the vuln-class checklist — aligned to the **2023 edition** (API1 BOLA,
   API3 BOPLA, API6 sensitive business flows, API7 SSRF, API10 unsafe API
   consumption; 2019 names are historical labels inside that skill).
@@ -153,4 +153,4 @@ Every routed skill assumes authorized testing against in-scope assets under a
 program policy actually read. This router adds nothing to that authority — it
 spends it more carefully. When policy and opportunity conflict (out-of-scope
 asset, banned technique, real user data within reach), policy wins; a great
-out-of-scope bug pays $0 and can cost the account.
+out-of-scope bug pays $0 and can cost the account. Source hierarchy + review metadata: `sources.md`.

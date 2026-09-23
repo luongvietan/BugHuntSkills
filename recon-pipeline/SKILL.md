@@ -100,3 +100,4 @@ skill and a separate authorization question.
 Related skills: `bug-bounty-bootcamp` (recon chapter, conceptual version),
 `bug-bounty-playbook` (exploitation-phase follow-on), `zseano-methodology`
 (alt methodology), `web-hacking-101`, `report-writing`.
+Source/version/review metadata: `sources.md`.

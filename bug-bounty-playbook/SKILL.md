@@ -48,5 +48,7 @@ description: Exploitation-phase playbook from "Bug Bounty Playbook V2" by Alex T
 - Self-XSS isn't dead — chain with **web cache poisoning** to make it stored.
 - Open redirect alone is low — chain into OAuth token theft / SSRF.
 - Un-guessable IDs may just be `md5(int)` — hash small integers and check.
-- Always demo impact past `alert()`: cookie theft → account takeover.
+- Demonstrated impact sells — but on live programs the PoC stops at the marker (`alert(document.domain)`); cookie theft → ATO chains are report narrative unless explicitly authorized.
 - When you find an unknown CMS/service: ExploitDB CVEs → GitHub scanner → else move on (unless hunting 0-days).
+
+Source/version/review metadata: `sources.md`.
