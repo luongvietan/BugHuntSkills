@@ -111,20 +111,30 @@ workaround:
 
 ### Recon (phase 2)
 
-- [ ] Dated run dir `recon/<target>/<YYYYMMDD>/` created; scope files
-      snapshotted into it
-- [ ] Passive stages complete before any active stage starts
-- [ ] ACTIVE GATE: written authorization confirmed AND each active-stage
-      target re-checked against `scope.md` exclusions — including assets
-      discovered this run
-- [ ] Every tool wrote a file; artifacts normalized (`sort -u`, lowercase)
-- [ ] `new-since-last-run.txt` produced by diffing vs the previous run
-- [ ] Live hosts -> Burp scope; tech fingerprints annotated with candidate
-      vuln classes in `notes.md`
+- [ ] Initial pass: dated run dir `recon/<target>/<YYYYMMDD>/` created;
+      scope files snapshotted; passive stages complete before Phase 3
+- [ ] Every tool wrote a file; artifacts normalized (`sort -u`, lowercase);
+      `new-since-last-run.txt` diffed vs prior run (or recorded as baseline)
+- [ ] ACTIVE GATE before any Phase 2 target traffic: written authorization
+      confirmed AND each active-stage target re-checked against `scope.md`
+      exclusions — including assets discovered this run. The initial pass
+      stays passive; use the program-listed application URL for Phase 3's
+      separately authorized functional walk-through without a broad active
+      pre-mapping scan
+- [ ] Feature-led re-entry only: a Phase 3 feature card or trust-boundary
+      question names the recon need; candidate targets/methods are rechecked
+      against the allowlist and policy before target traffic; passive stages
+      complete before any active stage starts
+- [ ] Re-entry findings remain leads until ownership and allowlist checks
+      confirm them; add only confirmed in-scope hosts to Burp scope
 
 ### Application mapping (phase 3)
 
 - [ ] Every in-scope host walked once per privilege level
+- [ ] Program-listed live hosts staged in Burp scope; tech fingerprints
+      observed during the authorized walk-through annotated with candidate
+      vuln classes. New discoveries remain leads for a feature-led Phase 2
+      re-entry and scope re-check.
 - [ ] Endpoint + parameter + role inventory in `notes.md`
 - [ ] Both accounts' request logs captured for later A-to-B replay
 - [ ] Candidate vuln classes listed per function (from the map, not memory)

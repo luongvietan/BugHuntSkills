@@ -9,6 +9,32 @@ Phases are a loop, not a ladder: phase 7 feeds phase 2, and any phase can send
 you back a step (a mapping surprise restarts recon on one host; a report
 question sends you back to phase 5 for a better PoC).
 
+## Crosswalk: user-shared 12-stage methodology -> this seven-phase router
+
+This is an activity crosswalk for **BUG BOUNTY METHODOLOGY 2026 v3.0**
+(reviewed 2026-09-24), not another lifecycle. The router and existing
+artifacts remain the operating path.
+
+| 12-stage activity | Existing route and handoff |
+|---|---|
+| 1. Program intelligence and target selection | Phase 1 dossier, program fit, and target choice. |
+| 2. Scope, authorization, and safety | Phase 1 scope contract; repeat the exact asset/method gates before each active test and follow-up. |
+| 3. Passive reconnaissance | Phase 2 passive collection; store provenance and treat results as leads. |
+| 4. Functional exploration and application mapping | Phase 3 walk-through, role/resource map, trust boundaries, and feature cards. |
+| 5. Deep reconnaissance and attack-surface graph | Re-enter Phase 2 from a Phase 3 feature lead; use scoped recon provenance, then update the Phase 3 map. A discovery stays a lead until scope is confirmed. |
+| 6. Threat modeling and hypothesis generation | Phase 4 and `05-hypothesis-engine.md`; use the existing falsifiable hypothesis cards. |
+| 7. Focused testing: web, API, and business logic | Phase 4 routes through `03-vuln-class-index.md` to the existing specialist skills under per-technique gates. |
+| 8. Modern research: parser, cache, protocol, cloud, and AI | Phase 4 routes to `web-security-academy` for parser/cache/protocol research and ch15's LLM/Agentic 2026 coverage, `hacking-apis`, `hacking-the-cloud`, `owasp-mas`, or the relevant specialist. Sources inform hypotheses; they do not grant permission. |
+| 9. Deterministic validation and impact assessment | Phase 5 plus the candidate validation gate in `04-engagement-workspace.md`; validate on controlled data and record baselines/negative controls. |
+| 10. Duplicate analysis and vulnerability reporting | Phase 6, `report-writing`, and the existing append-only triage/outcome records. |
+| 11. Controlled AI-assisted automation | Cross-cutting overlay on hypothesis and authorization gates. AI output is an unvalidated lead; a human owns scope and approves each active action. |
+| 12. Continuous monitoring and regression hunting | Phase 7 and `recon-pipeline/chapters/03-monitoring.md`; changes feed Phases 1–4. |
+
+The methodology puts functional exploration before **deep** recon. Phase 2
+therefore has two entry points: the initial passive pass before Phase 3, then
+a feature-led, allowlist-bound re-entry after Phase 3. Do not use the second
+pass to bulk-expand targets or promote discoveries into scope.
+
 ---
 
 ## Phase 1 — program selection
@@ -79,11 +105,12 @@ grant into the next.
 
 ## Phase 2 — recon
 
-**Purpose:** enumerate every in-scope asset — subdomains, live hosts, ports,
-directories, screenshots, code leaks, tech fingerprints — normalized so the
-next run can be diffed.
+**Purpose:** collect passive asset leads before functional exploration, then
+re-enter for feature-led deep recon after phase 3 has mapped the application.
+Normalize and diff each pass; keep discovery separate from authorization.
 
-**Inputs:** `hunt/<target>/scope.md` from phase 1; previous run's output if any.
+**Inputs:** `hunt/<target>/scope.md` from phase 1; previous run's output if any;
+on re-entry, a named feature card or mapped trust boundary from phase 3.
 
 **Actions:**
 
@@ -93,6 +120,14 @@ next run can be diffed.
 - Passive collection first (third-party sources: CT logs, search engines,
   archives, DNS zone data, repo/search-code surfaces) — sends no packets to
   the target. Everything it emits is a *lead*.
+- Before the first phase-3 functional walk-through, keep this pass passive.
+  Use the program-listed, in-scope application URL for the authorized
+  researcher-account walk-through in phase 3; do not substitute broad recon.
+  Phase 3 records live program-listed hosts in Burp scope and observed tech
+  fingerprints; a separate active pre-mapping scan is not a prerequisite.
+- After phase 3, tie deep recon to a feature card or trust-boundary question.
+  Re-enter this phase for only the candidate assets and methods that answer
+  that question, then update the phase-3 map with provenance-backed results.
 - Target-traffic stages (HTTP probing, DNS queries against target
   infrastructure, screenshots) run only on allowlist-derived targets after
   the authorization re-check.
@@ -122,9 +157,11 @@ next run can be diffed.
   scope includes cloud orgs/tenants: unauthenticated enumeration of
   subscriptions, buckets, principals.
 
-**Exit criteria:** dated run dir exists; `new-since-last-run.txt` written;
-live-host list pushed to Burp scope (allowlist-derived only); tech list
-annotated with candidate vuln classes.
+**Exit criteria:** the initial passive pass has a dated, normalized,
+provenance-backed candidate inventory and a baseline diff, with every
+discovery still separate from the allowlist. On feature-led re-entry, the
+dated run and diff exist, the Burp target list is allowlist-derived, and
+results flow back into the phase-3 feature map.
 
 **Do not skip — the deny-by-default rule:** a discovered hostname or resolved
 IP is a lead until ownership AND allowlist membership are confirmed. Shared/
@@ -140,13 +177,18 @@ real-user data → halt the stage, re-check policy or contact the program.
 **Purpose:** turn "hosts exist" into "here is every feature, role, parameter,
 and trust boundary" — the map + feature cards phase 4's queue is built from.
 
-**Inputs:** live hosts + tech fingerprints from phase 2; test accounts at two
-privilege levels.
+**Inputs:** the policy-listed application URL(s) and allowlist from phase 1;
+passive leads and provenance from phase 2; researcher-controlled test accounts
+at two privilege levels.
 
 **Actions:**
 
 - Walk every feature manually at every privilege level; let Burp build the
   site map. Log endpoints, parameters, roles, and state-changing actions.
+- During this authorized walk-through, stage program-listed live hosts in
+  Burp scope and annotate observed tech fingerprints with candidate classes.
+  New discoveries remain leads and need a feature-led Phase 2 re-entry plus
+  ownership and scope checks before active follow-up.
 - Note hidden/undocumented surface: JS-file endpoints, API routes referenced
   by the frontend, alternate subdomains running old versions.
 - Classify each function: authZ boundary? parser? file handling? state
@@ -156,6 +198,10 @@ privilege levels.
   expected invariant, dated evidence, and an `unknowns` line that is never
   optional — a field is evidence or it is `unknown`. Phase 4 generates
   tests from these cards; no card, no hypothesis.
+- If a feature exposes an uncharted API, client, integration, or service,
+  create a feature-led deep-recon question and re-enter Phase 2 for those
+  candidates only. Use the exact allowlist and record asset provenance;
+  discovered names remain leads until ownership and scope are confirmed.
 
 **Skill routing:**
 

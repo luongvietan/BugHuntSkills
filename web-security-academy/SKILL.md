@@ -35,7 +35,8 @@ Related skills: `bug-bounty-bootcamp` + `web-hacking-101` (same classic classes,
 - Command injection + SSTI + path traversal + file upload + deserialization → `chapters/ch13-injection-files.md`
 - Access control + authentication + information disclosure → `chapters/ch14-access-authn-info.md`
 - Business logic + race conditions + API testing + GraphQL + LLM attacks
-  (mapped to OWASP GenAI Top 10 2025) → `chapters/ch15-logic-race-api-llm.md`
+  (mapped to OWASP GenAI LLM and Agentic Top 10 2026 plus selected AI Testing
+  Guide v1 test IDs) → `chapters/ch15-logic-race-api-llm.md`
 
 - Terms → `glossary.md`; cross-cutting heuristics → `patterns.md`; quick ref → `cheatsheet.md`
 - Lab index (free, registration required): `https://portswigger.net/web-security/all-labs` — each chapter ends with its topic anchor.

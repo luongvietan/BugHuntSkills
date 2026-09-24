@@ -114,10 +114,12 @@ exact action leaves the gate unknown — stop, don't assume.
   consumption; 2019 names are historical labels inside that skill).
 - **AI/LLM product surface** (chatbots, agents, RAG features, LLM-backed
   endpoints) -> `web-security-academy` ch15 for Web LLM attack classes +
-  OWASP GenAI Top 10 2025 risk names (prompt injection, sensitive info
-  disclosure, excessive agency, vector/embedding, unbounded consumption) —
-  test owned prompts/agents only; never aim a lab technique at shared model
-  capacity.
+  the current OWASP GenAI LLM Top 10 2026. For tool-using agents, map the
+  relevant Agentic 2026 boundaries (goal hijack, tool misuse, identity and
+  privilege, memory and context) and selected AI Testing Guide v1 procedures.
+  Generated ideas stay leads; test with owned accounts and synthetic data,
+  least-impact sinks, and the exact policy grants — never real-user data,
+  unapproved actions, or shared model load.
 - **General web testing** -> `bug-bounty-bootcamp` per-class chapters, or
   `web-app-hackers-handbook` for deeper mechanism, `owasp-wstg` for checklist
   coverage, `web-security-academy` for the modern class.

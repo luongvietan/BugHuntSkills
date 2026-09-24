@@ -1,6 +1,6 @@
 # Sources & currency — bug-bounty-hunter
 
-Reviewed: **2026-09-23**. This is an authored ops skill (no book source); its
+Reviewed: **2026-09-24**. This is an authored ops skill (no book source); its
 authority is the source hierarchy below plus the verified 2026 state of its 16
 companion skills.
 
@@ -10,8 +10,9 @@ companion skills.
    in this skill set. Pinned per session in `hunt/<target>/scope.md`
    (URL + revision/date).
 2. **Official standards/primary docs** — OWASP API Security Top 10 2023,
-   WSTG v4.2 (+`latest` for draft), OWASP MAS, OWASP GenAI Security Project
-   (LLM Top 10 2025), FIRST CVSS v4.0, provider docs for cloud behavior.
+   WSTG v4.2 (+`latest` for draft), OWASP ASVS 5.0.0, OWASP MAS, OWASP
+   GenAI LLM Top 10 2026, Top 10 for Agentic Applications 2026, selected
+   OWASP AI Testing Guide v1 methods, FIRST CVSS v4.0, and provider docs.
 3. **Maintained research/labs** — PortSwigger Web Security Academy (rolling);
    lab reproduction ≠ bounty-safe validation, ever.
 4. **Tool vendor docs** — version-scoped command syntax only.
@@ -30,7 +31,8 @@ companion skills.
 - Recon routing split: passive collection → target-traffic (allowlist-derived)
   → intrusive (separately gated). No discovered host/IP auto-in-scope.
 - Router entries added for API Top 10 **2023** naming, AI/LLM surfaces
-  (OWASP GenAI 2025), severity precedence (program > platform > CVSS v4).
+  (OWASP GenAI LLM Top 10 2026 and Agentic Top 10 2026), severity
+  precedence (program > platform > CVSS v4).
 - Scope pressure scenarios added to session checklist (no scope file,
   unlisted host, CDN/shared IP, found credential).
 - Impact hypothesis engine added (`chapters/05-hypothesis-engine.md`) —
@@ -41,12 +43,37 @@ companion skills.
 
 - `owasp-api-security-top-10` — refreshed to the 2023 edition (2019 labels
   kept historical). Router cites filenames, not edition years.
-- `web-security-academy` — LLM chapter expanded to OWASP GenAI 2025 risks.
+- `web-security-academy` — chapter 15 uses OWASP GenAI LLM Top 10 2026,
+  the 2026 Agentic risks that map to testable product boundaries, and selected
+  AI Testing Guide v1 test IDs; 2025 is historical.
 - `recon-pipeline` — commands re-verified against tool releases of
   2026-09-23 (Amass **v5.1.1** is a rewrite — v4 flags do not carry over).
 
 Full per-skill register: `docs/superpowers/2026-09-23-bug-bounty-source-register.md`
 in the BugBounty workspace.
+
+## AI source anchors (checked 2026-09-24)
+
+- OWASP GenAI LLM Top 10 2026: https://genai.owasp.org/resource/owasp-genai-llm-top-10-2026/
+- OWASP Top 10 for Agentic Applications 2026: https://genai.owasp.org/resource/owasp-top-10-for-agentic-applications-for-2026/
+- OWASP AI Testing Guide v1 (published 2025-11-26): https://owasp.org/projects/ai-testing-guide
+- The AI Testing Guide's application, model, infrastructure, and data test
+  families are broader than bounty work. Route only security checks that
+  touch an in-scope product boundary, and keep policy, controlled-data, and
+  least-impact gates in force.
+
+## Methodology crosswalk
+
+- **Basis**: user-shared *BUG BOUNTY METHODOLOGY 2026*, version 3.0,
+  reviewed 2026-09-24 —
+  https://chatgpt.com/share/6ab41390-e9f8-83ec-b468-53f2a0e39166 .
+- Its 12 activity stages are mapped onto the existing seven-phase router in
+  `chapters/01-phase-map.md`; they are labels and handoffs, not a replacement
+  lifecycle. Functional mapping feeds a feature-led re-entry to Phase 2 for
+  deep recon. Human-controlled AI may suggest hypotheses, but cannot establish
+  scope, permission, or validation.
+- Program policy/written authorization and the official current sources above
+  remain authoritative where the synthesized methodology is silent or differs.
 
 ## Design references (attribution)
 

@@ -48,52 +48,72 @@ Check-then-act window: the app reads state (balance, coupon-used, invite-count),
 
 ## LLM attacks (web LLM)
 
-Mapped against the **OWASP Top 10 for LLM Applications** (GenAI Security
-Project, 2025 list — `genai.owasp.org/llm-top-10/`). Academy labs cover the
-web-visible subset; the fuller risk model:
+Use the **OWASP GenAI LLM Top 10 2026** as the current risk vocabulary;
+2025 is historical. The 2026 categories are LLM01 Prompt Injection, LLM02
+Sensitive Information Disclosure, LLM03 Excessive Agency, LLM04 Supply Chain,
+LLM05 Data and Model Poisoning, LLM06 Unbounded Consumption, LLM07
+Misinformation, LLM08 Hidden Context Exposure, LLM09 Vector and Embedding
+Weaknesses, and LLM10 Improper Output Handling. Add the **OWASP Top 10 for
+Agentic Applications 2026** when the product can plan or act, especially ASI01
+Agent Goal Hijack, ASI02 Tool Misuse and Exploitation, ASI03 Identity and
+Privilege Abuse, and ASI06 Memory and Context Poisoning. The Academy's Web LLM
+labs demonstrate mechanics; these taxonomies help map product boundaries.
 
-- **Surface mapping**: LLM features call APIs/plugins/functions — map which
-  (ask it, or infer from responses); treat every LLM-callable API as
-  publicly accessible. Document the model's reachable action set before
-  attacking it.
-- **LLM01 Prompt injection — direct**: make the model ignore instructions →
-  invoke functions it shouldn't (delete, refund, send email). Escalate
-  gradually: get it to reveal its instructions, then to violate one.
-- **LLM01 Prompt injection — indirect**: poison a data source the LLM reads
-  (web page, email, product description, support ticket) → when the
-  *victim's* LLM reads it, the payload executes in their context —
-  CSRF-equivalent for AI. Bounty-safe version: poison a document *you* own
-  that only your own session/agent will read.
-- **LLM02 Sensitive information disclosure**: prompt the model to regurgitate
-  sensitive context, PII in its context window, secrets in its system
-  prompt, or other users' conversation data. Own-context proof only —
-  demonstrate with data you planted or your own account's data.
-- **LLM05 Improper output handling**: LLM output rendered as HTML/JS → XSS
-  via crafted model responses; output passed to shell/SQL → injection
-  through the model. Verify with a harmless marker payload.
-- **LLM06 Excessive agency / unsafe tool calls**: the model calls real
-  APIs with the user's permissions — chain injection→function call→data
-  theft/action. Inventory the tool list first; a model that can *only read*
-  is low-impact, one that can *send/delete/pay* is the finding.
-- **LLM07 System prompt leakage**: coax out the hidden instructions — often
-  contains role definitions, secrets, or business logic worth a report on
-  its own; also maps the model's intended limits for the next probe.
-- **LLM08 RAG / vector-store isolation**: knowledge-grounded bots retrieve
-  per-tenant documents — test whether your queries surface another tenant's
-  chunks (embedding-space cross-tenant leak) or whether poisoned documents
-  rank-manipulate answers. Own-tenant data only.
-- **LLM10 Unbounded consumption / resource risks**: expensive queries,
-  recursive tool loops, context-window stuffing — a per-request cost
-  amplifier. Demonstrate *one* expensive request; never a load test —
-  volumetric rules apply exactly as for API4:2023.
-- **AI-scanner SSRF** (newest): AI-powered scanners/proxies fetch URLs —
-  prompt-inject the scanner into fetching internal resources
-  (routing-based SSRF) or carrying injected payloads onward.
-- **Lab vs live**: PortSwigger labs authorize full exploitation chains. On a
-  live program, LLM testing stays inside: your own documents/accounts, no
-  real-user data, no destructive tool calls, no spam/resource abuse — a
-  model doing a real action (email sent, record deleted) needs a test-
-  owned endpoint to receive it, and stops there.
+### Map the boundary before choosing a test
+
+- Map direct input, retrieved content, tool output, conversation context,
+  persistent memory, connected data, and downstream output/action sinks.
+- Record the account/tenant principal, the tool's effective identity, each
+  allowed action, and which server-side control should authorize it. Do not
+  assume model-generated text itself is evidence of a security impact.
+- OWASP AI Testing Guide v1 adds selected procedure IDs: APP-01/02 (direct and
+  indirect prompt injection), APP-06 (agent behavior limits), APP-08 (embedding
+  manipulation), and INF-03/04 (plugin boundary and capability misuse). Use
+  these as test methods, not as another risk taxonomy.
+
+### Bounded tests for authorized product surfaces
+
+- **LLM01 / ASI01 prompt or goal hijack**: test one direct prompt or one
+  researcher-owned document in a researcher-owned session. Do not plant
+  instructions in shared, public, or victim-facing content.
+- **LLM02 sensitive disclosure / LLM08 hidden context exposure**: use a
+  synthetic marker that you put in your own test context. Never probe for
+  another user's messages, private documents, credentials, or live system
+  secrets; stop if any appear unexpectedly.
+- **LLM03 excessive agency / ASI02 tool misuse / ASI03 identity and privilege**:
+  inventory documented or observable tools, then verify authorization with a
+  harmless read-only check or a no-op routed to a sink you control. Do not
+  send real email, issue refunds/payments, delete records, change privileges,
+  or exercise another principal's credentials. Exact action permission is a
+  separate gate from permission to use the chat feature.
+- **ASI06 memory and context / LLM09 vector and embedding weaknesses**: use
+  synthetic documents in two researcher-controlled test tenants, if the
+  program provides them. Check only those test identities and IDs; stop on
+  any foreign content. Never poison a shared corpus or persistent memory.
+- **LLM04 supply chain / LLM05 data and model poisoning**: use in-scope
+  inventories and configuration evidence first. Do not upload packages, alter
+  training data, or persist a poisoned artifact as a live proof.
+- **LLM07 misinformation**: report only a security-relevant invariant failure
+  with demonstrated product impact; model inaccuracy alone is not proof of a
+  security boundary break.
+- **LLM10 improper output handling**: use an inert marker to check a documented
+  renderer or parser boundary. Do not use a payload that can execute a real
+  command, script, or state change.
+- **Resource consumption (LLM06 / API4:2023)**: obey the program's rate and
+  cost limits; use at most the smallest permitted single request, never loops,
+  load tests, or context stuffing.
+- **AI fetch / scanner SSRF**: only test a URL-fetch feature with a
+  researcher-controlled canary endpoint. Do not direct it at internal IPs,
+  metadata services, or third-party hosts unless the program grants that
+  exact destination and method.
+
+### Lab vs live
+
+PortSwigger labs authorize the lab's full exercise. They grant no permission
+on a bounty target. Before each live check, re-run the asset, technique,
+account/data, rate, and impact gates. Keep synthetic evidence, use the
+least-impact observable result, and stop immediately if the test could affect
+another user, shared state, or service availability.
 
 ## Lab reference
 
