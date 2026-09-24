@@ -1,7 +1,7 @@
 # Impact Hypothesis Engine — design spec
 
-**Status:** Approved design; awaiting user review before implementation planning
-**Date:** 2026-09-23
+**Status:** Implemented and integrated into `bug-bounty-hunter`; design closeout updated 2026-09-24.
+**Spec date:** 2026-09-23
 **Scope:** Add a prioritized, evidence-led hypothesis loop to the 17-skill bug bounty workflow, with minimal learning from the user's own outcomes and public precedents.
 
 ## Problem
@@ -103,6 +103,10 @@ No other companion skill needs editing in the first implementation. Existing vul
 6. Existing phases, candidate-validation gate, scope contract, finding lifecycle, and redaction rules remain consistent and linked rather than duplicated.
 7. Templates fit the existing `hunt/<target>/notes.md` and optional engagement workspace without requiring a database or additional runtime tool.
 
-## Review focus
+## Implementation and behavior-evaluation record
 
-Please review whether the fields and rating rubric are useful in a real session, especially whether the low/medium/high ratings create useful ordering without false precision. Implementation planning starts only after this spec review.
+This design has been implemented in [`bug-bounty-hunter/chapters/05-hypothesis-engine.md`](../bug-bounty-hunter/chapters/05-hypothesis-engine.md) and integrated with the router, phase map, session checklist, engagement workspace, and source notes. The implementation sequence is recorded in [`docs/superpowers/plans/2026-09-23-impact-hypothesis-engine.md`](../docs/superpowers/plans/2026-09-23-impact-hypothesis-engine.md).
+
+Completed behavior evaluations are summarized in the [pressure-test and regression record](impact-hypothesis-engine-pressure-tests.md): fresh-context baseline/with-chapter/full-integration A/B/C evaluations, the seven-criterion consistency review, and Regression D for exact technique authorization. Regression D failed on the pre-fix integrated skill and passed in 5/5 fresh contexts after the fix. The record explicitly qualifies the earlier 15/15 A/B/C results and identifies the method-authorization gap they did not cover.
+
+These are simulated skill-behavior evaluations, not live program tests. Their prompts sent no target requests; raw outputs are in ignored local SDD scratch, while protocols, grading criteria, and result tables are in the linked record. They do not establish an end-to-end run from a live program URL through report validation, and no regression result grants target authorization.

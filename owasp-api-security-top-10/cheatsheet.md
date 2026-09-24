@@ -1,63 +1,81 @@
-# Cheatsheet — OWASP API Security Top 10 (2019 → 2023 crosswalk): Tester Decision Table
+# Cheatsheet — OWASP API Security Top 10 2023: bounded tester decision table
 
-Risk column shows `2019 → 2023` mapping. Quote 2023 IDs in reports.
+Use the 2023 taxonomy and IDs below. The parent `SKILL.md` and crosswalk
+retain the 2019 source-book chapter paths; that historical structure does not
+change the current risk names.
 
-## Where to look → what to try
+## Entry gate — apply before every check
 
-| Surface | Try first | Risk (19→23) |
+1. Verify the exact host and path against the current program scope contract.
+   A discovered host, subdomain, or path is a lead until scope is confirmed.
+2. Use an endpoint observed in the authorized application flow or supplied
+   program documentation. Do not guess routes or sweep endpoint lists.
+3. Verify that the exact technique and HTTP method are allowed. Policy
+   silence or ambiguity means `blocked-by-policy`; ask the program before
+   continuing.
+4. Use only researcher-controlled accounts and records. Never access
+   real-user data or affect shared, financial, or third-party resources.
+5. Choose the smallest permitted check and stop at unexpected data, impact,
+   errors, or service degradation.
+
+## Current model — API Security Top 10:2023
+
+| Current risk | Start only from this verified surface | Bounded first check |
 |---|---|---|
-| Any `{id}`/`{guid}`/`{name}` in path, query, body, header | Swap ID for another user's → 200+data = BOLA | API1 → API1 |
-| Custom headers (`X-User-Id`, `X-Account`) | Modify value → horizontal access | API1 → API1 |
-| Login / register / reset / OTP verify / token refresh | Lockout missing, weak password, low-volume spray on own accounts only | API2 → API2 |
-| JWT | `alg:none`, weak HMAC secret, no `exp` check, signature ignored | API2 → API2 |
-| Any JSON response | Diff fields vs UI → tokens/PII/internal props = exposure | API3 → API3 BOPLA (read) |
-| Object mutation endpoints | Add `is_admin`, `role`, `balance`, `verified`, internal params | API6 → API3 BOPLA (write) |
-| `size`, `limit`, `per_page`, `count`, `page` | Large values → slowdown/errors/overflow — few requests, measure, stop | API4 → API4 |
-| Upload + server-side processing (thumbs, convert) | One oversized file → memory/CPU signal; no repeated load | API4 → API4 |
-| Every endpoint | GET→PUT/DELETE/PATCH; `users`→`admins`; `/export_all`, `/new`, `/internal` | API5 → API5 |
-| Purchase/book/vote/coupon flows | Low-volume abuse simulation on own accounts — auto-purchase, re-use coupon, flood-by-design | — → API6 (new) |
-| URL params, webhook/callback registration, file-import-by-URL | `http://127.0.0.1/`, `http://169.254.169.254/`, collaborator URL → SSRF | — → API7 (new) |
-| Endpoints using shell-backed features | `$(cmd)`, `;cmd`, `|cmd`, backticks in params | API8 → dropped 2023* |
-| JSON/query params (Mongo-ish) | `[$ne]`, `[$gt]`, `[$regex]`, object/array juggling | API8 → dropped 2023* |
-| Subdomains & paths | `beta/staging/dev/test/mbasic/legacy` hosts, `/v1↔v2↔v3` rotation; documented-vs-running drift | API9 → API9 |
-| Web root | `.git`, `.env`, `.bash_history`, swagger/openapi files | API7 → API8 |
-| CORS | `Origin: evil.com` reflection + `Access-Control-Allow-Credentials` | API7 → API8 |
-| Errors | Force 4xx/5xx → stack traces, versions, paths | API7 → API8 |
-| Third-party API the target consumes | Trust boundary: unvalidated upstream data stored/reflected, weak TLS to provider, over-scoped provider token | — → API10 (new) |
-| Logged fields (UA, names, params) | `%0d%0a`, format strings → log injection | API10 → dropped 2023* |
+| **API1:2023 Broken Object Level Authorization (BOLA)** | An observed object request on a listed asset; its method is allowed. | Compare only objects created by two accounts you control, and only if cross-account checks are permitted. Never enumerate or use identifiers belonging to other people. |
+| **API2:2023 Broken Authentication** | An observed login, session, reset, or token flow covered by the policy. | Review the flow using your own accounts. Run a low-volume auth check only when the relevant technique and rate are allowed; no spraying or lockout testing by assumption. |
+| **API3:2023 Broken Object Property Level Authorization (BOPLA)** | An observed response or mutation for a researcher-owned record. | Compare fields available to your own roles. Test a harmless property write only when that exact mutation method is allowed; do not try privilege, balance, or verification changes without explicit permission. |
+| **API4:2023 Unrestricted Resource Consumption** | An observed operation with a documented or directly observed resource limit. | Prefer policy/docs review. Make no burst, large-payload, exhaustion, or degradation test. A minimal request is eligible only if the exact check and rate are permitted. |
+| **API5:2023 Broken Function Level Authorization (BFLA)** | An observed function and roles you control on a listed asset. | Compare access using your own authorized roles and only an allowed method. Do not guess admin paths or try unlisted methods. |
+| **API6:2023 Unrestricted Access to Sensitive Business Flows** | An observed business flow and a policy-permitted way to test it. | Use only controlled accounts and non-impacting records. Do not repeat purchases, bookings, votes, redemptions, or other side effects unless the program explicitly permits that exact check. |
+| **API7:2023 Server Side Request Forgery (SSRF)** | An observed URL-fetch feature on a listed asset; callback testing is permitted. | Use a researcher-controlled canary only. Do not probe internal addresses, cloud metadata, or third-party destinations. |
+| **API8:2023 Security Misconfiguration** | A listed asset and an observed route or program-documented configuration surface. | Review supplied documentation and ordinary responses. Do not enumerate hidden files, methods, or routes unless explicitly allowed. |
+| **API9:2023 Improper Inventory Management** | Program-listed assets or versions and their supplied inventory. | Compare only versions already in scope. Newly found hosts or versions remain leads until the scope contract confirms them; do not rotate hostnames or version paths. |
+| **API10:2023 Unsafe Consumption of APIs** | An observed integration the target consumes. | Assess the target's documented or observable handling. Do not contact, modify, or test the third-party provider; use a controlled integration only if the program permits it. |
 
-\* dropped from the 2023 top 10 ≠ not a bug — still test; report under the
-class name, not a 2023 ID.
+The label “API Top 10” is a triage aid, not proof of impact or a severity
+rating. For injection classes that are not separate 2023 risks, use the
+specific class name and its specialist reference; do not force a 2023 ID.
 
-## Severity & report hints
+## Severity and reporting
 
-- **BOLA**: object access on other users → usually highest severity; prove with 2 accounts.
-- **Reset/OTP without rate limit**: account-takeover potential — top-tier finding.
-- **Mass assignment**: severity = property sensitivity (`is_admin`/`balance` >> cosmetic fields).
-- **Rate limiting/DoS class**: show mechanism with a handful of requests; never degrade the service.
-- **Excessive data**: severity scales with data sensitivity, not volume.
-- **Shadow API**: same bug on `v1` that `v2` fixed is still a valid, often worse, finding.
-- **Missing monitoring**: secondary finding — pair with the exploit it failed to catch.
+- Base priority on reproducible, in-scope impact, affected data or actions,
+  required privileges, and the program's rating rubric—not the risk-class
+  name.
+- Demonstrate impact with controlled accounts and records. Do not read,
+  change, or delete real-user or business data to strengthen a report.
+- For resource-consumption issues, describe the control gap without causing
+  load or disruption.
+- For a newly observed host, route, or version, record a lead and resolve
+  scope before testing or reporting it as an in-scope asset.
 
-## Risk scores (Exploitability/Prevalence/Detectability/Technical)
+## Historical reference — OWASP API Security Top 10 2019 scores
 
-| Risk | E | P | D | T |
-|---|---|---|---|---|
-| API1 BOLA | 3 | 3 | 2 | 3 |
-| API2 Broken Auth | 3 | 2 | 2 | 3 |
-| API3 Excessive Data | 3 | 2 | 2 | 2 |
-| API4 Rate Limiting | 2 | 3 | 3 | 2 |
-| API5 BFLA | 3 | 2 | 1 | 2 |
+The following values are the legacy 2019 table retained for historical
+reference. They predate the 2023 categories and must not be used to rank
+current risks, assign severity, or choose a live test.
+
+| Historical 2019 risk | E (exploitability) | P (prevalence) | D (detectability) | T (technical impact) |
+|---|---:|---:|---:|---:|
+| API1 Broken Object Level Authorization | 3 | 3 | 2 | 3 |
+| API2 Broken User Authentication | 3 | 2 | 2 | 3 |
+| API3 Excessive Data Exposure | 3 | 2 | 2 | 2 |
+| API4 Lack of Resources & Rate Limiting | 2 | 3 | 3 | 2 |
+| API5 Broken Function Level Authorization | 3 | 2 | 1 | 2 |
 | API6 Mass Assignment | 2 | 2 | 2 | 2 |
-| API7 Misconfiguration | 3 | 3 | 3 | 2 |
+| API7 Security Misconfiguration | 3 | 3 | 3 | 2 |
 | API8 Injection | 3 | 2 | 3 | 3 |
-| API9 Assets Mgmt | 3 | 3 | 2 | 2 |
-| API10 Logging/Monitoring | 2 | 3 | 1 | 2 |
+| API9 Improper Assets Management | 3 | 3 | 2 | 2 |
+| API10 Insufficient Logging & Monitoring | 2 | 3 | 1 | 2 |
 
-## Golden rules
+## Working rules
 
-- Client filters nothing — the API response is the truth.
-- Two test accounts minimum: horizontal (BOLA) + vertical (BFLA) need proofs.
-- Every protection added later is a version-diff to test on old/shadow hosts.
-- IDs live in headers and cookies too, not just URLs.
-- Auth endpoints need *stricter* limits than normal endpoints — check they got them.
+- A listed host does not put its subdomains, vendors, or shared infrastructure
+  in scope.
+- A route being observed does not authorize every method on it; re-check the
+  method and technique for each hypothesis.
+- Two accounts are useful only when both are controlled by the researcher and
+  the policy permits that comparison.
+- Treat unknown permissions as blockers, not as missing details to infer.
+- Stop on unexpected personal data, a state change outside the planned test,
+  service degradation, or a scope boundary.

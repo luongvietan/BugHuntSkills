@@ -1,66 +1,122 @@
-# Patterns & Techniques — OWASP API Security Top 10
+# Patterns & Techniques — OWASP API Security Top 10:2023
 
-## ID Swap (BOLA Probe)
-**When to use**: any endpoint taking an object identifier (path, query, body, header, cookie)
-**How**: capture request as user A → replay with user B's ID/value → success + foreign data = BOLA. Decrement/increment numeric IDs; try GUIDs of other resources leaked elsewhere.
-**Trade-offs**: needs 2 accounts for clean proof; GUIDs slow enumeration but don't prevent it
+## Before selecting a pattern
 
-## Method Swapping (BFLA Probe)
-**When to use**: every discovered endpoint, especially under shared paths like `/api/users`
-**How**: replay with GET→POST/PUT/PATCH/DELETE; mutate path segments (`users`→`admins`, append `/all`, `/export`, `/new`, `/internal`)
-**Trade-offs**: cheap probe, high value; requires mapping app's role model to report correctly
+The exact host and path must be in the current scope contract. The endpoint
+must be observed in an authorized flow or supplied by the program. Verify the
+specific technique, HTTP method, account/data conditions, rate, and impact
+boundary before each check. An unobserved route, newly found asset, or method
+not explicitly covered by policy is a lead or a `blocked-by-policy` card—not
+an invitation to discover or try it. Use only accounts and records you
+control.
 
-## Response-vs-UI Diff (Excessive Data)
-**When to use**: every JSON response, always
-**How**: list response fields → compare to rendered UI → unexplained fields (tokens, emails, internal flags, `live_*` secrets) = exposure
-**Trade-offs**: manual judgment needed — only report genuinely sensitive extras
+## Object authorization — API1:2023 BOLA
 
-## Mass Assignment Write-Back
-**When to use**: PUT/POST/PATCH endpoints on object resources
-**How**: `GET` the object → catalog properties → resend mutation adding juicy fields (`is_admin`, `role`, `balance`, `verified`, internal params); test nested objects + query params too
-**Trade-offs**: may need knowledge of business logic to pick impactful props; watch for chained sinks (conversion params → RCE)
+**When to use:** An observed, in-scope object request whose exact method is
+permitted, and the program allows controlled-account authorization checks.
 
-## Version/Host Rotation (Shadow API)
-**When to use**: on every API target, before deep testing
-**How**: rotate `/v1/↔/v2/↔/v3/`, try unversioned paths; enumerate subdomains `api.`, `beta`, `staging`, `dev`, `test`, `mbasic`, `legacy`; diff behaviors vs production (missing rate limit/authz/WAF)
-**Trade-offs**: shadow hosts sometimes out of scope — check program rules
+**Bounded check:** Create an object under account A that you control. If the
+program also permits cross-account testing, compare access from your own
+account B using only that known object ID. Stop if any record not created by
+you appears. Do not guess, increment, scrape, or enumerate identifiers.
 
-## Rate-Limit Gap Testing → API4:2023 Unrestricted Resource Consumption
-**When to use**: auth, OTP, reset, search, export, upload, paging endpoints
-**How**: small bursts only; try oversized `size/limit/per_page` values; check per-account vs per-IP keying; verify limit applies on all hosts/versions. 2023 widened the class: response-size amplification, per-request cost, CPU/memory-heavy ops, quota absence all count — not just request rate.
-**Trade-offs**: demonstrate mechanism with minimal requests — never actually DoS a live target
+## Function authorization — API5:2023 BFLA
 
-## Sensitive Business Flow Abuse — API6:2023 (new)
-**When to use**: flows where the *legitimate* function is the weapon — purchase, booking, voting, coupon/invite redemption, comment/review posting, account creation
-**How**: identify the flow's business constraint ("one per user", "first come first served", "rate-limited by design") → simulate the abuse pattern **at low volume on your own accounts**: re-use a coupon across your two test accounts, script a handful of automated buys, double-submit a form. The finding is the *absence of a control*, proven small
-**Trade-offs**: NEVER run at scale — a real scalping/spam run is a program violation; 5-10 requests proves the missing control
+**When to use:** A documented or observed function and researcher-controlled
+roles exist on a listed asset.
 
-## SSRF via API — API7:2023 (new)
-**When to use**: any parameter holding a URL, webhook/callback registration, import-by-URL, PDF/report generators, link-preview unfurlers, file fetchers
-**How**: `http://127.0.0.1`, `http://169.254.169.254` (cloud metadata — check `hacking-the-cloud` for the per-provider paths), your own collaborator URL, redirect chains to bypass naive filters. Payload depth: `payloads-all-the-things` SSRF chapter
-**Trade-offs**: metadata hits are read-only probes only — never mint creds or pivot without explicit authorization
+**Bounded check:** Compare the same observed function across roles you
+control, using only the method explicitly permitted for that function. Do
+not mutate methods, infer administrator routes, or append guessed paths.
 
-## Unsafe Consumption of APIs — API10:2023 (new)
-**When to use**: features built on third-party APIs the target consumes — payment/status webhooks, partner data feeds, OAuth-provider integrations, "powered by X" widgets
-**How**: ask what the target trusts from its providers: unvalidated upstream data stored then reflected (stored XSS via partner API), missing TLS verification to the provider, provider tokens with wider scope than needed, trusting upstream `Content-Type`. Probe by observing how upstream responses are handled, not by attacking the provider
-**Trade-offs**: the third-party API itself is out of scope — you test the *target's handling* of it
+## Object properties — API3:2023 BOPLA
 
-## NoSQL Operator Injection
-**When to use**: JSON APIs backed by Mongo-like stores
-**How**: `param[$ne]=x`, `param[$gt]=`, `{"$regex":"^a"}`, type-juggle strings→arrays/objects
-**Trade-offs**: syntax varies (query-string arrays vs JSON body); `$where`/`$regex` higher impact but noisier
+**When to use:** An observed response or mutation concerns a record you
+control, and its exact read/write method is permitted.
 
-## Command-Injection Probing
-**When to use**: params reaching OS-backed features (restore, convert, import, ping, filename)
-**How**: `$(id)`, `` `id` ``, `;id`, `|id`, `&&id` in fields; check firmware/IoT endpoints especially
-**Trade-offs**: blind sinks need timing/OOB; destructive commands out of bounds
+**Bounded check:** Compare returned fields against the feature's documented
+purpose and the roles you control. For write-side checks, use only a harmless
+property on your own record. Do not submit privilege, balance, ownership, or
+verification changes unless the program explicitly authorizes that precise
+test and its impact boundary.
 
-## Config Recon Pass
-**When to use**: start of every API assessment
-**How**: probe `.git`, `.env`, `.bash_history`, `/swagger`, `/openapi.json`, `OPTIONS` method inventory, security-header audit, CORS origin reflection, force errors for stack traces
-**Trade-offs**: noisy but cheap; findings chain into everything else
+## Resource consumption — API4:2023
 
-## Auth-Flow Coverage Map
-**When to use**: before declaring auth tested
-**How**: list ALL flows — login, register, refresh, reset, OTP verify, deep-link/one-click, mobile-only paths; apply brute-force/lockout/weak-token tests to each
-**Trade-offs**: forgotten flows are where findings live; reset ≠ login protection levels
+**When to use:** A program document or an observed response identifies a
+limit on an observed operation.
+
+**Bounded check:** Start with passive review of the documented limit. Do not
+send bursts, oversized values, repeated expensive requests, or requests
+intended to consume CPU, memory, quota, or shared capacity. A single minimal
+request is allowed only when that exact test is covered by policy. Stop at
+any latency, error-rate, or service-health change.
+
+## Sensitive business flows — API6:2023
+
+**When to use:** An observed purchase, booking, vote, redemption, or similar
+flow has a documented constraint and the program permits testing that
+specific side effect.
+
+**Bounded check:** Prefer a non-committing or sandbox path. Otherwise use
+only a researcher-owned account and record, and the smallest policy-permitted
+action. Do not automate or repeat purchases, bookings, votes, redemptions, or
+other state changes. Do not affect inventory, payments, notifications, or
+other people.
+
+## Server-side request forgery — API7:2023
+
+**When to use:** An observed in-scope feature fetches a URL, and the program
+explicitly permits callback/canary testing.
+
+**Bounded check:** Use a researcher-controlled canary endpoint and one
+minimal request. Do not target loopback, private networks, metadata services,
+redirect chains to internal systems, or third-party hosts.
+
+## Security misconfiguration — API8:2023
+
+**When to use:** A listed asset has a supplied configuration document or an
+observed route relevant to the reportable issue.
+
+**Bounded check:** Review the supplied document and ordinary responses for
+the observed route. Do not enumerate dotfiles, hidden paths, methods, or
+error conditions unless the exact discovery technique is allowed. Exclude
+best-practice-only findings if the program excludes them.
+
+## Inventory management — API9:2023
+
+**When to use:** The program lists multiple assets or API versions, or its
+documentation supplies an inventory to compare.
+
+**Bounded check:** Compare only those listed assets and versions. Do not
+rotate hostname guesses, try unlisted versions, or expand from a link to a
+new host. Record newly observed assets as leads and request a scope
+clarification before testing them.
+
+## Unsafe consumption of APIs — API10:2023
+
+**When to use:** An observed target feature consumes a third-party API and
+the target's handling can be reviewed without contacting or changing the
+provider.
+
+**Bounded check:** Review supplied documentation or target-side behavior in
+an authorized flow. Do not test, alter, or send requests to the provider. Use
+a researcher-controlled integration or canary only when the program
+explicitly permits it.
+
+## Authentication — API2:2023
+
+**When to use:** An observed login, session, reset, or token flow is covered
+by the program's authentication-testing and rate rules.
+
+**Bounded check:** Use researcher-controlled accounts and the minimum
+permitted request count. Do not spray credentials, probe other people's
+accounts, trigger lockouts, or treat silence about rate as authorization.
+
+## Other injection classes
+
+SQL, NoSQL, command, and other injection vulnerabilities remain valid bug
+classes but are not current API Top 10:2023 IDs. Start only from an observed
+input and an explicitly permitted technique. Keep proofs non-destructive and
+limited to data you control; never alter/delete backend data or read more
+than the minimum needed to show impact. Use the relevant specialist skill
+for the class-specific validation details.
