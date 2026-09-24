@@ -5,8 +5,8 @@ description: "Knowledge base from the OWASP API Security Top 10 — source book 
 
 <!-- argument-hint: [API risk number, vuln class, or endpoint type] -->
 
-# OWASP API Security Top 10 — 2019 edition + 2023 crosswalk
-**Author**: OWASP API Security Project | **Pages**: ~31 | **Risks**: 10 | **Generated**: 2026-09-23 | **Refresh**: crosswalk vs official 2023 list, 2026-09-23
+# OWASP API Security Top 10 — 2023 testing model + 2019 source chapters
+**Author**: OWASP API Security Project | **Pages**: ~31 | **Risks**: 10 | **Generated**: 2026-09-23 | **Refresh**: current 2023 model + 2019 chapter crosswalk, 2026-09-24
 
 > **Edition note.** The source book documents the **2019** list. The current
 > authoritative list is **API Security Top 10 2023** (stable, June 2023 —
@@ -24,22 +24,28 @@ When you ask about a topic not covered below, I read the relevant chapter file b
 
 ---
 
-## Core Testing Model
+## Core Testing Model — API Security Top 10 2023
 
-**The 10 risks, ranked by bounty value:**
+Use these 2023 categories for current risk names and report IDs. The one-line
+checks are bounded examples; re-check the program's exact asset, method, data,
+and rate grants before any live request.
 
-| Rank | Risk | One-line test |
-|---|---|---|
-| API1 | **Broken Object Level Authorization** | Swap object ID (path/query/body/header) → other user's data |
-| API2 | **Broken User Authentication** | Brute force/OTP without lockout; JWT `alg:none`/weak validation; creds in URL |
-| API3 | **Excessive Data Exposure** | Response fields > UI fields → leaked PII/tokens/internal props |
-| API4 | **Lack of Resources & Rate Limiting** | `size=200000`, upload bombs, missing per-client caps |
-| API5 | **Broken Function Level Authorization** | HTTP method swap; `users`→`admins`; guess admin endpoints |
-| API6 | **Mass Assignment** | Add `is_admin`/`role`/`balance`/internal props to mutation payloads |
-| API7 | **Security Misconfiguration** | `.git`/dotfiles, extra HTTP verbs, CORS reflection, stack traces, TLS gaps |
-| API8 | **Injection** | SQL/NoSQL (`[$ne]`)/command (`$(x)`) via any input reaching an interpreter |
-| API9 | **Improper Assets Management** | `v1↔v2` rotation; beta/staging/legacy hosts missing newer protections |
-| API10 | **Insufficient Logging & Monitoring** | Attack traffic raises no alert; log injection |
+| Current risk | Bounded first check |
+|---|---|
+| **API1:2023 Broken Object Level Authorization (BOLA)** | Compare access to the same object type using two researcher-controlled accounts. |
+| **API2:2023 Broken Authentication** | Review auth/session flows; use low-volume reset or OTP checks on owned accounts only. |
+| **API3:2023 Broken Object Property Level Authorization (BOPLA)** | Compare readable properties and test a harmless permitted/forbidden property write on an owned object. |
+| **API4:2023 Unrestricted Resource Consumption** | Review documented limits and make only the smallest policy-permitted request; no load or exhaustion test. |
+| **API5:2023 Broken Function Level Authorization (BFLA)** | Compare function access across researcher-controlled roles with a single controlled check. |
+| **API6:2023 Unrestricted Access to Sensitive Business Flows** | Model the abuse pattern at low volume with owned accounts; never scale against shared resources. |
+| **API7:2023 Server Side Request Forgery (SSRF)** | Use a researcher-controlled canary URL for an in-scope fetch feature; do not probe internal or third-party destinations without exact permission. |
+| **API8:2023 Security Misconfiguration** | Review configuration, headers, error handling, and methods on listed assets under the program's method gates. |
+| **API9:2023 Improper Inventory Management** | Compare documented and observed versions on listed assets; keep newly discovered hosts as leads. |
+| **API10:2023 Unsafe Consumption of APIs** | Inspect trust and validation of upstream responses using a controlled integration flow; do not alter third-party services. |
+
+The chapter index and chapter IDs below follow the **2019 source book**. Use
+the 2019 → 2023 crosswalk to route current risks into those historical source
+chapters; do not treat the old chapter labels as the current taxonomy.
 
 ## 2019 → 2023 crosswalk (current list)
 
@@ -64,13 +70,13 @@ to the methods above. No coverage gaps.
 
 **Universal method:** (1) inventory hosts/versions/endpoints; (2) probe with 2 accounts — horizontal for BOLA, vertical for BFLA; (3) diff responses vs UI for exposure; (4) fuzz IDs, methods, params, operators; (5) check the version-gap on shadow hosts.
 
-**Highest-yield first pass:** BOLA ID-swap on every object endpoint → method swap + admin-path guesses → response/UI diff → OTP/reset rate-limit check → `v1` rotation.
+**Highest-yield first pass:** API1 checks on researcher-owned object IDs → API5 role/function checks with owned accounts → API3 readable/writable property review → low-volume API2 reset/OTP control review on owned accounts → API9 version inventory on listed assets.
 
-**Report framing:** BOLA and OTP-brute-force = account-takeover class; mass-assignment severity = property sensitivity; never actually DoS for rate-limit findings — show the mechanism with a few requests.
+**Report framing:** use 2023 risk IDs. Describe property-write failures as API3 BOPLA (historical mass-assignment cases are its write-side); report only demonstrated impact from researcher-controlled accounts. For API4, never perform load or exhaustion testing — use the smallest permitted request to show a control gap.
 
 ---
 
-## Chapter Index
+## Chapter Index — 2019 source-book structure
 
 | # | Title | Key Content |
 |---|-------|----------------|

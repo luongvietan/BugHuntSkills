@@ -1,5 +1,7 @@
 # sources.md — owasp-api-security-top-10
 
+Reviewed: **2026-09-24**.
+
 ## Sources
 
 - **Book**: *OWASP API Security Top 10 — 2019* (PDF in the source repo; the
@@ -24,4 +26,7 @@
 
 - 2026-09-23: crosswalk added vs official 2023 edition page; new-risk routing
   verified; sources.md created (methods-refresh T4).
+- 2026-09-24: Core Testing Model changed to current API1:2023–API10:2023
+  names and bounded first checks; 2019 chapter paths remain explicitly
+  historical and routed through the crosswalk.
 - Next review trigger: a new OWASP API Top 10 edition or release candidate.
